@@ -31,66 +31,66 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4xx_HAL_LTDC_EX_H
 #define __STM32F4xx_HAL_LTDC_EX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 #if defined(STM32F469xx) || defined(STM32F479xx)
-/* Includes ------------------------------------------------------------------*/
+    /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_hal_def.h"
 #include "stm32f4xx_hal_dsi.h"
 
-/** @addtogroup STM32F4xx_HAL_Driver
-  * @{
-  */
+    /** @addtogroup STM32F4xx_HAL_Driver
+      * @{
+      */
 
-/** @addtogroup LTDCEx
-  * @{
-  */
+    /** @addtogroup LTDCEx
+      * @{
+      */
 
-/* Exported types ------------------------------------------------------------*/ 
-/* Exported constants --------------------------------------------------------*/
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/
-/** @addtogroup LTDCEx_Exported_Functions
-  * @{
-  */
+    /* Exported types ------------------------------------------------------------*/
+    /* Exported constants --------------------------------------------------------*/
+    /* Exported macro ------------------------------------------------------------*/
+    /* Exported functions --------------------------------------------------------*/
+    /** @addtogroup LTDCEx_Exported_Functions
+      * @{
+      */
 
-/** @addtogroup LTDCEx_Exported_Functions_Group1
-  * @{
-  */
-HAL_StatusTypeDef HAL_LTDCEx_StructInitFromVideoConfig(LTDC_HandleTypeDef* hltdc, DSI_VidCfgTypeDef *VidCfg);
-HAL_StatusTypeDef HAL_LTDCEx_StructInitFromAdaptedCommandConfig(LTDC_HandleTypeDef* hltdc, DSI_CmdCfgTypeDef *CmdCfg);
-/**
-  * @}
-  */ 
- 
-/**
-  * @}
-  */ 
+    /** @addtogroup LTDCEx_Exported_Functions_Group1
+      * @{
+      */
+    HAL_StatusTypeDef HAL_LTDCEx_StructInitFromVideoConfig(LTDC_HandleTypeDef *hltdc, DSI_VidCfgTypeDef *VidCfg);
+    HAL_StatusTypeDef HAL_LTDCEx_StructInitFromAdaptedCommandConfig(LTDC_HandleTypeDef *hltdc, DSI_CmdCfgTypeDef *CmdCfg);
+    /**
+      * @}
+      */
 
-/* Private types -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Private constants ---------------------------------------------------------*/
-/* Private macros ------------------------------------------------------------*/
-/* Private functions ---------------------------------------------------------*/
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */ 
+    /* Private types -------------------------------------------------------------*/
+    /* Private variables ---------------------------------------------------------*/
+    /* Private constants ---------------------------------------------------------*/
+    /* Private macros ------------------------------------------------------------*/
+    /* Private functions ---------------------------------------------------------*/
 
-/**
-  * @}
-  */
+    /**
+      * @}
+      */
 
-#endif /* STM32F469xx || STM32F479xx */ 
-  
+    /**
+      * @}
+      */
+
+#endif /* STM32F469xx || STM32F479xx */
+
 #ifdef __cplusplus
 }
 #endif

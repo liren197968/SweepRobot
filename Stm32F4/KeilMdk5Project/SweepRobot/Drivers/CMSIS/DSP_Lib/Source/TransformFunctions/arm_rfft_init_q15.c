@@ -1,24 +1,24 @@
-/* ----------------------------------------------------------------------    
-* Copyright (C) 2010-2014 ARM Limited. All rights reserved.    
-*    
-* $Date:        19. March 2015 
-* $Revision: 	V.1.4.5  
-*    
-* Project: 	    CMSIS DSP Library    
-* Title:	    arm_rfft_init_q15.c    
-*    
-* Description:	RFFT & RIFFT Q15 initialisation function    
-*    
+/* ----------------------------------------------------------------------
+* Copyright (C) 2010-2014 ARM Limited. All rights reserved.
+*
+* $Date:        19. March 2015
+* $Revision: 	V.1.4.5
+*
+* Project: 	    CMSIS DSP Library
+* Title:	    arm_rfft_init_q15.c
+*
+* Description:	RFFT & RIFFT Q15 initialisation function
+*
 * Target Processor: Cortex-M4/Cortex-M3/Cortex-M0
-*  
-* Redistribution and use in source and binary forms, with or without 
+*
+* Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions
 * are met:
 *   - Redistributions of source code must retain the above copyright
 *     notice, this list of conditions and the following disclaimer.
 *   - Redistributions in binary form must reproduce the above copyright
 *     notice, this list of conditions and the following disclaimer in
-*     the documentation and/or other materials provided with the 
+*     the documentation and/or other materials provided with the
 *     distribution.
 *   - Neither the name of ARM LIMITED nor the names of its contributors
 *     may be used to endorse or promote products derived from this
@@ -27,7 +27,7 @@
 * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS
 * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT
 * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS
-* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE 
+* FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE
 * COPYRIGHT OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT,
 * INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING,
 * BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
@@ -35,7 +35,7 @@
 * CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
 * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN
 * ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-* POSSIBILITY OF SUCH DAMAGE.  
+* POSSIBILITY OF SUCH DAMAGE.
 * -------------------------------------------------------------------- */
 
 
@@ -43,32 +43,33 @@
 #include "arm_common_tables.h"
 #include "arm_const_structs.h"
 
-/**    
-* @ingroup groupTransforms    
+/**
+* @ingroup groupTransforms
 */
 
-/**    
-* @addtogroup RealFFT    
-* @{    
+/**
+* @addtogroup RealFFT
+* @{
 */
 
 
 
-/**    
-* \par    
-* Generation fixed-point realCoefAQ15 array in Q15 format:    
-* \par    
-* n = 4096    
-* <pre>for (i = 0; i < n; i++)    
-*  {    
-*    pATable[2 * i] = 0.5 * (1.0 - sin (2 * PI / (double) (2 * n) * (double) i));    
-*    pATable[2 * i + 1] = 0.5 * (-1.0 * cos (2 * PI / (double) (2 * n) * (double) i));    
-*  } </pre>    
-* \par    
-* Convert to fixed point Q15 format    
-*       round(pATable[i] * pow(2, 15))    
+/**
+* \par
+* Generation fixed-point realCoefAQ15 array in Q15 format:
+* \par
+* n = 4096
+* <pre>for (i = 0; i < n; i++)
+*  {
+*    pATable[2 * i] = 0.5 * (1.0 - sin (2 * PI / (double) (2 * n) * (double) i));
+*    pATable[2 * i + 1] = 0.5 * (-1.0 * cos (2 * PI / (double) (2 * n) * (double) i));
+*  } </pre>
+* \par
+* Convert to fixed point Q15 format
+*       round(pATable[i] * pow(2, 15))
 */
-static const q15_t ALIGN4 realCoefAQ15[8192] = {
+static const q15_t ALIGN4 realCoefAQ15[8192] =
+{
     0x4000, 0xc000, 0x3ff3, 0xc000, 0x3fe7, 0xc000, 0x3fda, 0xc000,
     0x3fce, 0xc000, 0x3fc1, 0xc000, 0x3fb5, 0xc000, 0x3fa8, 0xc000,
     0x3f9b, 0xc000, 0x3f8f, 0xc000, 0x3f82, 0xc000, 0x3f76, 0xc001,
@@ -1095,22 +1096,23 @@ static const q15_t ALIGN4 realCoefAQ15[8192] = {
     0x3fce, 0x4000, 0x3fda, 0x4000, 0x3fe7, 0x4000, 0x3ff3, 0x4000,
 };
 
-/**    
-* \par   
-* Generation of real_CoefB array:    
-* \par    
-* n = 4096    
-* <pre>for (i = 0; i < n; i++)    
-*  {    
-*    pBTable[2 * i] = 0.5 * (1.0 + sin (2 * PI / (double) (2 * n) * (double) i));    
-*    pBTable[2 * i + 1] = 0.5 * (1.0 * cos (2 * PI / (double) (2 * n) * (double) i));    
-*  } </pre>   
-* \par    
-* Convert to fixed point Q15 format    
-*       round(pBTable[i] * pow(2, 15))    
-*    
+/**
+* \par
+* Generation of real_CoefB array:
+* \par
+* n = 4096
+* <pre>for (i = 0; i < n; i++)
+*  {
+*    pBTable[2 * i] = 0.5 * (1.0 + sin (2 * PI / (double) (2 * n) * (double) i));
+*    pBTable[2 * i + 1] = 0.5 * (1.0 * cos (2 * PI / (double) (2 * n) * (double) i));
+*  } </pre>
+* \par
+* Convert to fixed point Q15 format
+*       round(pBTable[i] * pow(2, 15))
+*
 */
-static const q15_t ALIGN4 realCoefBQ15[8192] = {
+static const q15_t ALIGN4 realCoefBQ15[8192] =
+{
     0x4000, 0x4000, 0x400d, 0x4000, 0x4019, 0x4000, 0x4026, 0x4000,
     0x4032, 0x4000, 0x403f, 0x4000, 0x404b, 0x4000, 0x4058, 0x4000,
     0x4065, 0x4000, 0x4071, 0x4000, 0x407e, 0x4000, 0x408a, 0x3fff,
@@ -2137,28 +2139,28 @@ static const q15_t ALIGN4 realCoefBQ15[8192] = {
     0x4032, 0xc000, 0x4026, 0xc000, 0x4019, 0xc000, 0x400d, 0xc000,
 };
 
-/**    
-* @brief  Initialization function for the Q15 RFFT/RIFFT.   
-* @param[in, out] *S             points to an instance of the Q15 RFFT/RIFFT structure.   
-* @param[in]      fftLenReal     length of the FFT.   
-* @param[in]      ifftFlagR      flag that selects forward (ifftFlagR=0) or inverse (ifftFlagR=1) transform.   
-* @param[in]      bitReverseFlag flag that enables (bitReverseFlag=1) or disables (bitReverseFlag=0) bit reversal of output.   
-* @return		The function returns ARM_MATH_SUCCESS if initialization is successful or ARM_MATH_ARGUMENT_ERROR if <code>fftLenReal</code> is not a supported value.   
-*    
-* \par Description:   
-* \par   
-* The parameter <code>fftLenReal</code>	Specifies length of RFFT/RIFFT Process. Supported FFT Lengths are 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192.    
-* \par    
-* The parameter <code>ifftFlagR</code> controls whether a forward or inverse transform is computed.    
-* Set(=1) ifftFlagR to calculate RIFFT, otherwise RFFT is calculated.    
-* \par    
-* The parameter <code>bitReverseFlag</code> controls whether output is in normal order or bit reversed order.    
-* Set(=1) bitReverseFlag for output to be in normal order otherwise output is in bit reversed order.   
-* \par    
-* This function also initializes Twiddle factor table.     
+/**
+* @brief  Initialization function for the Q15 RFFT/RIFFT.
+* @param[in, out] *S             points to an instance of the Q15 RFFT/RIFFT structure.
+* @param[in]      fftLenReal     length of the FFT.
+* @param[in]      ifftFlagR      flag that selects forward (ifftFlagR=0) or inverse (ifftFlagR=1) transform.
+* @param[in]      bitReverseFlag flag that enables (bitReverseFlag=1) or disables (bitReverseFlag=0) bit reversal of output.
+* @return		The function returns ARM_MATH_SUCCESS if initialization is successful or ARM_MATH_ARGUMENT_ERROR if <code>fftLenReal</code> is not a supported value.
+*
+* \par Description:
+* \par
+* The parameter <code>fftLenReal</code>	Specifies length of RFFT/RIFFT Process. Supported FFT Lengths are 32, 64, 128, 256, 512, 1024, 2048, 4096, 8192.
+* \par
+* The parameter <code>ifftFlagR</code> controls whether a forward or inverse transform is computed.
+* Set(=1) ifftFlagR to calculate RIFFT, otherwise RFFT is calculated.
+* \par
+* The parameter <code>bitReverseFlag</code> controls whether output is in normal order or bit reversed order.
+* Set(=1) bitReverseFlag for output to be in normal order otherwise output is in bit reversed order.
+* \par
+* This function also initializes Twiddle factor table.
 */
 arm_status arm_rfft_init_q15(
-    arm_rfft_instance_q15 * S,
+    arm_rfft_instance_q15 *S,
     uint32_t fftLenReal,
     uint32_t ifftFlagR,
     uint32_t bitReverseFlag)
@@ -2230,6 +2232,6 @@ arm_status arm_rfft_init_q15(
     return (status);
 }
 
-/**    
-* @} end of RealFFT group    
+/**
+* @} end of RealFFT group
 */

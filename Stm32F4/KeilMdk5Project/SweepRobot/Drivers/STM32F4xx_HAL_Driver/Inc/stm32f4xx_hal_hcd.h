@@ -31,226 +31,227 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4xx_HAL_HCD_H
 #define __STM32F4xx_HAL_HCD_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 #if defined(STM32F405xx) || defined(STM32F415xx) || defined(STM32F407xx) || defined(STM32F417xx) || \
     defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx) || \
     defined(STM32F401xC) || defined(STM32F401xE) || defined(STM32F411xE) || defined(STM32F446xx) || \
     defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F412Zx) || defined(STM32F412Vx) || \
     defined(STM32F412Rx) || defined(STM32F412Cx) || defined(STM32F413xx) || defined(STM32F423xx)
-/* Includes ------------------------------------------------------------------*/
+    /* Includes ------------------------------------------------------------------*/
 #include "stm32f4xx_ll_usb.h"
-   
-/** @addtogroup STM32F4xx_HAL_Driver
-  * @{
-  */
 
-/** @addtogroup HCD
-  * @{
-  */
+    /** @addtogroup STM32F4xx_HAL_Driver
+      * @{
+      */
 
-/* Exported types ------------------------------------------------------------*/ 
-/** @defgroup HCD_Exported_Types HCD Exported Types
-  * @{
-  */
+    /** @addtogroup HCD
+      * @{
+      */
 
-/** @defgroup HCD_Exported_Types_Group1 HCD State Structure definition 
-  * @{
-  */
-typedef enum 
-{
-  HAL_HCD_STATE_RESET    = 0x00U,
-  HAL_HCD_STATE_READY    = 0x01U,
-  HAL_HCD_STATE_ERROR    = 0x02U,
-  HAL_HCD_STATE_BUSY     = 0x03U,
-  HAL_HCD_STATE_TIMEOUT  = 0x04U
-} HCD_StateTypeDef;
+    /* Exported types ------------------------------------------------------------*/
+    /** @defgroup HCD_Exported_Types HCD Exported Types
+      * @{
+      */
 
-typedef USB_OTG_GlobalTypeDef   HCD_TypeDef;
-typedef USB_OTG_CfgTypeDef      HCD_InitTypeDef;
-typedef USB_OTG_HCTypeDef       HCD_HCTypeDef ;   
-typedef USB_OTG_URBStateTypeDef HCD_URBStateTypeDef ;
-typedef USB_OTG_HCStateTypeDef  HCD_HCStateTypeDef ;
-/**
-  * @}
-  */
+    /** @defgroup HCD_Exported_Types_Group1 HCD State Structure definition
+      * @{
+      */
+    typedef enum
+    {
+        HAL_HCD_STATE_RESET    = 0x00U,
+        HAL_HCD_STATE_READY    = 0x01U,
+        HAL_HCD_STATE_ERROR    = 0x02U,
+        HAL_HCD_STATE_BUSY     = 0x03U,
+        HAL_HCD_STATE_TIMEOUT  = 0x04U
+    }
+                             HCD_StateTypeDef;
 
-/** @defgroup HCD_Exported_Types_Group2 HCD Handle Structure definition   
-  * @{
-  */ 
-typedef struct
-{
-  HCD_TypeDef               *Instance;  /*!< Register base address    */ 
-  HCD_InitTypeDef           Init;       /*!< HCD required parameters  */
-  HCD_HCTypeDef             hc[15U];     /*!< Host channels parameters */
-  HAL_LockTypeDef           Lock;       /*!< HCD peripheral status    */
-  __IO HCD_StateTypeDef     State;      /*!< HCD communication state  */
-  void                      *pData;     /*!< Pointer Stack Handler    */     
-} HCD_HandleTypeDef;
-/**
-  * @}
-  */
+    typedef USB_OTG_GlobalTypeDef   HCD_TypeDef;
+    typedef USB_OTG_CfgTypeDef      HCD_InitTypeDef;
+    typedef USB_OTG_HCTypeDef       HCD_HCTypeDef ;
+    typedef USB_OTG_URBStateTypeDef HCD_URBStateTypeDef ;
+    typedef USB_OTG_HCStateTypeDef  HCD_HCStateTypeDef ;
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */
+    /** @defgroup HCD_Exported_Types_Group2 HCD Handle Structure definition
+      * @{
+      */
+    typedef struct
+    {
+        HCD_TypeDef               *Instance;  /*!< Register base address    */
+        HCD_InitTypeDef           Init;       /*!< HCD required parameters  */
+        HCD_HCTypeDef             hc[15U];     /*!< Host channels parameters */
+        HAL_LockTypeDef           Lock;       /*!< HCD peripheral status    */
+        __IO HCD_StateTypeDef     State;      /*!< HCD communication state  */
+        void                      *pData;     /*!< Pointer Stack Handler    */
+    } HCD_HandleTypeDef;
+    /**
+      * @}
+      */
 
-/* Exported constants --------------------------------------------------------*/
-/** @defgroup HCD_Exported_Constants HCD Exported Constants
-  * @{
-  */
+    /**
+      * @}
+      */
 
-/** @defgroup HCD_Speed HCD Speed
-  * @{
-  */
+    /* Exported constants --------------------------------------------------------*/
+    /** @defgroup HCD_Exported_Constants HCD Exported Constants
+      * @{
+      */
+
+    /** @defgroup HCD_Speed HCD Speed
+      * @{
+      */
 #define HCD_SPEED_HIGH               0U
 #define HCD_SPEED_LOW                2U
 #define HCD_SPEED_FULL               3U
-/**
-  * @}
-  */
+    /**
+      * @}
+      */
 
-/** @defgroup HCD_PHY_Module HCD PHY Module
-  * @{
-  */
+    /** @defgroup HCD_PHY_Module HCD PHY Module
+      * @{
+      */
 #define HCD_PHY_ULPI                 1U
 #define HCD_PHY_EMBEDDED             2U
-/**
-  * @}
-  */
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */ 
+    /**
+      * @}
+      */
 
-/* Exported macro ------------------------------------------------------------*/
-/** @defgroup HCD_Exported_Macros HCD Exported Macros
- *  @brief macros to handle interrupts and specific clock configurations
- * @{
- */
+    /* Exported macro ------------------------------------------------------------*/
+    /** @defgroup HCD_Exported_Macros HCD Exported Macros
+     *  @brief macros to handle interrupts and specific clock configurations
+     * @{
+     */
 #define __HAL_HCD_ENABLE(__HANDLE__)               USB_EnableGlobalInt ((__HANDLE__)->Instance)
 #define __HAL_HCD_DISABLE(__HANDLE__)              USB_DisableGlobalInt ((__HANDLE__)->Instance)
-   
+
 #define __HAL_HCD_GET_FLAG(__HANDLE__, __INTERRUPT__)      ((USB_ReadInterrupts((__HANDLE__)->Instance) & (__INTERRUPT__)) == (__INTERRUPT__))
 #define __HAL_HCD_CLEAR_FLAG(__HANDLE__, __INTERRUPT__)    (((__HANDLE__)->Instance->GINTSTS) = (__INTERRUPT__))
-#define __HAL_HCD_IS_INVALID_INTERRUPT(__HANDLE__)         (USB_ReadInterrupts((__HANDLE__)->Instance) == 0U)    
-  
-#define __HAL_HCD_CLEAR_HC_INT(chnum, __INTERRUPT__)  (USBx_HC(chnum)->HCINT = (__INTERRUPT__)) 
-#define __HAL_HCD_MASK_HALT_HC_INT(chnum)             (USBx_HC(chnum)->HCINTMSK &= ~USB_OTG_HCINTMSK_CHHM) 
-#define __HAL_HCD_UNMASK_HALT_HC_INT(chnum)           (USBx_HC(chnum)->HCINTMSK |= USB_OTG_HCINTMSK_CHHM) 
-#define __HAL_HCD_MASK_ACK_HC_INT(chnum)              (USBx_HC(chnum)->HCINTMSK &= ~USB_OTG_HCINTMSK_ACKM) 
-#define __HAL_HCD_UNMASK_ACK_HC_INT(chnum)            (USBx_HC(chnum)->HCINTMSK |= USB_OTG_HCINTMSK_ACKM) 
-/**
-  * @}
-  */
+#define __HAL_HCD_IS_INVALID_INTERRUPT(__HANDLE__)         (USB_ReadInterrupts((__HANDLE__)->Instance) == 0U)
 
-/* Exported functions --------------------------------------------------------*/
-/** @addtogroup HCD_Exported_Functions HCD Exported Functions
-  * @{
-  */
+#define __HAL_HCD_CLEAR_HC_INT(chnum, __INTERRUPT__)  (USBx_HC(chnum)->HCINT = (__INTERRUPT__))
+#define __HAL_HCD_MASK_HALT_HC_INT(chnum)             (USBx_HC(chnum)->HCINTMSK &= ~USB_OTG_HCINTMSK_CHHM)
+#define __HAL_HCD_UNMASK_HALT_HC_INT(chnum)           (USBx_HC(chnum)->HCINTMSK |= USB_OTG_HCINTMSK_CHHM)
+#define __HAL_HCD_MASK_ACK_HC_INT(chnum)              (USBx_HC(chnum)->HCINTMSK &= ~USB_OTG_HCINTMSK_ACKM)
+#define __HAL_HCD_UNMASK_ACK_HC_INT(chnum)            (USBx_HC(chnum)->HCINTMSK |= USB_OTG_HCINTMSK_ACKM)
+    /**
+      * @}
+      */
 
-/* Initialization/de-initialization functions  ********************************/
-/** @addtogroup HCD_Exported_Functions_Group1 Initialization and de-initialization functions
-  * @{
-  */
-HAL_StatusTypeDef   HAL_HCD_Init(HCD_HandleTypeDef *hhcd);
-HAL_StatusTypeDef   HAL_HCD_DeInit(HCD_HandleTypeDef *hhcd);
-HAL_StatusTypeDef   HAL_HCD_HC_Init(HCD_HandleTypeDef *hhcd,  
-                                    uint8_t ch_num,
-                                    uint8_t epnum,
-                                    uint8_t dev_address,
-                                    uint8_t speed,
-                                    uint8_t ep_type,
-                                    uint16_t mps);
+    /* Exported functions --------------------------------------------------------*/
+    /** @addtogroup HCD_Exported_Functions HCD Exported Functions
+      * @{
+      */
 
-HAL_StatusTypeDef   HAL_HCD_HC_Halt(HCD_HandleTypeDef *hhcd, uint8_t ch_num);
+    /* Initialization/de-initialization functions  ********************************/
+    /** @addtogroup HCD_Exported_Functions_Group1 Initialization and de-initialization functions
+      * @{
+      */
+    HAL_StatusTypeDef   HAL_HCD_Init(HCD_HandleTypeDef *hhcd);
+    HAL_StatusTypeDef   HAL_HCD_DeInit(HCD_HandleTypeDef *hhcd);
+    HAL_StatusTypeDef   HAL_HCD_HC_Init(HCD_HandleTypeDef *hhcd,
+                                        uint8_t ch_num,
+                                        uint8_t epnum,
+                                        uint8_t dev_address,
+                                        uint8_t speed,
+                                        uint8_t ep_type,
+                                        uint16_t mps);
 
-void                HAL_HCD_MspInit(HCD_HandleTypeDef *hhcd);
-void                HAL_HCD_MspDeInit(HCD_HandleTypeDef *hhcd);
-/**
-  * @}
-  */
+    HAL_StatusTypeDef   HAL_HCD_HC_Halt(HCD_HandleTypeDef *hhcd, uint8_t ch_num);
 
-/* I/O operation functions  ***************************************************/
-/** @addtogroup HCD_Exported_Functions_Group2 Input and Output operation functions
-  * @{
-  */
-HAL_StatusTypeDef   HAL_HCD_HC_SubmitRequest(HCD_HandleTypeDef *hhcd,
-                                             uint8_t ch_num, 
-                                             uint8_t direction,
-                                             uint8_t ep_type,  
-                                             uint8_t token, 
-                                             uint8_t* pbuff, 
-                                             uint16_t length,
-                                             uint8_t do_ping);
+    void                HAL_HCD_MspInit(HCD_HandleTypeDef *hhcd);
+    void                HAL_HCD_MspDeInit(HCD_HandleTypeDef *hhcd);
+    /**
+      * @}
+      */
 
-/* Non-Blocking mode: Interrupt */
-void                HAL_HCD_IRQHandler(HCD_HandleTypeDef *hhcd);
-void                HAL_HCD_SOF_Callback(HCD_HandleTypeDef *hhcd);
-void                HAL_HCD_Connect_Callback(HCD_HandleTypeDef *hhcd);
-void                HAL_HCD_Disconnect_Callback(HCD_HandleTypeDef *hhcd);
-void                HAL_HCD_HC_NotifyURBChange_Callback(HCD_HandleTypeDef *hhcd, 
-                                                        uint8_t chnum, 
-                                                        HCD_URBStateTypeDef urb_state);
-/**
-  * @}
-  */
+    /* I/O operation functions  ***************************************************/
+    /** @addtogroup HCD_Exported_Functions_Group2 Input and Output operation functions
+      * @{
+      */
+    HAL_StatusTypeDef   HAL_HCD_HC_SubmitRequest(HCD_HandleTypeDef *hhcd,
+            uint8_t ch_num,
+            uint8_t direction,
+            uint8_t ep_type,
+            uint8_t token,
+            uint8_t *pbuff,
+            uint16_t length,
+            uint8_t do_ping);
 
-/* Peripheral Control functions  **********************************************/
-/** @addtogroup HCD_Exported_Functions_Group3 Peripheral Control functions
-  * @{
-  */
-HAL_StatusTypeDef   HAL_HCD_ResetPort(HCD_HandleTypeDef *hhcd);
-HAL_StatusTypeDef   HAL_HCD_Start(HCD_HandleTypeDef *hhcd);
-HAL_StatusTypeDef   HAL_HCD_Stop(HCD_HandleTypeDef *hhcd);
-/**
-  * @}
-  */
+    /* Non-Blocking mode: Interrupt */
+    void                HAL_HCD_IRQHandler(HCD_HandleTypeDef *hhcd);
+    void                HAL_HCD_SOF_Callback(HCD_HandleTypeDef *hhcd);
+    void                HAL_HCD_Connect_Callback(HCD_HandleTypeDef *hhcd);
+    void                HAL_HCD_Disconnect_Callback(HCD_HandleTypeDef *hhcd);
+    void                HAL_HCD_HC_NotifyURBChange_Callback(HCD_HandleTypeDef *hhcd,
+            uint8_t chnum,
+            HCD_URBStateTypeDef urb_state);
+    /**
+      * @}
+      */
 
-/* Peripheral State functions  ************************************************/
-/** @addtogroup HCD_Exported_Functions_Group4 Peripheral State functions
-  * @{
-  */
-HCD_StateTypeDef    HAL_HCD_GetState(HCD_HandleTypeDef *hhcd);
-HCD_URBStateTypeDef HAL_HCD_HC_GetURBState(HCD_HandleTypeDef *hhcd, uint8_t chnum);
-uint32_t            HAL_HCD_HC_GetXferCount(HCD_HandleTypeDef *hhcd, uint8_t chnum);
-HCD_HCStateTypeDef  HAL_HCD_HC_GetState(HCD_HandleTypeDef *hhcd, uint8_t chnum);
-uint32_t            HAL_HCD_GetCurrentFrame(HCD_HandleTypeDef *hhcd);
-uint32_t            HAL_HCD_GetCurrentSpeed(HCD_HandleTypeDef *hhcd);
-/**
-  * @}
-  */
+    /* Peripheral Control functions  **********************************************/
+    /** @addtogroup HCD_Exported_Functions_Group3 Peripheral Control functions
+      * @{
+      */
+    HAL_StatusTypeDef   HAL_HCD_ResetPort(HCD_HandleTypeDef *hhcd);
+    HAL_StatusTypeDef   HAL_HCD_Start(HCD_HandleTypeDef *hhcd);
+    HAL_StatusTypeDef   HAL_HCD_Stop(HCD_HandleTypeDef *hhcd);
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */
+    /* Peripheral State functions  ************************************************/
+    /** @addtogroup HCD_Exported_Functions_Group4 Peripheral State functions
+      * @{
+      */
+    HCD_StateTypeDef    HAL_HCD_GetState(HCD_HandleTypeDef *hhcd);
+    HCD_URBStateTypeDef HAL_HCD_HC_GetURBState(HCD_HandleTypeDef *hhcd, uint8_t chnum);
+    uint32_t            HAL_HCD_HC_GetXferCount(HCD_HandleTypeDef *hhcd, uint8_t chnum);
+    HCD_HCStateTypeDef  HAL_HCD_HC_GetState(HCD_HandleTypeDef *hhcd, uint8_t chnum);
+    uint32_t            HAL_HCD_GetCurrentFrame(HCD_HandleTypeDef *hhcd);
+    uint32_t            HAL_HCD_GetCurrentSpeed(HCD_HandleTypeDef *hhcd);
+    /**
+      * @}
+      */
 
-/* Private macros ------------------------------------------------------------*/
-/** @defgroup HCD_Private_Macros HCD Private Macros
- * @{
- */
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */
+    /* Private macros ------------------------------------------------------------*/
+    /** @defgroup HCD_Private_Macros HCD Private Macros
+     * @{
+     */
 
-/**
-  * @}
-  */
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */ 
+    /**
+      * @}
+      */
+
+    /**
+      * @}
+      */
 #endif /* STM32F405xx || STM32F415xx || STM32F407xx || STM32F417xx || STM32F427xx || STM32F437xx || STM32F429xx || STM32F439xx ||
-          STM32F401xC || STM32F401xE || STM32F411xE || STM32F446xx || STM32F469xx || STM32F479xx || STM32F412Zx || STM32F412Rx ||
-          STM32F412Vx || STM32F412Cx || defined(STM32F413xx) || defined(STM32F423xx) */
+    STM32F401xC || STM32F401xE || STM32F411xE || STM32F446xx || STM32F469xx || STM32F479xx || STM32F412Zx || STM32F412Rx ||
+    STM32F412Vx || STM32F412Cx || defined(STM32F413xx) || defined(STM32F423xx) */
 #ifdef __cplusplus
 }
 #endif

@@ -335,7 +335,7 @@
               <MiscControls></MiscControls>
               <Define>USE_HAL_DRIVER,STM32F405xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc; ../Drivers/STM32F4xx_HAL_Driver/Inc; ../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy; ../Drivers/CMSIS/Device/ST/STM32F4xx/Include; ../Drivers/CMSIS/Include</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\Robot\RocPca9685;..\Robot\RocRobotControl</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -387,12 +387,37 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>Application/User</GroupName>
+          <GroupName>Application/Hardware</GroupName>
           <Files>
             <File>
               <FileName>main.c</FileName>
               <FileType>1</FileType>
               <FilePath>../Src/main.c</FilePath>
+            </File>
+            <File>
+              <FileName>gpio.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/gpio.c</FilePath>
+            </File>
+            <File>
+              <FileName>dma.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/dma.c</FilePath>
+            </File>
+            <File>
+              <FileName>i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/spi.c</FilePath>
+            </File>
+            <File>
+              <FileName>usart.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Src/usart.c</FilePath>
             </File>
             <File>
               <FileName>stm32f4xx_it.c</FileName>
@@ -409,6 +434,21 @@
         <Group>
           <GroupName>Drivers/STM32F4xx_HAL_Driver</GroupName>
           <Files>
+            <File>
+              <FileName>stm32f4xx_hal_i2c.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_i2c_ex.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_i2c_ex.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_hal_spi.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>../Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_spi.c</FilePath>
+            </File>
             <File>
               <FileName>stm32f4xx_hal_tim.c</FileName>
               <FileType>1</FileType>
@@ -493,6 +533,21 @@
               <FileName>system_stm32f4xx.c</FileName>
               <FileType>1</FileType>
               <FilePath>..//Src/system_stm32f4xx.c</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Application/Robot</GroupName>
+          <Files>
+            <File>
+              <FileName>RocPca9685.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Robot\RocPca9685\RocPca9685.c</FilePath>
+            </File>
+            <File>
+              <FileName>RocRobotControl.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Robot\RocRobotControl\RocRobotControl.c</FilePath>
             </File>
           </Files>
         </Group>

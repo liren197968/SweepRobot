@@ -31,97 +31,97 @@
   * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   *
   ******************************************************************************
-  */ 
+  */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
 #ifndef __STM32F4xx_HAL_I2C_EX_H
 #define __STM32F4xx_HAL_I2C_EX_H
 
 #ifdef __cplusplus
- extern "C" {
+extern "C" {
 #endif
 
 #if defined(STM32F427xx) || defined(STM32F437xx) || defined(STM32F429xx) || defined(STM32F439xx) ||\
     defined(STM32F401xC) || defined(STM32F401xE) || defined(STM32F411xE) || defined(STM32F446xx) ||\
     defined(STM32F469xx) || defined(STM32F479xx) || defined(STM32F413xx) || defined(STM32F423xx)
-/* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal_def.h"  
+    /* Includes ------------------------------------------------------------------*/
+#include "stm32f4xx_hal_def.h"
 
-/** @addtogroup STM32F4xx_HAL_Driver
-  * @{
-  */
+    /** @addtogroup STM32F4xx_HAL_Driver
+      * @{
+      */
 
-/** @addtogroup I2CEx
-  * @{
-  */ 
+    /** @addtogroup I2CEx
+      * @{
+      */
 
-/* Exported types ------------------------------------------------------------*/ 
-/* Exported constants --------------------------------------------------------*/
-/** @defgroup I2CEx_Exported_Constants I2C Exported Constants
-  * @{
-  */
+    /* Exported types ------------------------------------------------------------*/
+    /* Exported constants --------------------------------------------------------*/
+    /** @defgroup I2CEx_Exported_Constants I2C Exported Constants
+      * @{
+      */
 
-/** @defgroup I2CEx_Analog_Filter I2C Analog Filter
-  * @{
-  */
+    /** @defgroup I2CEx_Analog_Filter I2C Analog Filter
+      * @{
+      */
 #define I2C_ANALOGFILTER_ENABLE        0x00000000U
 #define I2C_ANALOGFILTER_DISABLE       I2C_FLTR_ANOFF
-/**
-  * @}
-  */
-  
-/**
-  * @}
-  */ 
-  
-/* Exported macro ------------------------------------------------------------*/
-/* Exported functions --------------------------------------------------------*/
-/** @addtogroup I2CEx_Exported_Functions
-  * @{
-  */
+    /**
+      * @}
+      */
 
-/** @addtogroup I2CEx_Exported_Functions_Group1
-  * @{
-  */
-/* Peripheral Control functions  ************************************************/
-HAL_StatusTypeDef HAL_I2CEx_ConfigAnalogFilter(I2C_HandleTypeDef *hi2c, uint32_t AnalogFilter);
-HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_t DigitalFilter);
-/**
-  * @}
-  */
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */ 
-/* Private types -------------------------------------------------------------*/
-/* Private variables ---------------------------------------------------------*/
-/* Private constants ---------------------------------------------------------*/
-/** @defgroup I2CEx_Private_Constants I2C Private Constants
-  * @{
-  */
+    /* Exported macro ------------------------------------------------------------*/
+    /* Exported functions --------------------------------------------------------*/
+    /** @addtogroup I2CEx_Exported_Functions
+      * @{
+      */
 
-/**
-  * @}
-  */
+    /** @addtogroup I2CEx_Exported_Functions_Group1
+      * @{
+      */
+    /* Peripheral Control functions  ************************************************/
+    HAL_StatusTypeDef HAL_I2CEx_ConfigAnalogFilter(I2C_HandleTypeDef *hi2c, uint32_t AnalogFilter);
+    HAL_StatusTypeDef HAL_I2CEx_ConfigDigitalFilter(I2C_HandleTypeDef *hi2c, uint32_t DigitalFilter);
+    /**
+      * @}
+      */
 
-/* Private macros ------------------------------------------------------------*/
-/** @defgroup I2CEx_Private_Macros I2C Private Macros
-  * @{
-  */
+    /**
+      * @}
+      */
+    /* Private types -------------------------------------------------------------*/
+    /* Private variables ---------------------------------------------------------*/
+    /* Private constants ---------------------------------------------------------*/
+    /** @defgroup I2CEx_Private_Constants I2C Private Constants
+      * @{
+      */
+
+    /**
+      * @}
+      */
+
+    /* Private macros ------------------------------------------------------------*/
+    /** @defgroup I2CEx_Private_Macros I2C Private Macros
+      * @{
+      */
 #define IS_I2C_ANALOG_FILTER(FILTER) (((FILTER) == I2C_ANALOGFILTER_ENABLE) || \
                                       ((FILTER) == I2C_ANALOGFILTER_DISABLE))
 #define IS_I2C_DIGITAL_FILTER(FILTER)   ((FILTER) <= 0x0000000FU)
-/**
-  * @}
-  */
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */ 
+    /**
+      * @}
+      */
 
-/**
-  * @}
-  */
+    /**
+      * @}
+      */
 
 #endif /* STM32F427xx || STM32F429xx || STM32F437xx || STM32F439xx || STM32F401xC ||\
           STM32F401xE || STM32F411xE || STM32F446xx || STM32F469xx || STM32F479xx ||\
