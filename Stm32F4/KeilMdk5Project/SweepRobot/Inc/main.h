@@ -50,6 +50,13 @@
 
 /* Private define ------------------------------------------------------------*/
 
+#define ROC_PCA9685_A_EN_Pin GPIO_PIN_2
+#define ROC_PCA9685_A_EN_GPIO_Port GPIOC
+#define ROC_PCA9685_B_EN_Pin GPIO_PIN_3
+#define ROC_PCA9685_B_EN_GPIO_Port GPIOC
+#define ROC_PCA9685_LED_Pin GPIO_PIN_7
+#define ROC_PCA9685_LED_GPIO_Port GPIOA
+
 /* ########################## Assert Selection ############################## */
 /**
   * @brief Uncomment the line below to expanse the "assert_param" macro in the

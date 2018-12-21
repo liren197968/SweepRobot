@@ -42,10 +42,12 @@
 #include "dma.h"
 #include "i2c.h"
 #include "spi.h"
+#include "tim.h"
 #include "usart.h"
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
+#include "RocLog.h"
 #include "RocRobotControl.h"
 /* USER CODE END Includes */
 
@@ -58,6 +60,7 @@
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+static void MX_NVIC_Init(void);
 
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
@@ -103,17 +106,19 @@ int main(void)
     MX_USART3_UART_Init();
     MX_I2C2_Init();
     MX_SPI1_Init();
-    /* USER CODE BEGIN 2 */
-    RocRobotControlInit();
+    MX_TIM6_Init();
 
-    printf("Hardware init Success! \r\n");
+    /* Initialize interrupts */
+    MX_NVIC_Init();
+    /* USER CODE BEGIN 2 */
+    RocRobotInit();
     /* USER CODE END 2 */
 
     /* Infinite loop */
     /* USER CODE BEGIN WHILE */
     while (1)
     {
-        RocRobotControlMain();
+        RocRobotMain();
         /* USER CODE END WHILE */
 
         /* USER CODE BEGIN 3 */
@@ -180,6 +185,26 @@ void SystemClock_Config(void)
     HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
 }
 
+/**
+  * @brief NVIC Configuration.
+  * @retval None
+  */
+static void MX_NVIC_Init(void)
+{
+    /* TIM6_DAC_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 4, 0);
+    HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+    /* USART3_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(USART3_IRQn);
+    /* DMA1_Stream1_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
+    /* DMA1_Stream3_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
+    HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
+}
+
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
@@ -196,6 +221,7 @@ void _Error_Handler(char *file, int line)
     /* User can add his own implementation to report the HAL error return state */
     while(1)
     {
+        ROC_LOGE("Hardware is in error(File: %s, Line: %d)!", file, line);
     }
     /* USER CODE END Error_Handler_Debug */
 }

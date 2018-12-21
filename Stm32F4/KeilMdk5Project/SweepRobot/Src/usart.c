@@ -114,9 +114,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         GPIO_InitStruct.Alternate = GPIO_AF7_USART1;
         HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 
-        /* USART1 interrupt Init */
-        HAL_NVIC_SetPriority(USART1_IRQn, 0, 0);
-        HAL_NVIC_EnableIRQ(USART1_IRQn);
         /* USER CODE BEGIN USART1_MspInit 1 */
 
         /* USER CODE END USART1_MspInit 1 */
@@ -149,7 +146,7 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
         hdma_usart3_rx.Init.MemInc = DMA_MINC_ENABLE;
         hdma_usart3_rx.Init.PeriphDataAlignment = DMA_PDATAALIGN_BYTE;
         hdma_usart3_rx.Init.MemDataAlignment = DMA_MDATAALIGN_BYTE;
-        hdma_usart3_rx.Init.Mode = DMA_NORMAL;
+        hdma_usart3_rx.Init.Mode = DMA_CIRCULAR;
         hdma_usart3_rx.Init.Priority = DMA_PRIORITY_HIGH;
         hdma_usart3_rx.Init.FIFOMode = DMA_FIFOMODE_DISABLE;
         if (HAL_DMA_Init(&hdma_usart3_rx) != HAL_OK)
@@ -177,9 +174,6 @@ void HAL_UART_MspInit(UART_HandleTypeDef *uartHandle)
 
         __HAL_LINKDMA(uartHandle, hdmatx, hdma_usart3_tx);
 
-        /* USART3 interrupt Init */
-        HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
-        HAL_NVIC_EnableIRQ(USART3_IRQn);
         /* USER CODE BEGIN USART3_MspInit 1 */
 
         /* USER CODE END USART3_MspInit 1 */
@@ -203,8 +197,6 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
         */
         HAL_GPIO_DeInit(GPIOA, GPIO_PIN_9 | GPIO_PIN_10);
 
-        /* USART1 interrupt Deinit */
-        HAL_NVIC_DisableIRQ(USART1_IRQn);
         /* USER CODE BEGIN USART1_MspDeInit 1 */
 
         /* USER CODE END USART1_MspDeInit 1 */
@@ -236,13 +228,7 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-//重定义fputc函数
-int fputc(int ch, FILE *f)
-{
-    while((USART1->SR & 0X40) == 0);                                                //循环发送,直到发送完毕
-    USART1->DR = (uint8_t) ch;
-    return ch;
-}
+
 /* USER CODE END 1 */
 
 /**
