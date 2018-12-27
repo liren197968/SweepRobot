@@ -4,9 +4,6 @@
 #include "RocBluetooth.h"
 
 
-__IO ITStatus g_UsartReadyFlag = RESET;
-
-
 uint8_t g_BtRecvEnd = ROC_FALSE;
 uint8_t g_BtRxDatLen = ROC_NONE;
 uint8_t g_BtTxBuffer[ROC_BT_TXD_LENGTH] = "Start";
@@ -70,8 +67,6 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *Huart)
 {
     if(USART3 == Huart->Instance)
     {
-        g_UsartReadyFlag = SET;
-
         ROC_LOGI("Bluetooth send data successfully.");
     }
 }
@@ -147,10 +142,9 @@ void RocBluetoothReceiveCallback(UART_HandleTypeDef *Huart)
             g_BtRecvEnd = ROC_TRUE;
 
             __HAL_UART_CLEAR_IDLEFLAG(&huart3);
+
             HAL_UART_DMAStop(&huart3);
 
-            BufferData = huart3.Instance->SR;
-            BufferData = huart3.Instance->DR;
             BufferData = __HAL_DMA_GET_COUNTER(&hdma_usart3_rx);
 
             g_BtRxDatLen = ROC_BT_RXD_LENGTH - BufferData;
@@ -180,9 +174,45 @@ void RocBluetoothData_Send(uint8_t *Buff, uint16_t DatLen)
         Error_Handler();
     }
 
-    while(SET != g_UsartReadyFlag);
+    while(ROC_NONE != huart3.TxXferCount);
+}
 
-    g_UsartReadyFlag = RESET;
+/*********************************************************************************
+ *  Description:
+ *              Set the bluetooth control command
+ *
+ *  Parameter:
+ *              None
+ *
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.20)
+**********************************************************************************/
+void RocBluetoothCtrlCmd_Set(uint8_t CtrlCmd)
+{
+    g_BtRxBuffer[0] = CtrlCmd;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Get the bluetooth control command
+ *
+ *  Parameter:
+ *              None
+ *
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.20)
+**********************************************************************************/
+uint8_t RocBluetoothCtrlCmd_Get(void)
+{
+    return g_BtRxBuffer[0];
 }
 
 /*********************************************************************************

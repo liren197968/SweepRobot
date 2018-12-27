@@ -175,6 +175,31 @@ static void RocRobotLefBakLegCtrl(int16_t FirstParm, int16_t SecndParm, int16_t 
 
 /*********************************************************************************
  *  Description:
+ *              Robot stand control function
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.20)
+**********************************************************************************/
+static void RocRobotStandCtrl(void)
+{
+    RocRobotRigForLegCtrl(g_RobotStandPwmVal[0], g_RobotStandPwmVal[1], g_RobotStandPwmVal[2]);
+    RocRobotRigMidLegCtrl(g_RobotStandPwmVal[3], g_RobotStandPwmVal[4], g_RobotStandPwmVal[5]);
+    RocRobotRigBakLegCtrl(g_RobotStandPwmVal[6], g_RobotStandPwmVal[7], g_RobotStandPwmVal[8]);
+
+    RocRobotLefForLegCtrl(g_RobotStandPwmVal[9], g_RobotStandPwmVal[10], g_RobotStandPwmVal[11]);
+    RocRobotLefMidLegCtrl(g_RobotStandPwmVal[12], g_RobotStandPwmVal[13], g_RobotStandPwmVal[14]);
+    RocRobotLefBakLegCtrl(g_RobotStandPwmVal[15], g_RobotStandPwmVal[16], g_RobotStandPwmVal[17]);
+}
+
+
+/*********************************************************************************
+ *  Description:
  *              Robot control init
  *
  *  Parameter:
@@ -188,13 +213,9 @@ static void RocRobotLefBakLegCtrl(int16_t FirstParm, int16_t SecndParm, int16_t 
 **********************************************************************************/
 static void RocRobotControlInit(void)
 {
-    RocRobotRigForLegCtrl(ROC_ROBOT_RIG_FOR_HIP_CENTER, ROC_ROBOT_RIG_FOR_LEG_CENTER, ROC_ROBOT_RIG_FOR_FET_CENTER);
-    RocRobotRigMidLegCtrl(ROC_ROBOT_RIG_MID_HIP_CENTER, ROC_ROBOT_RIG_MID_LEG_CENTER, ROC_ROBOT_RIG_MID_FET_CENTER);
-    RocRobotRigBakLegCtrl(ROC_ROBOT_RIG_BAK_HIP_CENTER, ROC_ROBOT_RIG_BAK_LEG_CENTER, ROC_ROBOT_RIG_BAK_FET_CENTER);
+    RocOpenLoopMoveCalculate(0, 0, g_RobotStandPwmVal);
 
-    RocRobotLefForLegCtrl(ROC_ROBOT_LEF_FOR_HIP_CENTER, ROC_ROBOT_LEF_FOR_LEG_CENTER, ROC_ROBOT_LEF_FOR_FET_CENTER);
-    RocRobotLefMidLegCtrl(ROC_ROBOT_LEF_MID_HIP_CENTER, ROC_ROBOT_LEF_MID_LEG_CENTER, ROC_ROBOT_LEF_MID_FET_CENTER);
-    RocRobotLefBakLegCtrl(ROC_ROBOT_LEF_BAK_HIP_CENTER, ROC_ROBOT_LEF_BAK_LEG_CENTER, ROC_ROBOT_LEF_BAK_FET_CENTER);
+    RocRobotStandCtrl();
 }
 
 /*********************************************************************************
@@ -217,7 +238,7 @@ static void RocRobotForwardCtrl(void)
 
     Flag++;
 
-    if(Flag > 4)
+    if(ROC_ROBOT_RUN_GAIT_NUM < Flag)
     {
         Flag = 1;
     }
@@ -228,72 +249,176 @@ static void RocRobotForwardCtrl(void)
         //g_ExpectedAngle = yaw;
     }
 
+#ifdef ROC_ROBOT_GAIT_FOUR
     switch(Flag)
     {
-    case 1:
-        RocAdjustStepCalculate(g_ExpectedAngle, 0);
+        case 1:
+                RocOpenLoopMoveCalculate(ROC_ROBOT_DEFAULT_STEP_LENGTH, ROC_ROBOT_DEFAULT_STEP_LENGTH, g_RobotForwardPwmVal);
 
-        RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotStandPwmVal[1] + ROC_ROBOT_LEG_LIFT, g_RobotStandPwmVal[2] + ROC_ROBOT_FEET_LIFT);          //第一步：第一组腿抬脚前移
-        RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotStandPwmVal[13] + ROC_ROBOT_LEG_LIFT, g_RobotStandPwmVal[14] + ROC_ROBOT_FEET_LIFT);
-        RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotStandPwmVal[7] + ROC_ROBOT_LEG_LIFT, g_RobotStandPwmVal[8] + ROC_ROBOT_FEET_LIFT);
+                RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotStandPwmVal[1] + ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[2] + ROC_ROBOT_DEFAULT_FEET_LIFT);
+                RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotStandPwmVal[13] - ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[14] - ROC_ROBOT_DEFAULT_FEET_LIFT);
+                RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotStandPwmVal[7] + ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[8] + ROC_ROBOT_DEFAULT_FEET_LIFT);
 
-        RocRobotLefForLegCtrl(g_RobotStandPwmVal[9], g_RobotStandPwmVal[10], g_RobotStandPwmVal[11]);
-        RocRobotRigMidLegCtrl(g_RobotStandPwmVal[3], g_RobotStandPwmVal[4], g_RobotStandPwmVal[5]);                                            //同时，第二组腿向后滑动
-        RocRobotLefBakLegCtrl(g_RobotStandPwmVal[15], g_RobotStandPwmVal[16], g_RobotStandPwmVal[17]);
-        break;
+                RocOpenLoopMoveCalculate(ROC_ROBOT_DEFAULT_STEP_LENGTH / 2, ROC_ROBOT_DEFAULT_STEP_LENGTH /2, g_RobotForwardPwmVal);
 
-    case 2:
-        RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);                                             //第二步：第一组腿落地
-        RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
-        RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotForwardPwmVal[7], g_RobotForwardPwmVal[8]);
+                RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotForwardPwmVal[10], g_RobotForwardPwmVal[11]);
+                RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotForwardPwmVal[4], g_RobotForwardPwmVal[5]);
+                RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
+                break;
 
-        RocRobotLefForLegCtrl(g_RobotForwardPwmVal[27], g_RobotForwardPwmVal[28], g_RobotForwardPwmVal[29]);
-        RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[21], g_RobotForwardPwmVal[22], g_RobotForwardPwmVal[23]);                                         //同时，第二组腿继续向后滑动
-        RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[33], g_RobotForwardPwmVal[34], g_RobotForwardPwmVal[35]);
-        break;
+        case 2: 
+                RocOpenLoopMoveCalculate(ROC_ROBOT_DEFAULT_STEP_LENGTH, ROC_ROBOT_DEFAULT_STEP_LENGTH, g_RobotForwardPwmVal);
 
-    case 3:
-        RocRobotRigForLegCtrl(g_RobotStandPwmVal[0], g_RobotStandPwmVal[1], g_RobotStandPwmVal[2]);                                             //第三步：第一组腿向后滑动
-        RocRobotLefMidLegCtrl(g_RobotStandPwmVal[12], g_RobotStandPwmVal[13], g_RobotStandPwmVal[14]);
-        RocRobotRigBakLegCtrl(g_RobotStandPwmVal[6], g_RobotStandPwmVal[7], g_RobotStandPwmVal[8]);
+                RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
+                RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
+                RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotForwardPwmVal[7], g_RobotForwardPwmVal[8]);
 
-        RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotStandPwmVal[10] + ROC_ROBOT_LEG_LIFT, g_RobotStandPwmVal[11] + ROC_ROBOT_FEET_LIFT);
-        RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotStandPwmVal[4] + ROC_ROBOT_LEG_LIFT, g_RobotStandPwmVal[5] + ROC_ROBOT_FEET_LIFT);           //同时，第二组腿抬腿
-        RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotStandPwmVal[16] + ROC_ROBOT_LEG_LIFT, g_RobotStandPwmVal[17] + ROC_ROBOT_FEET_LIFT);
-        break;
+                RocRobotLefForLegCtrl(g_RobotStandPwmVal[9], g_RobotStandPwmVal[10], g_RobotStandPwmVal[11]);
+                RocRobotRigMidLegCtrl(g_RobotStandPwmVal[3], g_RobotStandPwmVal[4], g_RobotStandPwmVal[5]);
+                RocRobotLefBakLegCtrl(g_RobotStandPwmVal[15], g_RobotStandPwmVal[16], g_RobotStandPwmVal[17]);
+                break;
 
-    case 4:
-        RocRobotRigForLegCtrl(g_RobotForwardPwmVal[18], g_RobotForwardPwmVal[19], g_RobotForwardPwmVal[20]);                                          //第四步：第一组腿继续向后滑动
-        RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[30], g_RobotForwardPwmVal[31], g_RobotForwardPwmVal[32]);
-        RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[24], g_RobotForwardPwmVal[25], g_RobotForwardPwmVal[26]);
+        case 3:
+                RocOpenLoopMoveCalculate(ROC_ROBOT_DEFAULT_STEP_LENGTH / 2, ROC_ROBOT_DEFAULT_STEP_LENGTH /2, g_RobotForwardPwmVal);
 
-        RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotForwardPwmVal[10], g_RobotForwardPwmVal[11]);
-        RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotForwardPwmVal[4], g_RobotForwardPwmVal[5]);                                            //同时，第二组腿落地
-        RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
-        break;
+                RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
+                RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
+                RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotForwardPwmVal[7], g_RobotForwardPwmVal[8]);
 
-    default:
-        break;
+                RocRobotLefForLegCtrl(g_RobotForwardPwmVal[27], g_RobotForwardPwmVal[28], g_RobotForwardPwmVal[29]);
+                RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[21], g_RobotForwardPwmVal[22], g_RobotForwardPwmVal[23]);
+                RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[33], g_RobotForwardPwmVal[34], g_RobotForwardPwmVal[35]);
+                break;
+
+        case 4:
+                RocRobotRigForLegCtrl(g_RobotStandPwmVal[0], g_RobotStandPwmVal[1], g_RobotStandPwmVal[2]);
+                RocRobotLefMidLegCtrl(g_RobotStandPwmVal[12], g_RobotStandPwmVal[13], g_RobotStandPwmVal[14]);
+                RocRobotRigBakLegCtrl(g_RobotStandPwmVal[6], g_RobotStandPwmVal[7], g_RobotStandPwmVal[8]);
+
+                RocOpenLoopMoveCalculate(ROC_ROBOT_DEFAULT_STEP_LENGTH, ROC_ROBOT_DEFAULT_STEP_LENGTH, g_RobotForwardPwmVal);
+
+                RocRobotLefForLegCtrl(g_RobotForwardPwmVal[27], g_RobotForwardPwmVal[28], g_RobotForwardPwmVal[29]);
+                RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[21], g_RobotForwardPwmVal[22], g_RobotForwardPwmVal[23]);
+                RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[33], g_RobotForwardPwmVal[34], g_RobotForwardPwmVal[35]);
+                break;
+
+        case 5:
+                RocOpenLoopMoveCalculate(ROC_ROBOT_DEFAULT_STEP_LENGTH, ROC_ROBOT_DEFAULT_STEP_LENGTH, g_RobotForwardPwmVal);
+
+                RocRobotRigForLegCtrl(g_RobotForwardPwmVal[18], g_RobotForwardPwmVal[19], g_RobotForwardPwmVal[20]);
+                RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[30], g_RobotForwardPwmVal[31], g_RobotForwardPwmVal[32]);
+                RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[24], g_RobotForwardPwmVal[25], g_RobotForwardPwmVal[26]);
+
+                RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotStandPwmVal[10] - ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[11] - ROC_ROBOT_DEFAULT_FEET_LIFT);
+                RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotStandPwmVal[4] + ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[5] + ROC_ROBOT_DEFAULT_FEET_LIFT);
+                RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotStandPwmVal[16] - ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[17] - ROC_ROBOT_DEFAULT_FEET_LIFT);
+                break;
+
+        case 6:
+                RocRobotRigForLegCtrl(g_RobotForwardPwmVal[18], g_RobotForwardPwmVal[19], g_RobotForwardPwmVal[20]);
+                RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[30], g_RobotForwardPwmVal[31], g_RobotForwardPwmVal[32]);
+                RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[24], g_RobotForwardPwmVal[25], g_RobotForwardPwmVal[26]);
+
+                RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotForwardPwmVal[10], g_RobotForwardPwmVal[11]);
+                RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotForwardPwmVal[4], g_RobotForwardPwmVal[5]);
+                RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
+                break;
+
+        default:break;
     }
+#else
+    switch(Flag)
+    {
+        case 1:
+                RocOpenLoopMoveCalculate(ROC_ROBOT_DEFAULT_STEP_LENGTH, ROC_ROBOT_DEFAULT_STEP_LENGTH, g_RobotForwardPwmVal);
+
+                RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotStandPwmVal[1] + ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[2] + ROC_ROBOT_DEFAULT_FEET_LIFT);
+                RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotStandPwmVal[13] - ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[14] - ROC_ROBOT_DEFAULT_FEET_LIFT);
+                RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotStandPwmVal[7] + ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[8] + ROC_ROBOT_DEFAULT_FEET_LIFT);
+
+                RocRobotLefForLegCtrl(g_RobotStandPwmVal[9], g_RobotStandPwmVal[10], g_RobotStandPwmVal[11]);
+                RocRobotRigMidLegCtrl(g_RobotStandPwmVal[3], g_RobotStandPwmVal[4], g_RobotStandPwmVal[5]);
+                RocRobotLefBakLegCtrl(g_RobotStandPwmVal[15], g_RobotStandPwmVal[16], g_RobotStandPwmVal[17]);
+            break;
+
+        case 2:
+                RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
+                RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
+                RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotForwardPwmVal[7], g_RobotForwardPwmVal[8]);
+
+                RocRobotLefForLegCtrl(g_RobotForwardPwmVal[27], g_RobotForwardPwmVal[28], g_RobotForwardPwmVal[29]);
+                RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[21], g_RobotForwardPwmVal[22], g_RobotForwardPwmVal[23]);
+                RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[33], g_RobotForwardPwmVal[34], g_RobotForwardPwmVal[35]);
+                break;
+
+        case 3:
+                RocRobotRigForLegCtrl(g_RobotStandPwmVal[0], g_RobotStandPwmVal[1], g_RobotStandPwmVal[2]);
+                RocRobotLefMidLegCtrl(g_RobotStandPwmVal[12], g_RobotStandPwmVal[13], g_RobotStandPwmVal[14]);
+                RocRobotRigBakLegCtrl(g_RobotStandPwmVal[6], g_RobotStandPwmVal[7], g_RobotStandPwmVal[8]);
+
+                RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotStandPwmVal[10] - ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[11] - ROC_ROBOT_DEFAULT_FEET_LIFT);
+                RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotStandPwmVal[4] + ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[5] + ROC_ROBOT_DEFAULT_FEET_LIFT);
+                RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotStandPwmVal[16] - ROC_ROBOT_DEFAULT_LEG_LIFT, g_RobotStandPwmVal[17] - ROC_ROBOT_DEFAULT_FEET_LIFT);
+                break;
+
+        case 4:
+                RocRobotRigForLegCtrl(g_RobotForwardPwmVal[18], g_RobotForwardPwmVal[19], g_RobotForwardPwmVal[20]);
+                RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[30], g_RobotForwardPwmVal[31], g_RobotForwardPwmVal[32]);
+                RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[24], g_RobotForwardPwmVal[25], g_RobotForwardPwmVal[26]);
+
+                RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotForwardPwmVal[10], g_RobotForwardPwmVal[11]);
+                RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotForwardPwmVal[4], g_RobotForwardPwmVal[5]);
+                RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
+                break;
+
+        default:break;
+    }
+#endif
+
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Robot remote control function
+ *
+ *  Parameter:
+ *              None
+ *
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
 void RocRobotRemoteControl(void)
 {
-    switch(g_BtRxBuffer[0])
+    uint8_t RobotCtrlCmd;
+
+    RobotCtrlCmd = RocBluetoothCtrlCmd_Get();
+
+    switch(RobotCtrlCmd)
     {
-        case 'W':   RocRobotForwardCtrl();
-                    break;
+        case ROC_ROBOT_CTRL_CMD_MOSTAND:    RocRobotStandCtrl();
+                                            break;
 
-        case 'S':
-                    break;
+        case ROC_ROBOT_CTRL_CMD_FORWARD:    RocRobotForwardCtrl();
+                                            break;
 
-        case 'A':
-                    break;
+        case ROC_ROBOT_CTRL_CMD_BAKWARD:
+                                            break;
 
-        case 'D':
-                    break;
+        case ROC_ROBOT_CTRL_CMD_LFCLOCK:
+                                            break;
 
-        default:    break;
+        case ROC_ROBOT_CTRL_CMD_RGCLOCK:
+                                            break;
+
+        case ROC_ROBOT_CTRL_CMD_PARAMET:    RocRobotForwardCtrl();
+                                            RocBluetoothCtrlCmd_Set(ROC_NONE);
+                                            break;
+
+        default:                            break;
     }
 }
 
@@ -327,9 +452,9 @@ static ROC_RESULT RocRobotStartRun(void)
         while(1);
     }
 
-    HAL_Delay(500);
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_DEFAULT);
 
-    RocPca9685Enable();
+    //RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
 
     return Ret;
 }
@@ -416,9 +541,6 @@ void RocRobotMain(void)
         ROC_LOGI("Bluetooth receive (%d) data(%s).", g_BtRxDatLen, g_BtRxBuffer);
 
         RocBluetoothData_Send(g_BtRxBuffer, g_BtRxDatLen);
-        HAL_Delay(100);
-
-        memset(g_BtRxBuffer, ROC_NONE, sizeof(g_BtRxBuffer));
 
         g_BtRecvEnd = ROC_FALSE;
     }

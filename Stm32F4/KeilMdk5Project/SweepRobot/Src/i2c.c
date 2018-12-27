@@ -95,7 +95,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
     if(i2cHandle->Instance == I2C1)
     {
         /* USER CODE BEGIN I2C1_MspInit 0 */
-
+        __HAL_RCC_I2C1_CLK_ENABLE();
         /* USER CODE END I2C1_MspInit 0 */
 
         /**I2C1 GPIO Configuration
@@ -118,7 +118,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
     else if(i2cHandle->Instance == I2C2)
     {
         /* USER CODE BEGIN I2C2_MspInit 0 */
-
+        __HAL_RCC_I2C2_CLK_ENABLE();
         /* USER CODE END I2C2_MspInit 0 */
 
         /**I2C2 GPIO Configuration

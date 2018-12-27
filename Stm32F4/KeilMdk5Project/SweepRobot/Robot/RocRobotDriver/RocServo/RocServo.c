@@ -27,7 +27,7 @@ static int16_t      g_PwmLastdVal[ROC_SERVO_MAX_SUPPORT_NUM] = {0};
  *  Author:
  *              ROC LiRen(2018.12.15)
 **********************************************************************************/
-static void RocServoPwmCalculate(void)
+static void RocServoPwmIncreCalculate(void)
 {
     uint8_t         i = 0U;
 
@@ -51,12 +51,9 @@ static void RocServoPwmCalculate(void)
  *  Author:
  *              ROC LiRen(2018.12.15)
 **********************************************************************************/
-static void RocServoPwmUpdate(void)
+static void RocServoPwmUpdate(uint8_t CountTimes)
 {
     uint8_t         i = 0U;
-    static uint8_t  CountTimes = 0U;
-
-    CountTimes++;
 
     if(CountTimes < ROC_SERVO_SPEED_DIV_STP)
     {
@@ -67,12 +64,9 @@ static void RocServoPwmUpdate(void)
     }
     else
     {
-        CountTimes = 0U;
-
         for(i = 0U; i < ROC_SERVO_MAX_SUPPORT_NUM; i++)
         {
-            g_PwmPreseVal[i] = g_PwmPreseVal[i] + (g_PwmExpetVal[i] - g_PwmLastdVal[i]
-                                                   - (ROC_SERVO_SPEED_DIV_STP - 1U) * g_PwmIncreVal[i]);
+            g_PwmPreseVal[i] = g_PwmExpetVal[i];
         }
     }
 }
@@ -117,16 +111,23 @@ static void RocServoPwmRecod(void)
 **********************************************************************************/
 static void RocServoPwmOut(void)
 {
-    uint8_t         i = 0U;
+    uint8_t             i = 0U;
+    HAL_StatusTypeDef   WriteStatus = HAL_OK;
 
     for(i = 0U; i < ROC_SERVO_MAX_SUPPORT_NUM; i++)
     {
-        RocPca9685OutPwm(PWM_ADDRESS_L, i, 0U, g_PwmPreseVal[i]);
+        WriteStatus = RocPca9685OutPwm(PWM_ADDRESS_L, i, 0U, (uint16_t)g_PwmPreseVal[i]);
 
         if(ROC_PCA9685_MAX_NUM <= i)
         {
-            RocPca9685OutPwm(PWM_ADDRESS_H, i - ROC_PCA9685_MAX_NUM, 0U, g_PwmPreseVal[i]);
+            WriteStatus = RocPca9685OutPwm(PWM_ADDRESS_H, i - ROC_PCA9685_MAX_NUM, 0U, (uint16_t)g_PwmPreseVal[i]);
         }
+    }
+
+    if(HAL_OK != WriteStatus)
+    {
+        ROC_LOGE("Servo PWM out is in error, and will stop running!");
+        while(1);
     }
 }
 
@@ -152,18 +153,20 @@ void RocServoControl(void)
 
     RefreshTimes++;     /* record the times of the data update of servo */
 
-    if(RefreshTimes < ROC_SERVO_SPEED_DIV_STP)
-    {
-        RocServoPwmUpdate();
-    }
-    else
+    RocServoPwmUpdate(RefreshTimes);
+
+#ifdef ROC_SERVO_DEBUG
+    ROC_LOGW("RefreshTimes is %d, g_PwmPreseVal is %d, g_PwmExpetVal is %d, g_PwmIncreVal is %d",
+                            RefreshTimes, g_PwmPreseVal[0], g_PwmExpetVal[0], g_PwmIncreVal[0]);
+#endif
+
+    if(RefreshTimes >= ROC_SERVO_SPEED_DIV_STP)
     {
         RefreshTimes = 0;
 
-        RocServoPwmUpdate();
         RocServoPwmRecod();
         RocRobotRemoteControl();
-        RocServoPwmCalculate();
+        RocServoPwmIncreCalculate();
     }
 
     RocServoPwmOut();

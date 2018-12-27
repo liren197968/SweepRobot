@@ -242,6 +242,7 @@ ROC_RESULT RocPca9685Init(void)
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
 
     RocPca9685Enable();
+    HAL_Delay(20);
 
     RocPca9685WriteReg(PWM_ADDRESS_L, PCA9685_MODE1, &InitDat);
     RocPca9685WriteReg(PWM_ADDRESS_H, PCA9685_MODE1, &InitDat);
@@ -259,8 +260,6 @@ ROC_RESULT RocPca9685Init(void)
         Ret = RET_ERROR;
         ROC_LOGE("Set High PCA9685 PWM frequent error(%d)!", WriteStatus);
     }
-
-    RocPca9685Disable();
 
     if(RET_OK != Ret)
     {

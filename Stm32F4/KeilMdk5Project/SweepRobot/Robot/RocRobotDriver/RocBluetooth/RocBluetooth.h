@@ -18,6 +18,8 @@ extern uint8_t g_BtRxBuffer[ROC_BT_RXD_LENGTH];
 
 
 ROC_RESULT RocBluetoothInit(void);
+void RocBluetoothCtrlCmd_Set(uint8_t CtrlCmd);
+uint8_t RocBluetoothCtrlCmd_Get(void);
 void RocBluetoothData_Send(uint8_t *Buff, uint16_t DatLen);
 void RocBluetoothReceiveCallback(UART_HandleTypeDef *Huart);
 
