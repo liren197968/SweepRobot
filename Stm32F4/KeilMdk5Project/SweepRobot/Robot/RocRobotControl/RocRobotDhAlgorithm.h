@@ -83,7 +83,7 @@ extern uint16_t g_RobotRightBackwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2];
 extern void RocAdjustStepCalculate(double g_ExpectedAngle, uint8_t Direction);
 extern void RocAdjustLeftStepCalculate(double g_ExpectedAngle, uint8_t Direction);
 extern void RocAdjustRightStepCalculate(double g_ExpectedAngle, uint8_t Direction);
-extern void RocOpenLoopMoveCalculate(double FirstStepLength, double SecndStepLength, uint16_t *RobotCtrlPwmVal);
+void RocOpenLoopMoveCalculate(double Step, double Left, uint16_t *pRobotCtrlPwmVal);
 extern void RocOpenLoopCircleCalculate(uint8_t DeltaAngle);
 
 

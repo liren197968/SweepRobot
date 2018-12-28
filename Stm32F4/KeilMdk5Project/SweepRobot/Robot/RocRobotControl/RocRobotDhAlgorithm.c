@@ -130,14 +130,14 @@ static void RocCorrectionPositionCaculate(uint8_t LegNum, double DeltaAlpha, dou
 }
 /**********************************************************************/
 /***************************开环运动控制********************************/
-void RocOpenLoopMoveCalculate(double FirstStepLength, double SecndStepLength, uint16_t *pRobotCtrlPwmVal)
+void RocOpenLoopMoveCalculate(double Step, double Left, uint16_t *pRobotCtrlPwmVal)
 {
     double                  x = 0, y = 0, z = 0;
 
     /***********the coordinate datas of the first group legs ****************/
     x = ROC_ROBOT_FRO_INIT_X;
-    y = ROC_ROBOT_FRO_INIT_Y + FirstStepLength;
-    z = ROC_ROBOT_FRO_INIT_Z;
+    y = ROC_ROBOT_FRO_INIT_Y + Step;
+    z = ROC_ROBOT_FRO_INIT_Z + Left;
 
     ROC_LOGW("x:%.2f, y:%.2f, z:%.2f, data:%.4f", x, y, z, ROC_ROBOT_FRO_FET_INIT_ANGLE);
 
@@ -152,8 +152,8 @@ void RocOpenLoopMoveCalculate(double FirstStepLength, double SecndStepLength, ui
 
 
     x = ROC_ROBOT_MID_INIT_X;
-    y = ROC_ROBOT_MID_INIT_Y + FirstStepLength;
-    z = ROC_ROBOT_MID_INIT_Z;
+    y = ROC_ROBOT_MID_INIT_Y + Step;
+    z = ROC_ROBOT_MID_INIT_Z + Left;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -165,8 +165,8 @@ void RocOpenLoopMoveCalculate(double FirstStepLength, double SecndStepLength, ui
     pRobotCtrlPwmVal[32] = (uint16_t)(ROC_ROBOT_LEF_MID_FET_CENTER + (-ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
     x = ROC_ROBOT_HIN_INIT_X;
-    y = ROC_ROBOT_HIN_INIT_Y - FirstStepLength;
-    z = ROC_ROBOT_HIN_INIT_Z;
+    y = ROC_ROBOT_HIN_INIT_Y - Step;
+    z = ROC_ROBOT_HIN_INIT_Z + Left;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -180,8 +180,8 @@ void RocOpenLoopMoveCalculate(double FirstStepLength, double SecndStepLength, ui
 
     /***********the coordinate datas of the second group legs ***************/
     x = ROC_ROBOT_FRO_INIT_X;
-    y = ROC_ROBOT_FRO_INIT_Y + SecndStepLength;
-    z = ROC_ROBOT_FRO_INIT_Z;
+    y = ROC_ROBOT_FRO_INIT_Y + Step;
+    z = ROC_ROBOT_FRO_INIT_Z + Left;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -193,8 +193,8 @@ void RocOpenLoopMoveCalculate(double FirstStepLength, double SecndStepLength, ui
     pRobotCtrlPwmVal[35] = (uint16_t)(ROC_ROBOT_LEF_HIN_FET_CENTER + (-ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
     x = ROC_ROBOT_MID_INIT_X;
-    y = ROC_ROBOT_MID_INIT_Y + SecndStepLength;
-    z = ROC_ROBOT_MID_INIT_Z;
+    y = ROC_ROBOT_MID_INIT_Y + Step;
+    z = ROC_ROBOT_MID_INIT_Z + Left;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -206,8 +206,8 @@ void RocOpenLoopMoveCalculate(double FirstStepLength, double SecndStepLength, ui
     pRobotCtrlPwmVal[23] = (uint16_t)(ROC_ROBOT_RIG_MID_FET_CENTER + (ROC_ROBOT_MID_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
     x = ROC_ROBOT_HIN_INIT_X;
-    y = ROC_ROBOT_HIN_INIT_Y - SecndStepLength;
-    z = ROC_ROBOT_HIN_INIT_Z;
+    y = ROC_ROBOT_HIN_INIT_Y - Step;
+    z = ROC_ROBOT_HIN_INIT_Z + Left;
 
     RocDhAlgorithmReverse(x, y, z);
 

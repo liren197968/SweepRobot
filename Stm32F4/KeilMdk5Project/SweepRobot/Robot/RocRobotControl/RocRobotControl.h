@@ -30,6 +30,10 @@
 #define ROC_ROBOT_LEF_HIN_FET_CENTER                310
 
 
+#define ROC_ROBOT_DEFAULT_STEP_LENGTH               25
+#define ROC_ROBOT_DEFAULT_FEET_LIFT                 40
+
+
 #define ROC_ROBOT_CTRL_CMD_MOSTAND                  'C'
 #define ROC_ROBOT_CTRL_CMD_FORWARD                  'W'
 #define ROC_ROBOT_CTRL_CMD_BAKWARD                  'S'
@@ -37,12 +41,12 @@
 #define ROC_ROBOT_CTRL_CMD_RGCLOCK                  'D'
 #define ROC_ROBOT_CTRL_CMD_PARAMET                  'Y'
 
-#define ROC_ROBOT_DEFAULT_LEG_LIFT                  -40
-#define ROC_ROBOT_DEFAULT_FEET_LIFT                 -40
-#define ROC_ROBOT_DEFAULT_STEP_LENGTH               25
+#define ROC_ROBOT_GAIT_FIVE
 
-#ifdef ROC_ROBOT_GAIT_FOUR
+#if defined(ROC_ROBOT_GAIT_FOUR)
 #define ROC_ROBOT_RUN_GAIT_NUM                      6
+#elif defined(ROC_ROBOT_GAIT_FIVE)
+#define ROC_ROBOT_RUN_GAIT_NUM                      5
 #else
 #define ROC_ROBOT_RUN_GAIT_NUM                      4
 #endif
