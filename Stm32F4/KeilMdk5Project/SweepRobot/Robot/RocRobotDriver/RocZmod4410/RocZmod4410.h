@@ -47,6 +47,7 @@
 ROC_RESULT RocZmod4410Init(void);
 ROC_RESULT RocZmode4410MeasureStart(void);
 ROC_RESULT RocZmode4410MeasureStop(void);
+uint32_t RocZmod4410SensorStatusIsChange(void);
 
 
 #endif

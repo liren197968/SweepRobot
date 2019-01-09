@@ -27,6 +27,18 @@ zmod44xx_dev_t g_dev;   /* ZMOD4410 IIC device */
 
 /*********************************************************************************
  *  Description:
+ *              The ZMOD4410 gas sensor odor status value, which will be used to
+ *              show the gas level status, if the gas level change suddenly, it
+ *              will be setted ROC_TRUE.
+ *
+ *  Author:
+ *              ROC LiRen(2019.01.09)
+**********************************************************************************/
+static uint32_t g_Zmod4410SensorStatusChange = ROC_FALSE;
+
+
+/*********************************************************************************
+ *  Description:
  *              Write ZMOD4410 register from IIC communication
  *
  *  Parameter:
@@ -79,6 +91,42 @@ static int8_t RocZmode4410ReadReg(uint8_t SlaveAddr, uint8_t Reg, uint8_t *Buffe
     }
 
     return (int8_t)ReadStatus;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Set the ZMOD4410 sensor status
+ *
+ *  Parameter:
+ *              SensorStatus: the expected sensor status
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.01.09)
+**********************************************************************************/
+static void RocZmod4410SensorStatusSet(uint32_t SensorStatus)
+{
+    g_Zmod4410SensorStatusChange = SensorStatus;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Get the ZMOD4410 sensor status
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              The current ZMOD4410 sensor status
+ *
+ *  Author:
+ *              ROC LiRen(2019.01.09)
+**********************************************************************************/
+uint32_t RocZmod4410SensorStatusIsChange(void)
+{
+    return g_Zmod4410SensorStatusChange;
 }
 
 /*********************************************************************************
@@ -176,6 +224,8 @@ ROC_RESULT RocZmode4410MeasureStart(void)
         cs_state = calc_odor(r_mox, &odor_par);
         ROC_LOGI("odor control state %d \r\n", cs_state);
 
+        RocZmod4410SensorStatusSet((uint32_t)cs_state);
+
         /* INSTEAD OF POLLING THE INTERRUPT CAN BE USED FOR OTHER HW */
         /* waiting for sensor ready */
         while (FIRST_SEQ_STEP != (zmod44xx_status & 0x07)) {
@@ -196,7 +246,6 @@ exit:
     while(1);
     /* ****** END TARGET SPECIFIC DEINITIALIZATION ****** */
 }
-
 
 /*********************************************************************************
  *  Description:

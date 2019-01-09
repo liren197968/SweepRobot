@@ -150,7 +150,7 @@ void RocServoControl(void)
 
     RocServoPwmUpdate(RefreshTimes);
 
-#ifdef ROC_SERVO_DEBUG
+#ifdef ROC_ROBOT_SERVO_DEBUG
     ROC_LOGW("RefreshTimes is %d, g_PwmPreseVal is %d, g_PwmExpetVal is %d, g_PwmIncreVal is %d",
                             RefreshTimes, g_PwmPreseVal[0], g_PwmExpetVal[0], g_PwmIncreVal[0]);
 #endif
