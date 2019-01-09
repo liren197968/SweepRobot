@@ -2,7 +2,7 @@
 #define __ROC_SERVO_H
 
 
-#define ROC_SERVO_SPEED_DIV_STP         3
+#define ROC_SERVO_SPEED_DIV_STP         4
 
 #define ROC_SERVO_MAX_SUPPORT_NUM       18U
 

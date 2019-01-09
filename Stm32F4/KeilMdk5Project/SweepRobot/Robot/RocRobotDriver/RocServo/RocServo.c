@@ -20,7 +20,6 @@ static int16_t      g_PwmLastdVal[ROC_SERVO_MAX_SUPPORT_NUM] = {0};
  *  Parameter:
  *              None
  *
- *
  *  Return:
  *              None
  *
@@ -43,7 +42,6 @@ static void RocServoPwmIncreCalculate(void)
  *
  *  Parameter:
  *              None
- *
  *
  *  Return:
  *              None
@@ -78,7 +76,6 @@ static void RocServoPwmUpdate(uint8_t CountTimes)
  *  Parameter:
  *              None
  *
- *
  *  Return:
  *              None
  *
@@ -101,7 +98,6 @@ static void RocServoPwmRecod(void)
  *
  *  Parameter:
  *              None
- *
  *
  *  Return:
  *              None
@@ -126,7 +122,7 @@ static void RocServoPwmOut(void)
 
     if(HAL_OK != WriteStatus)
     {
-        ROC_LOGE("Servo PWM out is in error, and will stop running!");
+        ROC_LOGE("Servo PWM out is in error, and servo will stop running!");
         while(1);
     }
 }
@@ -139,7 +135,6 @@ static void RocServoPwmOut(void)
  *
  *  Parameter:
  *              None
- *
  *
  *  Return:
  *              None
@@ -179,7 +174,6 @@ void RocServoControl(void)
  *  Parameter:
  *              None
  *
- *
  *  Return:
  *              None
  *
@@ -205,7 +199,6 @@ void RocServoSpeedSet(uint16_t ServoRunTimeMs)
  *
  *  Parameter:
  *              None
- *
  *
  *  Return:
  *              None
@@ -234,7 +227,6 @@ ROC_RESULT RocServoTimerStart(void)
  *  Parameter:
  *              None
  *
- *
  *  Return:
  *              None
  *
@@ -262,9 +254,8 @@ ROC_RESULT RocServoTimerStop(void)
  *  Parameter:
  *              None
  *
- *
  *  Return:
- *              None
+ *              The servo driver init status
  *
  *  Author:
  *              ROC LiRen(2018.12.15)

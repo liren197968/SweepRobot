@@ -4,15 +4,17 @@
 
 #include "RocLog.h"
 #include "RocLed.h"
+#include "RocMotor.h"
 #include "RocServo.h"
+#include "RocBeeper.h"
 #include "RocPca9685.h"
-#include "RocAt24c02.h"
+#include "RocZmod4410.h"
 #include "RocBluetooth.h"
 #include "RocRobotControl.h"
 #include "RocRobotDhAlgorithm.h"
 
 
-#define ROC_ROBOT_RUN_SPEED_DEFAULT     160
+#define ROC_ROBOT_RUN_SPEED_DEFAULT     300
 
 
 static uint8_t          g_StartMoveFlag = 0;
@@ -449,8 +451,6 @@ switch(Flag)
         default:break;
     }
 #endif
-
-    ROC_LOGE("%d", ROC_ROBOT_RUN_GAIT_NUM);
 }
 
 /*********************************************************************************
@@ -490,11 +490,20 @@ void RocRobotRemoteControl(void)
         case ROC_ROBOT_CTRL_CMD_RGCLOCK:
                                             break;
 
+#ifdef ROC_ROBOT_GAIT_DEBUG
         case ROC_ROBOT_CTRL_CMD_PARAMET:    RocRobotForwardCtrl();
                                             RocBluetoothCtrlCmd_Set(ROC_NONE);
                                             break;
+#endif
 
-        default:                            break;
+        case ROC_ROBOT_CTRL_CMD_CARFORD:    RocMotorRotateDirectionSet(ROC_MOTOR_FORWARD_ROTATE);
+                                            break;
+
+        case ROC_ROBOT_CTRL_CMD_CARBAKD:    RocMotorRotateDirectionSet(ROC_MOTOR_REVERSE_ROTATE);
+                                            break;
+
+        default:                            RocMotorRotateDirectionSet(ROC_MOTOR_STOPPED_ROTATE);
+                                            break;
     }
 }
 
@@ -553,13 +562,37 @@ void RocRobotInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    ROC_LOGW("############# Robot hardware version is 0.1! #############");
+    ROC_LOGW("############# Robot hardware version is 0.5! #############");
 
     Ret = RocLedInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
 
+        while(1);
+    }
+
+    Ret = RocBluetoothInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+
+    Ret = RocZmod4410Init();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+
+    Ret = RocBeeperInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
         while(1);
     }
 
@@ -579,7 +612,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    RocBluetoothInit();
+    Ret = RocMotorInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -621,5 +654,13 @@ void RocRobotMain(void)
         g_BtRecvEnd = ROC_FALSE;
     }
 
+    if(ROC_ROBOT_CTRL_MEASURE_START == RocBluetoothCtrlCmd_Get())
+    {
+        RocZmode4410MeasureStart();
+    }
+    else
+    {
+        RocZmode4410MeasureStop();
+    }
 }
 

@@ -9,48 +9,67 @@
 #include "RocLog.h"
 
 
-#pragma import(__use_no_semihosting)
-
-FILE __stdout;
-
-/*********************************************************************************
- *  Description:
- *              Printf system call function
- *
- *  Parameter:
- *              None
- *
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2018.12.15)
-**********************************************************************************/
-struct __FILE
-{
-    int handle;
-};
-
-/*********************************************************************************
- *  Description:
- *              Printf system call function
- *
- *  Parameter:
- *              None
- *
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2018.12.15)
-*********************************************************************************/
-void _sys_exit(int x)
-{
-    x = x;
-}
-
+//#pragma import(__use_no_semihosting)
+//
+//FILE __stdout;
+//
+///*********************************************************************************
+// *  Description:
+// *              Printf system call function
+// *
+// *  Parameter:
+// *              None
+// *
+// *
+// *  Return:
+// *              None
+// *
+// *  Author:
+// *              ROC LiRen(2018.12.15)
+//**********************************************************************************/
+//struct __FILE
+//{
+//    int handle;
+//};
+//
+///*********************************************************************************
+// *  Description:
+// *              Printf system call function
+// *
+// *  Parameter:
+// *              None
+// *
+// *
+// *  Return:
+// *              None
+// *
+// *  Author:
+// *              ROC LiRen(2018.12.15)
+//*********************************************************************************/
+//void _sys_exit(int x)
+//{
+//    x = x;
+//}
+//
+///*********************************************************************************
+// *  Description:
+// *              Printf system call function
+// *
+// *  Parameter:
+// *              None
+// *
+// *
+// *  Return:
+// *              None
+// *
+// *  Author:
+// *              ROC LiRen(2018.12.15)
+//*********************************************************************************/
+//void _ttywrch(int ch)
+//{
+//    ch = ch;
+//}
+//
 /*********************************************************************************
  *  Description:
  *              Redefine the fputc function
@@ -124,7 +143,7 @@ ROC_RESULT RocLogI(const char *function, uint32_t line, const char *fmt, ...)
     Ret = printf("[%010d] %s[%d]: %s \r\n", TickTime, function, line, Buffer);
     if(ROC_ZERO > Ret)
     {
-        printf("Print is error!!! \r\n");
+        printf("Print is error(%d)!!! \r\n", Ret);
     }
 
     return Ret;
@@ -159,7 +178,7 @@ ROC_RESULT RocLogW(const char *function, uint32_t line, const char *fmt, ...)
     Ret = printf("[%010d] "ROC_FONT_GREEN"[WARN]%s[%d]: %s "ROC_CLOSE_PROPERTY" \r\n", TickTime, function, line, Buffer);
     if(ROC_ZERO > Ret)
     {
-        printf("Print is error!!! \r\n");
+        printf("Print is error(%d)!!! \r\n", Ret);
     }
 
     return Ret;
@@ -194,7 +213,7 @@ ROC_RESULT RocLogE(const char *function, uint32_t line, const char *fmt, ...)
     Ret = printf("[%010d] "ROC_FONT_RED"[ERROR]%s[%d]: %s "ROC_CLOSE_PROPERTY" \r\n", TickTime, function, line, Buffer);
     if(ROC_ZERO > Ret)
     {
-        printf("Print is error!!! \r\n");
+        printf("Print is error(%d)!!! \r\n", Ret);
     }
 
     return Ret;
@@ -229,7 +248,7 @@ ROC_RESULT RocLogN(const char *function, uint32_t line, const char *fmt, ...)
     Ret = printf("[%010d] "ROC_FONT_YELLOW"[NOTIFY]%s[%d]: %s "ROC_CLOSE_PROPERTY" \r\n", TickTime, function, line, Buffer);
     if(ROC_ZERO > Ret)
     {
-        printf("Print is error!!! \r\n");
+        printf("Print is error(%d)!!! \r\n", Ret);
     }
 
     return Ret;

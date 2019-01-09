@@ -1,7 +1,7 @@
 #ifndef __ROC_LOG_H
 #define __ROC_LOG_H
 
-
+#include <stdint.h>
 #include "RocError.h"
 
 

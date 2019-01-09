@@ -40,10 +40,15 @@
 #define ROC_ROBOT_CTRL_CMD_LFCLOCK                  'A'
 #define ROC_ROBOT_CTRL_CMD_RGCLOCK                  'D'
 #define ROC_ROBOT_CTRL_CMD_PARAMET                  'Y'
+#define ROC_ROBOT_CTRL_CMD_CARFORD                  'B'
+#define ROC_ROBOT_CTRL_CMD_CARBAKD                  'R'
 
-#define ROC_ROBOT_GAIT_FIVE
 
-#if defined(ROC_ROBOT_GAIT_FOUR)
+//#define ROC_ROBOT_GAIT_DEBUG
+//#define ROC_ROBOT_GAIT_FIVE
+
+
+#if defined(ROC_ROBOT_GAIT_SIX)
 #define ROC_ROBOT_RUN_GAIT_NUM                      6
 #elif defined(ROC_ROBOT_GAIT_FIVE)
 #define ROC_ROBOT_RUN_GAIT_NUM                      5

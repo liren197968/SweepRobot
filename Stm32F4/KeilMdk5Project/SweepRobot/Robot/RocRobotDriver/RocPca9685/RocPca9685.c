@@ -54,6 +54,7 @@ void RocPca9685Disable(void)
  *              *BufferAddr:the pointer of data storage buffer address
  *
  *  Return:
+ *              The PCA9685 write register status
  *
  *  Author:
  *              ROC LiRen(2018.12.15)
@@ -63,6 +64,10 @@ static HAL_StatusTypeDef RocPca9685WriteReg(uint16_t SlaveAddr, uint16_t Reg, ui
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
 
     WriteStatus = HAL_I2C_Mem_Write(&hi2c1, SlaveAddr, Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, 1, 1000);
+    if(HAL_OK != WriteStatus)
+    {
+        ROC_LOGE("IIC2 reg reg is in error(%d)!", WriteStatus);
+    }
 
     return WriteStatus;
 }
@@ -77,6 +82,7 @@ static HAL_StatusTypeDef RocPca9685WriteReg(uint16_t SlaveAddr, uint16_t Reg, ui
  *              *BufferAddr:the pointer of data storage buffer address
  *
  *  Return:
+ *              The PCA9685 read register status
  *
  *  Author:
  *              ROC LiRen(2018.12.15)
@@ -86,6 +92,10 @@ static HAL_StatusTypeDef RocPca9685ReadReg(uint16_t SlaveAddr, uint16_t Reg, uin
     HAL_StatusTypeDef   ReadStatus = HAL_OK;
 
     ReadStatus = HAL_I2C_Mem_Read(&hi2c1, SlaveAddr, Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, 1, 1000);
+    if(HAL_OK != ReadStatus)
+    {
+        ROC_LOGE("IIC2 reg reg is in error(%d)!", ReadStatus);
+    }
 
     return ReadStatus;
 }
@@ -228,9 +238,8 @@ HAL_StatusTypeDef RocPca9685SetPinOutPwm(uint8_t SlaveAddr, uint8_t NumPin, uint
  *  Parameter:
  *              None
  *
- *
  *  Return:
- *              None
+ *              The PCA9685 driver init status
  *
  *  Author:
  *              ROC LiRen(2018.12.15)

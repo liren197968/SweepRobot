@@ -36,6 +36,7 @@
 #include "stm32f4xx_it.h"
 
 /* USER CODE BEGIN 0 */
+#include "RocLog.h"
 #include "RocBluetooth.h"
 /* USER CODE END 0 */
 
@@ -68,7 +69,7 @@ void NMI_Handler(void)
 void HardFault_Handler(void)
 {
     /* USER CODE BEGIN HardFault_IRQn 0 */
-
+    ROC_LOGE("Hardware CPU is in ERROR!!!");
     /* USER CODE END HardFault_IRQn 0 */
     while (1)
     {

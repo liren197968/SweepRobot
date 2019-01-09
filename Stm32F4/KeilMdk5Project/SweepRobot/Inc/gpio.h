@@ -48,19 +48,36 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 #include "main.h"
 
-    /* USER CODE BEGIN Includes */
+/* USER CODE BEGIN Includes */
+#define ROC_PCA9685_A_EN_PIN                GPIO_PIN_2
+#define ROC_PCA9685_A_EN_GPIO_PORT          GPIOC
+#define ROC_PCA9685_B_EN_PIN                GPIO_PIN_3
+#define ROC_PCA9685_B_EN_GPIO_PORT          GPIOC
+#define ROC_PCA9685_LED_PIN                 GPIO_PIN_7
+#define ROC_PCA9685_LED_GPIO_PORT           GPIOA
 
-    /* USER CODE END Includes */
+#define ROC_BEEPER_CTRL_PIN                 GPIO_PIN_15
+#define ROC_BEEPER_GPIO_PORT                GPIOA
 
-    /* USER CODE BEGIN Private defines */
+#define ROC_MOTOR_IN1_PIN                   GPIO_PIN_2
+#define ROC_MOTOR_IN2_PIN                   GPIO_PIN_12
+#define ROC_MOTOR_IN3_PIN                   GPIO_PIN_0
+#define ROC_MOTOR_IN4_PIN                   GPIO_PIN_1
+#define ROC_MOTOR_GPIO_PORT1                GPIOB
+#define ROC_MOTOR_GPIO_PORT2                GPIOA
 
-    /* USER CODE END Private defines */
 
-    void MX_GPIO_Init(void);
+/* USER CODE END Includes */
 
-    /* USER CODE BEGIN Prototypes */
+/* USER CODE BEGIN Private defines */
 
-    /* USER CODE END Prototypes */
+/* USER CODE END Private defines */
+
+void MX_GPIO_Init(void);
+
+/* USER CODE BEGIN Prototypes */
+
+/* USER CODE END Prototypes */
 
 #ifdef __cplusplus
 }
