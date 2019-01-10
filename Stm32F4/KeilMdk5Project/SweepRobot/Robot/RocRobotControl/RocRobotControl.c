@@ -14,11 +14,13 @@
 #include "RocRobotDhAlgorithm.h"
 
 
-#define ROC_ROBOT_RUN_SPEED_DEFAULT     300
+#define ROC_ROBOT_RUN_SPEED_DEFAULT     260
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
 static double           g_ExpectedAngle = 0;
 #endif
+
+static uint32_t g_RobotWalkModeStatus = ROC_ROBOT_WALK_MODE_CAR;
 
 /*********************************************************************************
  *  Description:
@@ -40,6 +42,16 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         RocLedToggle();
         RocServoControl();
     }
+}
+
+static void RocRobotWalkModeSet(uint32_t WalkMode)
+{
+    g_RobotWalkModeStatus = WalkMode;
+}
+
+static uint32_t RocRobotWalkModeGet(void)
+{
+    return g_RobotWalkModeStatus;
 }
 
 /*********************************************************************************
@@ -202,25 +214,6 @@ static void RocRobotStandCtrl(void)
 
 /*********************************************************************************
  *  Description:
- *              Robot control init
- *
- *  Parameter:
- *              None
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2018.12.16)
-**********************************************************************************/
-static void RocRobotControlInit(void)
-{
-    RocRobotStandCtrl();
-}
-
-
-/*********************************************************************************
- *  Description:
  *              Robot transform walk mode
  *
  *  Parameter:
@@ -232,23 +225,32 @@ static void RocRobotControlInit(void)
  *  Author:
  *              ROC LiRen(2018.12.20)
 **********************************************************************************/
-static void RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_e RobotWalkMode)
+static void RocRobotWalkModeChangeCtrl(void)
 {
-    static uint8_t      Flag = 0;
+    static uint8_t      CountFlag = ROC_ROBOT_RUN_GAIT_NUM;
+    uint32_t            RobotWalkMode = ROC_ROBOT_WALK_MODE_CAR;
+    static uint32_t     LastWalkMode = ROC_ROBOT_WALK_MODE_CAR;
 
-    Flag++;
-    
-    if(ROC_ROBOT_RUN_GAIT_NUM < Flag)
+    CountFlag++;
+
+    if(ROC_ROBOT_RUN_GAIT_NUM < CountFlag)
     {
-        Flag = ROC_ROBOT_RUN_GAIT_NUM;
+        CountFlag = ROC_ROBOT_RUN_GAIT_NUM;
+    }
+
+    RobotWalkMode = RocRobotWalkModeGet();
+
+    if(LastWalkMode != RobotWalkMode)
+    {
+        CountFlag = 1;
     }
 
     if(ROC_ROBOT_WALK_MODE_CAR == RobotWalkMode)
     {
-        switch(Flag)
+        switch(CountFlag)
         {
             case 1:
-                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.25, g_RobotForwardPwmVal);
+                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.35, g_RobotForwardPwmVal);
 
                     RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
                     RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
@@ -260,18 +262,6 @@ static void RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_e RobotWalkMode)
                     break;
 
             case 2:
-                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.5, g_RobotForwardPwmVal);
-
-                    RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
-                    RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
-                    RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotForwardPwmVal[7], g_RobotForwardPwmVal[8]);
-                    
-                    RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotForwardPwmVal[10], g_RobotForwardPwmVal[11]);
-                    RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotForwardPwmVal[4], g_RobotForwardPwmVal[5]);
-                    RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
-                    break;
-
-            case 3:
                     RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.75, g_RobotForwardPwmVal);
 
                     RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
@@ -283,8 +273,20 @@ static void RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_e RobotWalkMode)
                     RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
                     break;
 
+            case 3:
+                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 1.1, g_RobotForwardPwmVal);
+
+                    RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
+                    RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
+                    RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotForwardPwmVal[7], g_RobotForwardPwmVal[8]);
+                    
+                    RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotForwardPwmVal[10], g_RobotForwardPwmVal[11]);
+                    RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotForwardPwmVal[4], g_RobotForwardPwmVal[5]);
+                    RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
+                    break;
+
             case 4:
-                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 1, g_RobotForwardPwmVal);
+                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5, g_RobotForwardPwmVal);
 
                     RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
                     RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
@@ -298,12 +300,12 @@ static void RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_e RobotWalkMode)
             default:break;
         }
     }
-    else if(ROC_ROBOT_WALK_MODE_CAR == RobotWalkMode)
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == RobotWalkMode)
     {
-        switch(Flag)
+        switch(CountFlag)
         {
             case 1:
-                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.75, g_RobotForwardPwmVal);
+                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 1.1, g_RobotForwardPwmVal);
 
                     RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
                     RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
@@ -315,7 +317,7 @@ static void RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_e RobotWalkMode)
                     break;
 
             case 2:
-                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.5, g_RobotForwardPwmVal);
+                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.75, g_RobotForwardPwmVal);
 
                     RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
                     RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
@@ -327,7 +329,7 @@ static void RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_e RobotWalkMode)
                     break;
 
             case 3:
-                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.25, g_RobotForwardPwmVal);
+                    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 0.35, g_RobotForwardPwmVal);
 
                     RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
                     RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
@@ -353,6 +355,8 @@ static void RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_e RobotWalkMode)
             default:break;
         }
     }
+
+    LastWalkMode = RocRobotWalkModeGet();
 }
 
 /*********************************************************************************
@@ -371,13 +375,13 @@ static void RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_e RobotWalkMode)
 **********************************************************************************/
 static void RocRobotForwardWalkCtrl(void)
 {
-    static uint8_t      Flag = 0;
+    static uint8_t      CountFlag = 0;
 
-    Flag++;
+    CountFlag++;
 
-    if(ROC_ROBOT_RUN_GAIT_NUM < Flag)
+    if(ROC_ROBOT_RUN_GAIT_NUM < CountFlag)
     {
-        Flag = 1;
+        CountFlag = 1;
     }
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
@@ -385,7 +389,7 @@ static void RocRobotForwardWalkCtrl(void)
 #endif
 
 #if defined(ROC_ROBOT_GAIT_SIX)
-    switch(Flag)
+    switch(CountFlag)
     {
         case 1:
                 RocRobotOpenLoopWalkCalculate(ROC_ROBOT_DEFAULT_LEG_STEP, ROC_ROBOT_DEFAULT_FEET_LIFT, g_RobotForwardPwmVal);
@@ -462,7 +466,7 @@ static void RocRobotForwardWalkCtrl(void)
         default:break;
     }
 #elif defined(ROC_ROBOT_GAIT_FIVE)
-switch(Flag)
+switch(CountFlag)
 {
     case 1:
             RocRobotOpenLoopWalkCalculate(ROC_ROBOT_DEFAULT_LEG_STEP, ROC_ROBOT_DEFAULT_FEET_LIFT, g_RobotForwardPwmVal);
@@ -531,7 +535,7 @@ switch(Flag)
     default:break;
 }
 #else
-    switch(Flag)
+    switch(CountFlag)
     {
         case 1:
                 RocRobotOpenLoopWalkCalculate(ROC_ROBOT_DEFAULT_LEG_STEP, ROC_ROBOT_DEFAULT_FEET_LIFT, g_RobotForwardPwmVal);
@@ -602,16 +606,16 @@ switch(Flag)
 **********************************************************************************/
 static void RocRobotBackwardWalkCtrl(void)
 {
-    static uint8_t      Flag = 0;
+    static uint8_t      CountFlag = 0;
 
-    Flag++;
+    CountFlag++;
 
-    if(ROC_ROBOT_RUN_GAIT_NUM < Flag)
+    if(ROC_ROBOT_RUN_GAIT_NUM < CountFlag)
     {
-        Flag = 1;
+        CountFlag = 1;
     }
 
-    switch(Flag)
+    switch(CountFlag)
     {
         case 1:
                 RocRobotOpenLoopWalkCalculate(-ROC_ROBOT_DEFAULT_LEG_STEP, ROC_ROBOT_DEFAULT_FEET_LIFT, g_RobotForwardPwmVal);
@@ -681,16 +685,16 @@ static void RocRobotBackwardWalkCtrl(void)
 **********************************************************************************/
 static void RocRobotCounterclockwiseWalkCtrl(void)
 {
-    static uint8_t      Flag = 0;
+    static uint8_t      CountFlag = 0;
 
-    Flag++;
+    CountFlag++;
 
-    if(ROC_ROBOT_RUN_GAIT_NUM < Flag)
+    if(ROC_ROBOT_RUN_GAIT_NUM < CountFlag)
     {
-        Flag = 1;
+        CountFlag = 1;
     }
 
-    switch(Flag)
+    switch(CountFlag)
     {
         case 1:
                 RocRobotOpenLoopCircleCalculate(ROC_ROBOT_DEFAULT_LEG_ANGLE, ROC_ROBOT_DEFAULT_FEET_LIFT, g_RobotForwardPwmVal);
@@ -760,16 +764,16 @@ static void RocRobotCounterclockwiseWalkCtrl(void)
 **********************************************************************************/
 static void RocRobotClockwiseWalkCtrl(void)
 {
-    static uint8_t      Flag = 0;
+    static uint8_t      CountFlag = 0;
 
-    Flag++;
+    CountFlag++;
 
-    if(ROC_ROBOT_RUN_GAIT_NUM < Flag)
+    if(ROC_ROBOT_RUN_GAIT_NUM < CountFlag)
     {
-        Flag = 1;
+        CountFlag = 1;
     }
 
-    switch(Flag)
+    switch(CountFlag)
     {
         case 1:
                 RocRobotOpenLoopCircleCalculate(-ROC_ROBOT_DEFAULT_LEG_ANGLE, ROC_ROBOT_DEFAULT_FEET_LIFT, g_RobotForwardPwmVal);
@@ -845,19 +849,34 @@ void RocRobotRemoteControl(void)
 
     switch(RobotCtrlCmd)
     {
-        case ROC_ROBOT_CTRL_CMD_MOSTAND:    RocRobotStandCtrl();
+        case ROC_ROBOT_CTRL_CMD_MOSTAND:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+                                            {
+                                                RocRobotStandCtrl();
+                                            }
                                             break;
 
-        case ROC_ROBOT_CTRL_CMD_FORWARD:    RocRobotForwardWalkCtrl();
+        case ROC_ROBOT_CTRL_CMD_FORWARD:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+                                            {
+                                                RocRobotForwardWalkCtrl();
+                                            }
                                             break;
 
-        case ROC_ROBOT_CTRL_CMD_BAKWARD:    RocRobotBackwardWalkCtrl();
+        case ROC_ROBOT_CTRL_CMD_BAKWARD:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+                                            {
+                                                RocRobotBackwardWalkCtrl();
+                                            }
                                             break;
 
-        case ROC_ROBOT_CTRL_CMD_LFCLOCK:    RocRobotCounterclockwiseWalkCtrl();
+        case ROC_ROBOT_CTRL_CMD_LFCLOCK:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+                                            {
+                                                RocRobotCounterclockwiseWalkCtrl();
+                                            }
                                             break;
 
-        case ROC_ROBOT_CTRL_CMD_RGCLOCK:    RocRobotClockwiseWalkCtrl();
+        case ROC_ROBOT_CTRL_CMD_RGCLOCK:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+                                            {
+                                                RocRobotClockwiseWalkCtrl();
+                                            }
                                             break;
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
@@ -872,15 +891,44 @@ void RocRobotRemoteControl(void)
         case ROC_ROBOT_CTRL_CMD_CARBAKD:    RocMotorRotateDirectionSet(ROC_MOTOR_REVERSE_ROTATE);
                                             break;
 
-        case ROC_ROBOT_CTRL_CMD_CARMODE:    RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_CAR);
+        case ROC_ROBOT_CTRL_CMD_CARMODE:    RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_CAR);
+                                            RocRobotWalkModeChangeCtrl();
                                             break;
 
-        case ROC_ROBOT_CTRL_CMD_ROTMODE:    RocRobotWalkModeChangeCtrl(ROC_ROBOT_WALK_MODE_HEXAPOD);
+        case ROC_ROBOT_CTRL_CMD_ROTMODE:    RocMotorRotateDirectionSet(ROC_MOTOR_STOPPED_ROTATE);
+                                            RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_HEXAPOD);
+                                            RocRobotWalkModeChangeCtrl();
                                             break;
 
         default:                            RocMotorRotateDirectionSet(ROC_MOTOR_STOPPED_ROTATE);
                                             break;
     }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot control init
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
+static void RocRobotControlInit(void)
+{
+    RocRobotStandCtrl();
+
+    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5, g_RobotForwardPwmVal);
+    RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
+    RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
+    RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotForwardPwmVal[7], g_RobotForwardPwmVal[8]);
+    RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotForwardPwmVal[10], g_RobotForwardPwmVal[11]);
+    RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotForwardPwmVal[4], g_RobotForwardPwmVal[5]);
+    RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
 }
 
 /*********************************************************************************

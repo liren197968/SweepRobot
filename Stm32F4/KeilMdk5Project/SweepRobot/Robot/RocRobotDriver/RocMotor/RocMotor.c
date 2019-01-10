@@ -147,14 +147,13 @@ static void RocMotorRotateForward(void)
 **********************************************************************************/
 static void RocMotorRotateReverse(void)
 {
-    RocMotorSpeedSet(ROC_MOTOR_DEFAULT_SPEED, ROC_MOTOR_DEFAULT_SPEED);
+    RocMotorSpeedSet(ROC_MOTOR_DEFAULT_SPEED + ROC_MOTOR_DIFFER_SPEED, ROC_MOTOR_DEFAULT_SPEED + ROC_MOTOR_DIFFER_SPEED);
 
     HAL_GPIO_WritePin(ROC_MOTOR_GPIO_PORT1, ROC_MOTOR_IN1_PIN, GPIO_PIN_SET);
     HAL_GPIO_WritePin(ROC_MOTOR_GPIO_PORT2, ROC_MOTOR_IN3_PIN, GPIO_PIN_SET);
 
     HAL_GPIO_WritePin(ROC_MOTOR_GPIO_PORT1, ROC_MOTOR_IN2_PIN, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(ROC_MOTOR_GPIO_PORT2, ROC_MOTOR_IN4_PIN, GPIO_PIN_RESET);
-
 }
 
 /*********************************************************************************

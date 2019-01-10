@@ -32,6 +32,19 @@ static void RocServoPwmIncreCalculate(void)
 
     for(i = 0U; i < ROC_SERVO_MAX_SUPPORT_NUM; i++)
     {
+        if(g_PwmExpetVal[i] < ROC_SERVO_MIN_PWM_VAL)
+        {
+            ROC_LOGN("Servo(%d) input PWM value(%d) is less than ROC_SERVO_MIN_PWM_VAL! Be careful!", i, g_PwmExpetVal[i]);
+
+            g_PwmExpetVal[i] = ROC_SERVO_MIN_PWM_VAL;
+        }
+        else if(g_PwmExpetVal[i] > ROC_SERVO_MAX_PWM_VAL)
+        {
+            ROC_LOGN("Servo(%d) input PWM value(%d) is more than ROC_SERVO_MAX_PWM_VAL! Be careful!", i, g_PwmExpetVal[i]);
+
+            g_PwmExpetVal[i] = ROC_SERVO_MAX_PWM_VAL;
+        }
+
         g_PwmIncreVal[i] = (g_PwmExpetVal[i] - g_PwmLastdVal[i]) / ROC_SERVO_SPEED_DIV_STP;
     }
 }
@@ -155,7 +168,7 @@ void RocServoControl(void)
                             RefreshTimes, g_PwmPreseVal[0], g_PwmExpetVal[0], g_PwmIncreVal[0]);
 #endif
 
-    if(RefreshTimes >= ROC_SERVO_SPEED_DIV_STP)
+    if(ROC_SERVO_SPEED_DIV_STP <= RefreshTimes)
     {
         RefreshTimes = 0;
 

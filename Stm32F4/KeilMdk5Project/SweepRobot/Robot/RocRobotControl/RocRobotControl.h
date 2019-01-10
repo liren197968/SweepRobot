@@ -79,14 +79,14 @@
 
 
 #define ROC_ROBOT_RIG_FRO_HIP_CENTER                302
-#define ROC_ROBOT_RIG_FRO_LEG_CENTER                170
+#define ROC_ROBOT_RIG_FRO_LEG_CENTER                172
 #define ROC_ROBOT_RIG_FRO_FET_CENTER                332
 #define ROC_ROBOT_RIG_MID_HIP_CENTER                301
-#define ROC_ROBOT_RIG_MID_LEG_CENTER                153
-#define ROC_ROBOT_RIG_MID_FET_CENTER                310
+#define ROC_ROBOT_RIG_MID_LEG_CENTER                180
+#define ROC_ROBOT_RIG_MID_FET_CENTER                300
 #define ROC_ROBOT_RIG_HIN_HIP_CENTER                307
 #define ROC_ROBOT_RIG_HIN_LEG_CENTER                180
-#define ROC_ROBOT_RIG_HIN_FET_CENTER                310 
+#define ROC_ROBOT_RIG_HIN_FET_CENTER                310
 
 #define ROC_ROBOT_LEF_FRO_HIP_CENTER                306
 #define ROC_ROBOT_LEF_FRO_LEG_CENTER                402
@@ -100,7 +100,7 @@
 
 
 #define ROC_ROBOT_DEFAULT_LEG_STEP                  25
-#define ROC_ROBOT_DEFAULT_LEG_ANGLE                 15
+#define ROC_ROBOT_DEFAULT_LEG_ANGLE                 12
 #define ROC_ROBOT_DEFAULT_FEET_LIFT                 30
 
 
@@ -112,8 +112,9 @@
 #define ROC_ROBOT_CTRL_CMD_PARAMET                  'Y'
 #define ROC_ROBOT_CTRL_CMD_CARFORD                  'B'
 #define ROC_ROBOT_CTRL_CMD_CARBAKD                  'R'
-#define ROC_ROBOT_CTRL_CMD_ROTMODE                  'Y'
-#define ROC_ROBOT_CTRL_CMD_CARMODE                  'G'
+#define ROC_ROBOT_CTRL_CMD_CARMODE                  'Y'
+#define ROC_ROBOT_CTRL_CMD_ROTMODE                  'G'
+
 
 #if defined(ROC_ROBOT_GAIT_SIX)
 #define ROC_ROBOT_RUN_GAIT_NUM                      6
