@@ -40,8 +40,10 @@
 
 #define STATUS_LAST_SEQ_STEP_MASK   0x0F
 
+#define ROC_ROBOT_IAQ_LEVEL_LIMIT_VALUE             3
 
-#define ROC_ROBOT_CTRL_MEASURE_START                'Y'
+#define ROC_ROBOT_CTRL_MEASURE_START                'O'
+#define ROC_ROBOT_CTRL_MEASURE_STOP                 'P'
 
 
 ROC_RESULT RocZmod4410Init(void);

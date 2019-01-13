@@ -4,8 +4,8 @@
 
 #include "RocLog.h"
 #include "RocLed.h"
-#include "RocMotor.h"
 #include "RocServo.h"
+#include "RocMotor.h"
 #include "RocBeeper.h"
 #include "RocPca9685.h"
 #include "RocZmod4410.h"
@@ -14,7 +14,7 @@
 #include "RocRobotDhAlgorithm.h"
 
 
-#define ROC_ROBOT_RUN_SPEED_DEFAULT     260
+#define ROC_ROBOT_RUN_SPEED_DEFAULT     200
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
 static double           g_ExpectedAngle = 0;
@@ -44,11 +44,37 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Set the robot walk mode
+ *
+ *  Parameter:
+ *              WalkMode: the expected robot walk mode
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
 static void RocRobotWalkModeSet(uint32_t WalkMode)
 {
     g_RobotWalkModeStatus = WalkMode;
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Get the robot walk mode
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              The current robot walk mode
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
 static uint32_t RocRobotWalkModeGet(void)
 {
     return g_RobotWalkModeStatus;
@@ -900,6 +926,12 @@ void RocRobotRemoteControl(void)
                                             RocRobotWalkModeChangeCtrl();
                                             break;
 
+        case ROC_ROBOT_CTRL_CMD_TURNLDR:    RocMotorServoTurnAngleSet(ROC_MOTOR_SERVO_DEFAULT_ANGLE - 30);
+                                            break;
+
+        case ROC_ROBOT_CTRL_CMD_TURNRDR:    RocMotorServoTurnAngleSet(ROC_MOTOR_SERVO_DEFAULT_ANGLE + 30);
+                                            break;
+
         default:                            RocMotorRotateDirectionSet(ROC_MOTOR_STOPPED_ROTATE);
                                             break;
     }
@@ -1073,19 +1105,21 @@ void RocRobotMain(void)
 
         RocBluetoothData_Send(g_BtRxBuffer, g_BtRxDatLen);
 
+        memset(g_BtRxBuffer, g_BtRxDatLen, 0);
+
         g_BtRecvEnd = ROC_FALSE;
     }
 
     if(ROC_ROBOT_CTRL_MEASURE_START == RocBluetoothCtrlCmd_Get())
     {
-        //RocZmode4410MeasureStart();
+        RocZmode4410MeasureStart();
 
         if(ROC_TRUE == RocZmod4410SensorStatusIsChange())
         {
             RocBeeperBlink(4, 800);
         }
     }
-    else
+    else if(ROC_ROBOT_CTRL_MEASURE_STOP == RocBluetoothCtrlCmd_Get())
     {
         RocZmode4410MeasureStop();
     }

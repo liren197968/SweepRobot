@@ -4,8 +4,8 @@
 
 #define ROC_MOTOR_MAX_SPEED                 4095
 #define ROC_MOTOR_MIN_SPEED                 10
-#define ROC_MOTOR_DEFAULT_SPEED             1100
-#define ROC_MOTOR_DIFFER_SPEED              400
+#define ROC_MOTOR_DEFAULT_SPEED             1300
+#define ROC_MOTOR_DIFFER_SPEED              300
 #define ROC_MOTOR_SERVO_DEFAULT_ANGLE       270
 
 

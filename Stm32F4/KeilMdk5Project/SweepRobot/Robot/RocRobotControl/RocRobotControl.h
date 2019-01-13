@@ -109,11 +109,13 @@
 #define ROC_ROBOT_CTRL_CMD_BAKWARD                  'S'
 #define ROC_ROBOT_CTRL_CMD_LFCLOCK                  'A'
 #define ROC_ROBOT_CTRL_CMD_RGCLOCK                  'D'
-#define ROC_ROBOT_CTRL_CMD_PARAMET                  'Y'
+#define ROC_ROBOT_CTRL_CMD_PARAMET                  'U'
 #define ROC_ROBOT_CTRL_CMD_CARFORD                  'B'
 #define ROC_ROBOT_CTRL_CMD_CARBAKD                  'R'
 #define ROC_ROBOT_CTRL_CMD_CARMODE                  'Y'
 #define ROC_ROBOT_CTRL_CMD_ROTMODE                  'G'
+#define ROC_ROBOT_CTRL_CMD_TURNLDR                  'Q'
+#define ROC_ROBOT_CTRL_CMD_TURNRDR                  'E'
 
 
 #if defined(ROC_ROBOT_GAIT_SIX)
@@ -129,7 +131,6 @@ typedef enum {
     ROC_ROBOT_WALK_MODE_CAR = 0,
     ROC_ROBOT_WALK_MODE_HEXAPOD = 1,
 }ROC_ROBOT_WALK_MODE_e;
-
 
 
 void RocRobotInit(void);

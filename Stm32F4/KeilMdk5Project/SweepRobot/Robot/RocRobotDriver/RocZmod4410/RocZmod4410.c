@@ -224,7 +224,10 @@ ROC_RESULT RocZmode4410MeasureStart(void)
         cs_state = calc_odor(r_mox, &odor_par);
         ROC_LOGI("odor control state %d \r\n", cs_state);
 
-        RocZmod4410SensorStatusSet((uint32_t)cs_state);
+        if((ROC_ROBOT_IAQ_LEVEL_LIMIT_VALUE < iaq) || (ROC_TRUE == cs_state))
+        {
+            RocZmod4410SensorStatusSet(ROC_TRUE);
+        }
 
         /* INSTEAD OF POLLING THE INTERRUPT CAN BE USED FOR OTHER HW */
         /* waiting for sensor ready */
