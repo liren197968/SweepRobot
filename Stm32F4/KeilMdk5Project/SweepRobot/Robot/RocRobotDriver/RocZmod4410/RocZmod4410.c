@@ -87,7 +87,7 @@ static int8_t RocZmode4410ReadReg(uint8_t SlaveAddr, uint8_t Reg, uint8_t *Buffe
     ReadStatus = HAL_I2C_Mem_Read(&hi2c2, (uint16_t)SlaveAddr, (uint16_t)Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, DatLen, 1000);
     if(HAL_OK != ReadStatus)
     {
-        ROC_LOGE("IIC2 reg reg is in error(%d)!", ReadStatus);
+        ROC_LOGE("IIC2 read reg is in error(%d)!", ReadStatus);
     }
 
     return (int8_t)ReadStatus;

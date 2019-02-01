@@ -395,6 +395,8 @@ __weak void HAL_Delay(uint32_t Delay)
     uint32_t tickstart = HAL_GetTick();
     uint32_t wait = Delay;
 
+    HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
+
     /* Add a freq to guarantee minimum wait */
     if (wait < HAL_MAX_DELAY)
     {
@@ -404,6 +406,37 @@ __weak void HAL_Delay(uint32_t Delay)
     while((HAL_GetTick() - tickstart) < wait)
     {
     }
+}
+
+/**
+  * @brief This function provides minimum delay (in microseconds) based
+  *        on variable incremented.
+  * @note In the default implementation , SysTick timer is the source of time base.
+  *       It is used to generate interrupts at regular time intervals where uwTick
+  *       is incremented.
+  * @note This function is declared as __weak to be overwritten in case of other
+  *       implementations in user file.
+  * @param Delay specifies the delay time length, in milliseconds.
+  * @retval None
+  */
+__weak void HAL_DelayUs(uint32_t Delay)
+{
+    uint32_t tickstart = HAL_GetTick();
+    uint32_t wait = Delay;
+
+    HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000000);
+
+    /* Add a freq to guarantee minimum wait */
+    if (wait < HAL_MAX_DELAY)
+    {
+        wait += (uint32_t)(uwTickFreq);
+    }
+
+    while((HAL_GetTick() - tickstart) < wait)
+    {
+    }
+
+    HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
 }
 
 /**

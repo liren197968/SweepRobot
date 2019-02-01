@@ -1,3 +1,9 @@
+/********************************************************************************
+ * This code is used for robot control
+*********************************************************************************
+ * Author        Data            Version
+ * Liren         2018/11/18      1.0
+********************************************************************************/
 #ifndef __ERROR_H
 #define __ERROR_H
 
@@ -12,6 +18,9 @@
 
 #define RET_OK              0
 #define RET_ERROR           -1
+
+#define ROC_OK              0
+#define ROC_ERROR           -1
 
 #define RUN_SUCCESS         0
 #define RUN_ERROR           -1

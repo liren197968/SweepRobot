@@ -39,6 +39,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "stm32f4xx_hal.h"
+#include "adc.h"
 #include "dma.h"
 #include "i2c.h"
 #include "spi.h"
@@ -102,11 +103,14 @@ int main(void)
     MX_GPIO_Init();
     MX_DMA_Init();
     MX_USART1_UART_Init();
+    MX_ADC1_Init();
+    MX_USART2_UART_Init();
     MX_I2C1_Init();
     MX_USART3_UART_Init();
     MX_I2C2_Init();
     MX_SPI1_Init();
     MX_TIM6_Init();
+    MX_TIM7_Init();
 
     /* Initialize interrupts */
     MX_NVIC_Init();
@@ -175,11 +179,11 @@ void SystemClock_Config(void)
 
     /**Configure the Systick interrupt time
     */
-    HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 8000);
+    HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
 
     /**Configure the Systick
     */
-    HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK_DIV8);
+    HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 
     /* SysTick_IRQn interrupt configuration */
     HAL_NVIC_SetPriority(SysTick_IRQn, 0, 0);
@@ -194,14 +198,20 @@ static void MX_NVIC_Init(void)
     /* TIM6_DAC_IRQn interrupt configuration */
     HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 4, 0);
     HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
+    /* TIM7_DAC_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(TIM7_IRQn, 7, 0);
+    HAL_NVIC_EnableIRQ(TIM7_IRQn);
+    /* USART2_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(USART2_IRQn, 2, 0);
+    HAL_NVIC_EnableIRQ(USART2_IRQn);
     /* USART3_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(USART3_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
     HAL_NVIC_EnableIRQ(USART3_IRQn);
     /* DMA1_Stream1_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 1, 0);
     HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
     /* DMA1_Stream3_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 0, 0);
+    HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 3, 0);
     HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
 }
 

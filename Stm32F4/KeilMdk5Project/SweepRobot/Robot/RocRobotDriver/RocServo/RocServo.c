@@ -1,3 +1,9 @@
+/********************************************************************************
+ * This code is used for robot control
+*********************************************************************************
+ * Author        Data            Version
+ * Liren         2018/12/15      1.0
+********************************************************************************/
 #include "tim.h"
 
 #include "RocLog.h"
@@ -227,7 +233,7 @@ ROC_RESULT RocServoTimerStart(void)
     {
         Ret = RET_ERROR;
 
-        _Error_Handler(__FILE__, __LINE__);
+        Error_Handler();
     }
 
     return Ret;
@@ -254,7 +260,7 @@ ROC_RESULT RocServoTimerStop(void)
     {
         Ret = RET_ERROR;
 
-        _Error_Handler(__FILE__, __LINE__);
+        Error_Handler();
     }
 
     return Ret;

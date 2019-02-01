@@ -1,3 +1,9 @@
+/********************************************************************************
+ * This code is used for robot control
+*********************************************************************************
+ * Author        Data            Version
+ * Liren         2018/12/20      1.0
+********************************************************************************/
 #include "usart.h"
 
 #include "RocLog.h"
@@ -17,9 +23,8 @@ uint8_t g_BtRxBuffer[ROC_BT_RXD_LENGTH];
  *  Parameter:
  *              None
  *
- *
  *  Return:
- *              None
+ *              The init status
  *
  *  Author:
  *              ROC LiRen(2018.12.20)
@@ -48,7 +53,6 @@ ROC_RESULT RocBluetoothUsart_Init(void)
     return Ret;
 }
 
-
 /*********************************************************************************
  *  Description:
  *              USART complete sending callback function
@@ -65,7 +69,11 @@ ROC_RESULT RocBluetoothUsart_Init(void)
 **********************************************************************************/
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *Huart)
 {
-    if(USART3 == Huart->Instance)
+    if(USART2 == Huart->Instance)
+    {
+        ROC_LOGI("Remote control send data successfully.");
+    }
+    else if(USART3 == Huart->Instance)
     {
         ROC_LOGI("Bluetooth send data successfully.");
     }
@@ -87,7 +95,10 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *Huart)
 **********************************************************************************/
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *Huart)
 {
-    if(USART3 == Huart->Instance)
+    if(USART2 == Huart->Instance)
+    {
+        ROC_LOGI("Remote control receive data successfully.");
+    }else if(USART3 == Huart->Instance)
     {
         ROC_LOGI("Bluetooth receive data successfully.");
     }
@@ -222,9 +233,8 @@ uint8_t RocBluetoothCtrlCmd_Get(void)
  *  Parameter:
  *              None
  *
- *
  *  Return:
- *              None
+ *              The init status
  *
  *  Author:
  *              ROC LiRen(2018.12.20)
@@ -241,7 +251,7 @@ ROC_RESULT RocBluetoothInit(void)
 
     if(RET_OK != Ret)
     {
-        ROC_LOGE("Bluetooth module init error(%d)!", Ret);
+        ROC_LOGE("Bluetooth module init is in error(%d)!", Ret);
     }
     else
     {

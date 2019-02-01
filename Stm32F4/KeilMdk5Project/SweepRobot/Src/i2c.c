@@ -110,9 +110,12 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
         /* I2C1 clock enable */
-        //__HAL_RCC_I2C1_CLK_ENABLE();
-        /* USER CODE BEGIN I2C1_MspInit 1 */
 
+        /* USER CODE BEGIN I2C1_MspInit 1 */
+        //__HAL_RCC_I2C1_FORCE_RESET();
+        //__HAL_RCC_I2C1_RELEASE_RESET();
+        i2cHandle->Instance->CR1 |= 0x8000;
+        i2cHandle->Instance->CR1 &= ~0x8000;
         /* USER CODE END I2C1_MspInit 1 */
     }
     else if(i2cHandle->Instance == I2C2)
@@ -133,7 +136,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
         /* I2C2 clock enable */
-        //__HAL_RCC_I2C2_CLK_ENABLE();
+
         /* USER CODE BEGIN I2C2_MspInit 1 */
 
         /* USER CODE END I2C2_MspInit 1 */

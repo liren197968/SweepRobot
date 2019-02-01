@@ -1,3 +1,9 @@
+/********************************************************************************
+ * This code is used for robot control
+*********************************************************************************
+ * Author        Data            Version
+ * Liren         2018/12/16      1.0
+********************************************************************************/
 #ifndef __ROC_ROBOTCONTROL_H
 #define __ROC_ROBOTCONTROL_H
 
@@ -12,7 +18,7 @@
 #define ROC_ROBOT_DH_CONST_D1                       0
 #define ROC_ROBOT_DH_CONST_A1                       44
 #define ROC_ROBOT_DH_CONST_A2                       74
-#define ROC_ROBOT_DH_CONST_A3                       112.38  //83.24
+#define ROC_ROBOT_DH_CONST_A3                       112.38
 
 
 #define ROC_ROBOT_INIT_ANGLE_THET_1                 60
@@ -33,7 +39,7 @@
 
 
 #define ROC_ROBOT_LEG_WIDTH                         141.06
-#define ROC_ROBOT_LEG_HEIGHT                        110 //80
+#define ROC_ROBOT_LEG_HEIGHT                        110
 #define ROC_ROBOT_FEET_WIDTH                        23
 
 
@@ -50,13 +56,13 @@
 
 #define ROC_ROBOT_FRO_HIP_INIT_ANGLE                60
 #define ROC_ROBOT_FRO_LEG_INIT_ANGLE                0
-#define ROC_ROBOT_FRO_FET_INIT_ANGLE                78.19//73.96
+#define ROC_ROBOT_FRO_FET_INIT_ANGLE                78.19
 #define ROC_ROBOT_MID_HIP_INIT_ANGLE                0
 #define ROC_ROBOT_MID_LEG_INIT_ANGLE                0
-#define ROC_ROBOT_MID_FET_INIT_ANGLE                78.19//73.96
+#define ROC_ROBOT_MID_FET_INIT_ANGLE                78.19
 #define ROC_ROBOT_HIN_HIP_INIT_ANGLE                60
 #define ROC_ROBOT_HIN_LEG_INIT_ANGLE                0
-#define ROC_ROBOT_HIN_FET_INIT_ANGLE                78.19//73.96
+#define ROC_ROBOT_HIN_FET_INIT_ANGLE                78.19
 
 
 #define ROC_ROBOT_FRO_INIT_X                        (ROC_ROBOT_WIDTH * cos(ROC_ROBOT_FRO_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
@@ -68,14 +74,6 @@
 #define ROC_ROBOT_HIN_INIT_X                        (ROC_ROBOT_WIDTH * cos(ROC_ROBOT_HIN_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
 #define ROC_ROBOT_HIN_INIT_Y                        (ROC_ROBOT_WIDTH * sin(ROC_ROBOT_HIN_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
 #define ROC_ROBOT_HIN_INIT_Z                        -ROC_ROBOT_HEIGHT
-
-
-#define ROC_ROBOT_RIGHT_FRONT_LEG                   1
-#define ROC_ROBOT_RIGHT_MIDDLE_LEG                  2
-#define ROC_ROBOT_RIGHT_HIND_LEG                    3
-#define ROC_ROBOT_LEFT_FRONT_LEG                    4
-#define ROC_ROBOT_LEFT_MIDDLE_LEG                   5
-#define ROC_ROBOT_LEFT_HIND_LEG                     6
 
 
 #define ROC_ROBOT_RIG_FRO_HIP_CENTER                302
@@ -99,23 +97,9 @@
 #define ROC_ROBOT_LEF_HIN_FET_CENTER                310
 
 
-#define ROC_ROBOT_DEFAULT_LEG_STEP                  25
+#define ROC_ROBOT_DEFAULT_LEG_STEP                  40
 #define ROC_ROBOT_DEFAULT_LEG_ANGLE                 12
 #define ROC_ROBOT_DEFAULT_FEET_LIFT                 30
-
-
-#define ROC_ROBOT_CTRL_CMD_MOSTAND                  'C'
-#define ROC_ROBOT_CTRL_CMD_FORWARD                  'W'
-#define ROC_ROBOT_CTRL_CMD_BAKWARD                  'S'
-#define ROC_ROBOT_CTRL_CMD_LFCLOCK                  'A'
-#define ROC_ROBOT_CTRL_CMD_RGCLOCK                  'D'
-#define ROC_ROBOT_CTRL_CMD_PARAMET                  'U'
-#define ROC_ROBOT_CTRL_CMD_CARFORD                  'B'
-#define ROC_ROBOT_CTRL_CMD_CARBAKD                  'R'
-#define ROC_ROBOT_CTRL_CMD_CARMODE                  'Y'
-#define ROC_ROBOT_CTRL_CMD_ROTMODE                  'G'
-#define ROC_ROBOT_CTRL_CMD_TURNLDR                  'Q'
-#define ROC_ROBOT_CTRL_CMD_TURNRDR                  'E'
 
 
 #if defined(ROC_ROBOT_GAIT_SIX)
@@ -127,9 +111,41 @@
 #endif
 
 
-typedef enum {
+typedef enum
+{
     ROC_ROBOT_WALK_MODE_CAR = 0,
     ROC_ROBOT_WALK_MODE_HEXAPOD = 1,
+
+}ROC_ROBOT_CTRL_CMD_e;
+
+
+typedef enum
+{
+    ROC_ROBOT_RIG_FRO_LEG = 1,
+    ROC_ROBOT_RIG_MID_LEG,
+    ROC_ROBOT_RIG_HIN_LEG,
+    ROC_ROBOT_LEF_FRO_LEG,
+    ROC_ROBOT_LEF_MID_LEG,
+    ROC_ROBOT_LEF_HIN_LEG,
+
+}ROC_ROBOT_LEG_e;
+
+
+typedef enum
+{
+    ROC_ROBOT_CTRL_CMD_MOSTAND = 'C',
+    ROC_ROBOT_CTRL_CMD_FORWARD = 'W',
+    ROC_ROBOT_CTRL_CMD_BAKWARD = 'S',
+    ROC_ROBOT_CTRL_CMD_LFCLOCK = 'A',
+    ROC_ROBOT_CTRL_CMD_RGCLOCK = 'D',
+    ROC_ROBOT_CTRL_CMD_PARAMET = 'U',
+    ROC_ROBOT_CTRL_CMD_CARFORD = 'B',
+    ROC_ROBOT_CTRL_CMD_CARBAKD = 'R',
+    ROC_ROBOT_CTRL_CMD_CARMODE = 'Y',
+    ROC_ROBOT_CTRL_CMD_ROTMODE = 'G',
+    ROC_ROBOT_CTRL_CMD_TURNLDR = 'Q',
+    ROC_ROBOT_CTRL_CMD_TURNRDR = 'E',
+
 }ROC_ROBOT_WALK_MODE_e;
 
 

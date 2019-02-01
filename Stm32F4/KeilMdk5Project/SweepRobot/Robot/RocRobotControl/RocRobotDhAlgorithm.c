@@ -1,3 +1,9 @@
+/********************************************************************************
+ * This code is used for robot control
+*********************************************************************************
+ * Author        Data            Version
+ * Liren         2018/12/16      1.0
+********************************************************************************/
 #include <math.h>
 #include <stdint.h>
 
@@ -14,15 +20,10 @@ static double           g_FirstAngleError = 0;
 static double           g_SecndAngleError = 0;
 #endif
 
-uint16_t                g_RobotOpenCtrlPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
+
 uint16_t                g_RobotStandPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
 uint16_t                g_RobotForwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
 uint16_t                g_RobotBackwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
-uint16_t                g_RobotCirclePwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
-uint16_t                g_RobotLeftForwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
-uint16_t                g_RobotLeftBackwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
-uint16_t                g_RobotRightForwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
-uint16_t                g_RobotRightBackwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
 
 
 /*********************************************************************************
@@ -328,7 +329,7 @@ static void RocCorrectionPositionCaculate(uint8_t LegNum, double DeltaAlpha, dou
     if(LegNum == 1)
     {
         r = ROC_ROBOT_WIDTH;
-        l = ROC_ROBOT_DEFAULT_STEP_LENGTH;
+        l = ROC_ROBOT_DEFAULT_LEG_STEP;
 
         gamma1 = ROC_ROBOT_INIT_ANGLE_BETA_1 - DeltaAlpha;
         gamma2 = ROC_ROBOT_INIT_ANGLE_BETA_2 - DeltaAlpha;
@@ -349,32 +350,32 @@ static void RocCorrectionPositionCaculate(uint8_t LegNum, double DeltaAlpha, dou
         alfa6 = acos( (c6 * c6 + r * r - l * l) / (2 * c6 * r));
     }
 
-    if(ROC_ROBOT_RIGHT_FRONT_LEG == LegNum)
+    if(ROC_ROBOT_RIG_FRO_LEG == LegNum)
     {
         *x = c1 * cos(ROC_ROBOT_INIT_ANGLE_THET_1 * ROC_ROBOT_ANGLE_TO_RADIAN + DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN + alfa1);
         *y = c1 * sin(ROC_ROBOT_INIT_ANGLE_THET_1 * ROC_ROBOT_ANGLE_TO_RADIAN + DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN + alfa1);
     }
-    else if(ROC_ROBOT_RIGHT_MIDDLE_LEG == LegNum)
+    else if(ROC_ROBOT_RIG_MID_LEG == LegNum)
     {
         *x = c2 * cos(ROC_ROBOT_INIT_ANGLE_THET_2 * ROC_ROBOT_ANGLE_TO_RADIAN + DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN + alfa2);
         *y = c2 * sin(ROC_ROBOT_INIT_ANGLE_THET_2 * ROC_ROBOT_ANGLE_TO_RADIAN + DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN + alfa2);
     }
-    else if(ROC_ROBOT_RIGHT_HIND_LEG == LegNum)
+    else if(ROC_ROBOT_RIG_HIN_LEG == LegNum)
     {
         *x = c3 * cos(ROC_ROBOT_INIT_ANGLE_THET_3 * ROC_ROBOT_ANGLE_TO_RADIAN - DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN - alfa3);
         *y = c3 * sin(ROC_ROBOT_INIT_ANGLE_THET_3 * ROC_ROBOT_ANGLE_TO_RADIAN - DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN - alfa3);
     }
-    else if(ROC_ROBOT_LEFT_FRONT_LEG == LegNum)
+    else if(ROC_ROBOT_LEF_FRO_LEG == LegNum)
     {
         *x = c4 * cos(ROC_ROBOT_INIT_ANGLE_THET_1 * ROC_ROBOT_ANGLE_TO_RADIAN + DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN - alfa4);
         *y = c4 * sin(ROC_ROBOT_INIT_ANGLE_THET_1 * ROC_ROBOT_ANGLE_TO_RADIAN + DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN - alfa4);
     }
-    else if(ROC_ROBOT_LEFT_MIDDLE_LEG == LegNum)
+    else if(ROC_ROBOT_LEF_MID_LEG == LegNum)
     {
         *x = c5 * cos(ROC_ROBOT_INIT_ANGLE_THET_2 * ROC_ROBOT_ANGLE_TO_RADIAN + DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN - alfa5);
         *y = c5 * sin(ROC_ROBOT_INIT_ANGLE_THET_2 * ROC_ROBOT_ANGLE_TO_RADIAN + DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN - alfa5);
     }
-    else if(ROC_ROBOT_LEFT_HIND_LEG == LegNum)
+    else if(ROC_ROBOT_LEF_HIN_LEG == LegNum)
     {
         *x = c6 * cos(ROC_ROBOT_INIT_ANGLE_THET_3 * ROC_ROBOT_ANGLE_TO_RADIAN - DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN + alfa6);
         *y = c6 * sin(ROC_ROBOT_INIT_ANGLE_THET_3 * ROC_ROBOT_ANGLE_TO_RADIAN - DeltaAlpha * ROC_ROBOT_ANGLE_TO_RADIAN + alfa6);

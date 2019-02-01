@@ -1,3 +1,9 @@
+/********************************************************************************
+ * This code is used for robot control
+*********************************************************************************
+ * Author        Data            Version
+ * Liren         2018/12/15      1.0
+********************************************************************************/
 #include "i2c.h"
 
 #include "RocLog.h"
@@ -66,7 +72,7 @@ static HAL_StatusTypeDef RocPca9685WriteReg(uint16_t SlaveAddr, uint16_t Reg, ui
     WriteStatus = HAL_I2C_Mem_Write(&hi2c1, SlaveAddr, Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, 1, 1000);
     if(HAL_OK != WriteStatus)
     {
-        ROC_LOGE("IIC2 reg reg is in error(%d)!", WriteStatus);
+        ROC_LOGE("IIC2 write reg is in error(%d)!", WriteStatus);
     }
 
     return WriteStatus;
@@ -94,7 +100,7 @@ static HAL_StatusTypeDef RocPca9685ReadReg(uint16_t SlaveAddr, uint16_t Reg, uin
     ReadStatus = HAL_I2C_Mem_Read(&hi2c1, SlaveAddr, Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, 1, 1000);
     if(HAL_OK != ReadStatus)
     {
-        ROC_LOGE("IIC2 reg reg is in error(%d)!", ReadStatus);
+        ROC_LOGE("IIC2 read reg is in error(%d)!", ReadStatus);
     }
 
     return ReadStatus;

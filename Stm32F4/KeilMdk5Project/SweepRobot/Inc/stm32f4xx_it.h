@@ -58,9 +58,13 @@ extern "C" {
     void SysTick_Handler(void);
     void DMA1_Stream1_IRQHandler(void);
     void DMA1_Stream3_IRQHandler(void);
+    void USART2_IRQHandler(void);
     void USART3_IRQHandler(void);
     void TIM6_DAC_IRQHandler(void);
+    void TIM7_IRQHandler(void);
     void DMA2_Stream3_IRQHandler(void);
+    void ADC_IRQHandler(void);
+    void DMA2_Stream0_IRQHandler(void);
 
 #ifdef __cplusplus
 }
