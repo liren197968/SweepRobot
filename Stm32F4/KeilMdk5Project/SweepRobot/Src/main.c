@@ -46,6 +46,7 @@
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
+#include "usb_host.h"
 
 /* USER CODE BEGIN Includes */
 #include "RocLog.h"
@@ -111,6 +112,7 @@ int main(void)
     MX_SPI1_Init();
     MX_TIM6_Init();
     MX_TIM7_Init();
+    MX_USB_HOST_Init();
 
     /* Initialize interrupts */
     MX_NVIC_Init();

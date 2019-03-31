@@ -8,7 +8,7 @@
 #define __ROC_SERVO_H
 
 
-#define ROC_SERVO_SPEED_DIV_STP         4
+#define ROC_SERVO_SPEED_DIV_STP         3
 
 #define ROC_SERVO_MAX_SUPPORT_NUM       18U
 
@@ -20,10 +20,11 @@
 
 
 void RocServoControl(void);
+void RocServoSpeedSet(uint16_t ServoRunTimeMs);
 ROC_RESULT RocServoInit(void);
 ROC_RESULT RocServoTimerStop(void);
 ROC_RESULT RocServoTimerStart(void);
-void RocServoSpeedSet(uint16_t ServoRunTimeMs);
+ROC_RESULT RocServoInputUpdate(uint16_t *pServoInputVal);
 
 
 extern int16_t          g_PwmExpetVal[ROC_SERVO_MAX_SUPPORT_NUM];

@@ -23,39 +23,14 @@
 #include "RocRobotDhAlgorithm.h"
 
 
-#define ROC_ROBOT_RUN_SPEED_DEFAULT     200
-
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
 static double           g_ExpectedAngle = 0;
 #endif
 
-static uint32_t g_RobotWalkModeStatus = ROC_ROBOT_WALK_MODE_CAR;
 
-/*********************************************************************************
- *  Description:
- *              The interrupt service handle for timer
- *
- *  Parameter:
- *              *htim: the point of the interrupt timer
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2018.12.16)
-**********************************************************************************/
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-    if(TIM6 == htim->Instance)
-    {
-        RocLedToggle();
-        RocServoControl();
-    }
-    else if(TIM7 == htim->Instance)
-    {
-        RocBatteryVoltageAdcSample();
-    }
-}
+static uint32_t g_RobotWalkModeStatus = ROC_ROBOT_WALK_MODE_CAR;
+static ROC_ROBOT_CONTROL_s *g_RocRobotCtrl = NULL;
+static ROC_REMOTE_CTRL_INPUT_s g_RocRobotRemoteCtrlInput = {0};
 
 /*********************************************************************************
  *  Description:
@@ -225,6 +200,7 @@ static void RocRobotLefBakLegCtrl(int16_t FirstParm, int16_t SecndParm, int16_t 
     g_PwmExpetVal[17]   = ThirdParm;
 }
 
+#ifdef ROC_ROBOT_SEQUENCE_MOVE
 /*********************************************************************************
  *  Description:
  *              Robot stand control function
@@ -865,6 +841,40 @@ static void RocRobotClockwiseWalkCtrl(void)
         default:break;
     }
 }
+#endif
+
+/*********************************************************************************
+ *  Description:
+ *              Robot move core
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.03.31)
+**********************************************************************************/
+static void RocRobotMoveCtrlCore(void)
+{
+    uint8_t     i = 0;
+    ROC_RESULT  Ret = RET_OK;
+    uint16_t    RoboMoveServoPwmVal[ROC_ROBOT_CNT_LEGS * ROC_ROBOT_PER_LEG_JOINT_NUM];
+
+    RocRobotCtrlDeltaMoveCoorInput(g_RocRobotRemoteCtrlInput.X, g_RocRobotRemoteCtrlInput.Y,
+                                   g_RocRobotRemoteCtrlInput.Z, g_RocRobotRemoteCtrlInput.H);
+
+    RocRobotGaitSeqUpdate();
+    RocRobotOpenLoopWalkCalculate(RoboMoveServoPwmVal);
+    RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
+
+    Ret = RocServoInputUpdate(RoboMoveServoPwmVal);
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Update the servo input data is in error!");
+    }
+}
 
 /*********************************************************************************
  *  Description:
@@ -872,7 +882,6 @@ static void RocRobotClockwiseWalkCtrl(void)
  *
  *  Parameter:
  *              None
- *
  *
  *  Return:
  *              None
@@ -890,31 +899,39 @@ void RocRobotRemoteControl(void)
     {
         case ROC_ROBOT_CTRL_CMD_MOSTAND:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
                                             {
-                                                RocRobotStandCtrl();
+                                                //RocRobotStandCtrl();
                                             }
                                             break;
 
-        case ROC_ROBOT_CTRL_CMD_FORWARD:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
-                                            {
-                                                RocRobotForwardWalkCtrl();
-                                            }
-                                            break;
+        case ROC_ROBOT_CTRL_CMD_FORWARD:
+        {
+            //if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+            {
+                ROC_LOGW("Start forward");
+                g_RocRobotRemoteCtrlInput.X = 0;
+                g_RocRobotRemoteCtrlInput.Y = 40;
+                g_RocRobotRemoteCtrlInput.Z = 0;
+                g_RocRobotRemoteCtrlInput.H = 50;
+            }
+
+            break;
+        }
 
         case ROC_ROBOT_CTRL_CMD_BAKWARD:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
                                             {
-                                                RocRobotBackwardWalkCtrl();
+                                                //RocRobotBackwardWalkCtrl();
                                             }
                                             break;
 
         case ROC_ROBOT_CTRL_CMD_LFCLOCK:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
                                             {
-                                                RocRobotCounterclockwiseWalkCtrl();
+                                                //RocRobotCounterclockwiseWalkCtrl();
                                             }
                                             break;
 
         case ROC_ROBOT_CTRL_CMD_RGCLOCK:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
                                             {
-                                                RocRobotClockwiseWalkCtrl();
+                                                //RocRobotClockwiseWalkCtrl();
                                             }
                                             break;
 
@@ -931,12 +948,12 @@ void RocRobotRemoteControl(void)
                                             break;
 
         case ROC_ROBOT_CTRL_CMD_CARMODE:    RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_CAR);
-                                            RocRobotWalkModeChangeCtrl();
+                                            //RocRobotWalkModeChangeCtrl();
                                             break;
 
         case ROC_ROBOT_CTRL_CMD_ROTMODE:    RocMotorRotateDirectionSet(ROC_MOTOR_STOPPED_ROTATE);
                                             RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_HEXAPOD);
-                                            RocRobotWalkModeChangeCtrl();
+                                            //RocRobotWalkModeChangeCtrl();
                                             break;
 
         case ROC_ROBOT_CTRL_CMD_TURNLDR:    RocMotorServoTurnAngleSet(ROC_MOTOR_SERVO_DEFAULT_ANGLE - 30);
@@ -965,15 +982,11 @@ void RocRobotRemoteControl(void)
 **********************************************************************************/
 static void RocRobotControlInit(void)
 {
-    RocRobotStandCtrl();
+    g_RocRobotCtrl = RocRobotCtrlInfoGet();
 
-    RocRobotOpenLoopWalkCalculate(0, ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5, g_RobotForwardPwmVal);
-    RocRobotRigForLegCtrl(g_RobotForwardPwmVal[0], g_RobotForwardPwmVal[1], g_RobotForwardPwmVal[2]);
-    RocRobotLefMidLegCtrl(g_RobotForwardPwmVal[12], g_RobotForwardPwmVal[13], g_RobotForwardPwmVal[14]);
-    RocRobotRigBakLegCtrl(g_RobotForwardPwmVal[6], g_RobotForwardPwmVal[7], g_RobotForwardPwmVal[8]);
-    RocRobotLefForLegCtrl(g_RobotForwardPwmVal[9], g_RobotForwardPwmVal[10], g_RobotForwardPwmVal[11]);
-    RocRobotRigMidLegCtrl(g_RobotForwardPwmVal[3], g_RobotForwardPwmVal[4], g_RobotForwardPwmVal[5]);
-    RocRobotLefBakLegCtrl(g_RobotForwardPwmVal[15], g_RobotForwardPwmVal[16], g_RobotForwardPwmVal[17]);
+    g_RocRobotCtrl->CurGait.NomGaitSpeed = ROC_ROBOT_RUN_SPEED_DEFAULT;
+
+    //RocRobotStandCtrl();
 }
 
 /*********************************************************************************
@@ -996,8 +1009,6 @@ static ROC_RESULT RocRobotStartRun(void)
 
     RocRobotControlInit();
 
-    RocServoSpeedSet(ROC_ROBOT_RUN_SPEED_DEFAULT);
-
     Ret = RocServoTimerStart();
     if(RET_OK != Ret)
     {
@@ -1006,7 +1017,7 @@ static ROC_RESULT RocRobotStartRun(void)
         while(1);
     }
 
-    HAL_Delay(ROC_ROBOT_RUN_SPEED_DEFAULT);
+    RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
 
     return Ret;
 }
@@ -1040,7 +1051,7 @@ static ROC_RESULT RocRobotStopRun(void)
 
     while(1)
     {
-        //RocBeeperBlink(4, 800);
+        RocBeeperBlink(4, 800);
     }
 }
 
@@ -1072,7 +1083,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocBatteryInit();
+    Ret = RocBatteryInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -1080,7 +1091,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocBluetoothInit();
+    Ret = RocBluetoothInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -1088,7 +1099,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocPca9685Init();
+    Ret = RocPca9685Init();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -1096,7 +1107,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocServoInit();
+    Ret = RocServoInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -1112,7 +1123,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocMotorInit();
+    Ret = RocMotorInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -1120,7 +1131,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    Ret = RocRemoteControlInit();
+    //Ret = RocRemoteControlInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -1128,7 +1139,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocBeeperInit();
+    Ret = RocBeeperInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -1138,10 +1149,45 @@ void RocRobotInit(void)
 
     ROC_LOGI("Robot hardware init is in success, and the system start running.");
 
-    //Ret = RocRobotStartRun();
+    Ret = RocRobotAlgoCtrlInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
+        while(1);
+    }
+
+    Ret = RocRobotStartRun();
     if(RET_OK == Ret)
     {
         ROC_LOGW("############# Robot is running! Be careful! #############");
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              The interrupt service handle for timer
+ *
+ *  Parameter:
+ *              *htim: the point of the interrupt timer
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+    if(TIM6 == htim->Instance)
+    {
+        RocLedToggle();
+        RocRobotMoveCtrlCore();
+        RocServoControl();
+    }
+    else if(TIM7 == htim->Instance)
+    {
+        RocBatteryVoltageAdcSample();
     }
 }
 
@@ -1161,29 +1207,6 @@ void RocRobotInit(void)
 **********************************************************************************/
 void RocRobotMain(void)
 {
-    //uint8_t i = 0;
-
-//    for(i = 0; i < 255; i++)
-//    {
-//        if(HAL_OK != HAL_UART_Transmit(&huart2, &i, 1, 10))
-//        {
-//            ROC_LOGE("USART2 transmit is in error!");
-//        }
-//
-//        i = 0;
-//
-//        if(HAL_OK != HAL_UART_Receive(&huart2, &i, 1, 10))
-//        {
-//            ROC_LOGE("USART2 receive is in error!");
-//        }
-//        else
-//        {
-//            ROC_LOGI("Receive data is %d", i);
-//        }
-//
-//        HAL_Delay(100);
-//    }
-
     if(g_BtRecvEnd == ROC_TRUE)
     {
         ROC_LOGI("Bluetooth receive (%d) data(%s).", g_BtRxDatLen, g_BtRxBuffer);
@@ -1197,7 +1220,7 @@ void RocRobotMain(void)
 
     if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > RocBatteryVoltageGet())
     {
-        RocRobotStopRun();
+        //RocRobotStopRun();
     }
 
     if(ROC_ROBOT_CTRL_MEASURE_START == RocBluetoothCtrlCmd_Get())

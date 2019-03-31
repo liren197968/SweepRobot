@@ -7,6 +7,7 @@
 #ifndef __ROC_ROBOTCONTROL_H
 #define __ROC_ROBOTCONTROL_H
 
+#include <stdlib.h>
 
 //#define ROC_ROBOT_GAIT_DEBUG
 //#define ROC_ROBOT_GAIT_FIVE
@@ -110,8 +111,7 @@
 #define ROC_ROBOT_RUN_GAIT_NUM                      4
 #endif
 
-
-typedef enum
+typedef enum _ROC_ROBOT_CTRL_CMD_e
 {
     ROC_ROBOT_WALK_MODE_CAR = 0,
     ROC_ROBOT_WALK_MODE_HEXAPOD = 1,
@@ -119,19 +119,7 @@ typedef enum
 }ROC_ROBOT_CTRL_CMD_e;
 
 
-typedef enum
-{
-    ROC_ROBOT_RIG_FRO_LEG = 1,
-    ROC_ROBOT_RIG_MID_LEG,
-    ROC_ROBOT_RIG_HIN_LEG,
-    ROC_ROBOT_LEF_FRO_LEG,
-    ROC_ROBOT_LEF_MID_LEG,
-    ROC_ROBOT_LEF_HIN_LEG,
-
-}ROC_ROBOT_LEG_e;
-
-
-typedef enum
+typedef enum _ROC_ROBOT_WALK_MODE_e
 {
     ROC_ROBOT_CTRL_CMD_MOSTAND = 'C',
     ROC_ROBOT_CTRL_CMD_FORWARD = 'W',

@@ -268,6 +268,32 @@ ROC_RESULT RocServoTimerStop(void)
 
 /*********************************************************************************
  *  Description:
+ *              Update the servo input PWM data
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.15)
+**********************************************************************************/
+ROC_RESULT RocServoInputUpdate(uint16_t *pServoInputVal)
+{
+    uint8_t     i = 0;
+    ROC_RESULT  Ret = RET_OK;
+
+    for(i = 0; i < ROC_SERVO_MAX_SUPPORT_NUM; i++)
+    {
+        g_PwmExpetVal[i] = pServoInputVal[i];
+    }
+
+    return Ret;
+}
+
+/*********************************************************************************
+ *  Description:
  *              Servo driver init
  *
  *  Parameter:

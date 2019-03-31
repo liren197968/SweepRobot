@@ -335,7 +335,7 @@
               <MiscControls>--wchar32</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F405xx</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\Robot\RocRobotControl;..\Robot\RocRobotDriver\RocPca9685;..\Robot\RocRobotDriver\RocEeprom;..\Robot\RocRobotDriver\RocServo;..\Robot\RocRobotDriver\RocBluetooth;..\Robot\RocRobotDriver\RocLog;..\Robot\RocRobotDriver\RocError;..\Robot\RocRobotDriver\RocLed;..\Robot\RocRobotDriver\RocOled;..\Robot\RocRobotDriver\RocImu;..\Robot\RocRobotDriver\RocLcd;..\Robot\RocRobotDriver\RocZmod4410;..\Robot\RocRobotDriver\RocBeeper;..\Robot\RocRobotDriver\RocMotor;..\Robot\RocRobotDriver\RocBattery;..\Robot\RocRobotDriver\RocRemoteControl;..\Zmod4410\Inc;..\Zmod4410\Lib;..\Zmod4410\Src</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\Robot\RocRobotControl;..\Robot\RocRobotDriver\RocPca9685;..\Robot\RocRobotDriver\RocEeprom;..\Robot\RocRobotDriver\RocServo;..\Robot\RocRobotDriver\RocBluetooth;..\Robot\RocRobotDriver\RocLog;..\Robot\RocRobotDriver\RocError;..\Robot\RocRobotDriver\RocLed;..\Robot\RocRobotDriver\RocOled;..\Robot\RocRobotDriver\RocImu;..\Robot\RocRobotDriver\RocLcd;..\Robot\RocRobotDriver\RocZmod4410;..\Robot\RocRobotDriver\RocBeeper;..\Robot\RocRobotDriver\RocMotor;..\Robot\RocRobotDriver\RocBattery;..\Robot\RocRobotDriver\RocRemoteControl;..\Zmod4410\Inc;..\Zmod4410\Lib;..\Zmod4410\Src;..\USB\USBHost;..\Middlewares\ST\STM32_USB_Host_Library\Core\Inc;..\Middlewares\ST\STM32_USB_Host_Library\Core\Src;..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Inc;..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Src</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -489,6 +489,16 @@
               <FileType>1</FileType>
               <FilePath>..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c</FilePath>
             </File>
+            <File>
+              <FileName>stm32f4xx_hal_hcd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_hcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>stm32f4xx_ll_usb.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_ll_usb.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>
@@ -568,6 +578,31 @@
               <FileName>adc.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Src\adc.c</FilePath>
+            </File>
+            <File>
+              <FileName>usb_host.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\usb_host.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_conf.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\usbh_conf.c</FilePath>
+            </File>
+            <File>
+              <FileName>mouse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Robot\RocRobotDriver\RocUsb\mouse.c</FilePath>
+            </File>
+            <File>
+              <FileName>keyboard.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Robot\RocRobotDriver\RocUsb\keyboard.c</FilePath>
+            </File>
+            <File>
+              <FileName>menu.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Robot\RocRobotDriver\RocUsb\menu.c</FilePath>
             </File>
           </Files>
         </Group>
@@ -658,6 +693,51 @@
               <FileName>libodor_m4.a</FileName>
               <FileType>4</FileType>
               <FilePath>..\Zmod4410\Lib\libodor_m4.a</FilePath>
+            </File>
+          </Files>
+        </Group>
+        <Group>
+          <GroupName>Middlewares/USB_Host_Library</GroupName>
+          <Files>
+            <File>
+              <FileName>usbh_core.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_core.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_ctlreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_ctlreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_ioreq.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_ioreq.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_pipes.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\ST\STM32_USB_Host_Library\Core\Src\usbh_pipes.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Src\usbh_hid.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_keybd.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Src\usbh_hid_keybd.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_mouse.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Src\usbh_hid_mouse.c</FilePath>
+            </File>
+            <File>
+              <FileName>usbh_hid_parser.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Src\usbh_hid_parser.c</FilePath>
             </File>
           </Files>
         </Group>
