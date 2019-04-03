@@ -98,7 +98,7 @@
 #define ROC_ROBOT_LEF_HIN_FET_CENTER                310
 
 
-#define ROC_ROBOT_DEFAULT_LEG_STEP                  40
+#define ROC_ROBOT_DEFAULT_LEG_STEP                  80
 #define ROC_ROBOT_DEFAULT_LEG_ANGLE                 12
 #define ROC_ROBOT_DEFAULT_FEET_LIFT                 30
 
@@ -139,7 +139,6 @@ typedef enum _ROC_ROBOT_WALK_MODE_e
 
 void RocRobotInit(void);
 void RocRobotMain(void);
-void RocRobotRemoteControl(void);
 
 
 #endif

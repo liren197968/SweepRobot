@@ -9,7 +9,6 @@
 #include "RocLog.h"
 #include "RocServo.h"
 #include "RocPca9685.h"
-#include "RocRobotControl.h"
 
 
 int16_t             g_PwmExpetVal[ROC_SERVO_MAX_SUPPORT_NUM] = {0};
@@ -18,6 +17,7 @@ static int16_t      g_PwmIncreVal[ROC_SERVO_MAX_SUPPORT_NUM] = {0};
 static int16_t      g_PwmPreseVal[ROC_SERVO_MAX_SUPPORT_NUM] = {0};
 static int16_t      g_PwmLastdVal[ROC_SERVO_MAX_SUPPORT_NUM] = {0};
 
+static ROC_RESULT   g_ServoTurnIsFinshed = ROC_FALSE;
 
 /*********************************************************************************
  *  Description:
@@ -40,18 +40,41 @@ static void RocServoPwmIncreCalculate(void)
     {
         if(g_PwmExpetVal[i] < ROC_SERVO_MIN_PWM_VAL)
         {
-            ROC_LOGN("Servo(%d) input PWM value(%d) is less than ROC_SERVO_MIN_PWM_VAL! Be careful!", i, g_PwmExpetVal[i]);
+            ROC_LOGE("Servo(%d) input PWM value(%d) is less than ROC_SERVO_MIN_PWM_VAL! Be careful! \r\n", i, g_PwmExpetVal[i]);
 
             g_PwmExpetVal[i] = ROC_SERVO_MIN_PWM_VAL;
         }
         else if(g_PwmExpetVal[i] > ROC_SERVO_MAX_PWM_VAL)
         {
-            ROC_LOGN("Servo(%d) input PWM value(%d) is more than ROC_SERVO_MAX_PWM_VAL! Be careful!", i, g_PwmExpetVal[i]);
+            ROC_LOGE("Servo(%d) input PWM value(%d) is more than ROC_SERVO_MAX_PWM_VAL! Be careful! \r\n", i, g_PwmExpetVal[i]);
 
             g_PwmExpetVal[i] = ROC_SERVO_MAX_PWM_VAL;
         }
 
         g_PwmIncreVal[i] = (g_PwmExpetVal[i] - g_PwmLastdVal[i]) / ROC_SERVO_SPEED_DIV_STP;
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Update the servo input PWM data
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.15)
+**********************************************************************************/
+static void RocServoInputUpdate(int16_t *pServoInputVal)
+{
+    uint8_t     i = 0;
+
+    for(i = 0; i < ROC_SERVO_MAX_SUPPORT_NUM; i++)
+    {
+        g_PwmExpetVal[i] = pServoInputVal[i];
     }
 }
 
@@ -148,6 +171,24 @@ static void RocServoPwmOut(void)
 
 /*********************************************************************************
  *  Description:
+ *              Check servos turns is finshed
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              The running state
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.15)
+**********************************************************************************/
+ROC_RESULT RocServoTurnIsFinshed(void)
+{
+    return g_ServoTurnIsFinshed;
+}
+
+/*********************************************************************************
+ *  Description:
  *              Control the running of all servos: if the times is eaqule to the
  *              expected, load the next group servo data, using this way to control
  *              the speed of servo.
@@ -161,7 +202,7 @@ static void RocServoPwmOut(void)
  *  Author:
  *              ROC LiRen(2018.12.15)
 **********************************************************************************/
-void RocServoControl(void)
+void RocServoControl(int16_t *pServoInputVal)
 {
     static uint8_t  RefreshTimes = 0U;
 
@@ -170,7 +211,7 @@ void RocServoControl(void)
     RocServoPwmUpdate(RefreshTimes);
 
 #ifdef ROC_ROBOT_SERVO_DEBUG
-    ROC_LOGW("RefreshTimes is %d, g_PwmPreseVal is %d, g_PwmExpetVal is %d, g_PwmIncreVal is %d",
+    ROC_LOGI("RefreshTimes is %d, g_PwmPreseVal is %d, g_PwmExpetVal is %d, g_PwmIncreVal is %d \r\n",
                             RefreshTimes, g_PwmPreseVal[0], g_PwmExpetVal[0], g_PwmIncreVal[0]);
 #endif
 
@@ -179,8 +220,19 @@ void RocServoControl(void)
         RefreshTimes = 0;
 
         RocServoPwmRecod();
-        RocRobotRemoteControl();
+
+        RocServoInputUpdate(pServoInputVal);
+
         RocServoPwmIncreCalculate();
+    }
+
+    if((ROC_SERVO_SPEED_DIV_STP - 1) == RefreshTimes)
+    {
+        g_ServoTurnIsFinshed = ROC_TRUE;
+    }
+    else
+    {
+        g_ServoTurnIsFinshed = ROC_FALSE;
     }
 
     RocServoPwmOut();
@@ -203,8 +255,24 @@ void RocServoSpeedSet(uint16_t ServoRunTimeMs)
 {
     ROC_RESULT Ret = RET_OK;
 
+    Ret = RocServoTimerStop();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Servo stop is in error!");
+
+        while(1);
+    }
+
     htim6.Init.Period = ServoRunTimeMs * 10 / ROC_SERVO_SPEED_DIV_STP;
     TIM_Base_SetConfig(htim6.Instance, &htim6.Init);
+
+    Ret = RocServoTimerStart();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Servo start is in error!");
+
+        while(1);
+    }
 
     if(RET_OK != Ret)
     {
@@ -261,32 +329,6 @@ ROC_RESULT RocServoTimerStop(void)
         Ret = RET_ERROR;
 
         Error_Handler();
-    }
-
-    return Ret;
-}
-
-/*********************************************************************************
- *  Description:
- *              Update the servo input PWM data
- *
- *  Parameter:
- *              None
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2018.12.15)
-**********************************************************************************/
-ROC_RESULT RocServoInputUpdate(uint16_t *pServoInputVal)
-{
-    uint8_t     i = 0;
-    ROC_RESULT  Ret = RET_OK;
-
-    for(i = 0; i < ROC_SERVO_MAX_SUPPORT_NUM; i++)
-    {
-        g_PwmExpetVal[i] = pServoInputVal[i];
     }
 
     return Ret;

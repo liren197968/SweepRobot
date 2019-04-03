@@ -11,13 +11,14 @@
 #include <stdint.h>
 
 
+//#define ROC_ROBOT_GAIT_DEBUG
 #define ROC_ROBOT_DISPLAY_GAIT_NAMES
 //#define ROC_ROBOT_GAIT_QUADMODE   // We are building for quad support
 #define cTravelDeadZone 4      //The deadzone for the analog input from the remote
 
 
-#define ROC_ROBOT_RUN_SPEED_DEFAULT     60
-#define ROC_ROBOT_PER_LEG_JOINT_NUM     3
+#define ROC_ROBOT_RUN_SPEED_DEFAULT     90
+
 
 typedef struct _ROC_COORD_XYZ_s
 {
@@ -26,6 +27,16 @@ typedef struct _ROC_COORD_XYZ_s
     double              Z;
 
 }ROC_COORD_XYZ_s;
+
+
+typedef enum _ROC_ROBOT_LEG_JOINT_e
+{
+    ROC_ROBOT_LEG_HIP_JOINT = 0,
+    ROC_ROBOT_LEG_KNEE_JOINT,
+    ROC_ROBOT_LEG_ANKLE_JOINT,
+
+    ROC_ROBOT_LEG_JOINT_NUM,
+}ROC_ROBOT_LEG_JOINT_e;
 
 
 #ifdef ROC_ROBOT_GAIT_QUADMODE
@@ -131,6 +142,21 @@ typedef struct _ROC_PHOENIX_STATE_s
 
 }ROC_PHOENIX_STATE_s;
 
+
+typedef struct _ROC_ROBOT_LEG_s
+{
+    int16_t             RobotJoint[ROC_ROBOT_LEG_JOINT_NUM];
+
+}ROC_ROBOT_LEG_s;
+
+
+typedef struct _ROC_ROBOT_SERVO_s
+{
+    ROC_ROBOT_LEG_s     RobotLeg[ROC_ROBOT_CNT_LEGS];
+
+}ROC_ROBOT_SERVO_s;
+
+
 //==============================================================================
 // class ControlState: This is the main structure of data that the Control 
 //      manipulates and is used by the main Phoenix Code to make it do what is
@@ -140,6 +166,7 @@ typedef struct _ROC_ROBOT_CONTROL_s
 {
     ROC_PHOENIX_GAIT_s  CurGait;                // Definition of the current gait
     ROC_PHOENIX_STATE_s CurState;               // Definition of the current state
+    ROC_ROBOT_SERVO_s   CurServo;               // Definition of the current servo
 
 }ROC_ROBOT_CONTROL_s;
 
@@ -148,7 +175,7 @@ void RocRobotGaitSeqUpdate(void);
 ROC_RESULT RocRobotAlgoCtrlInit(void);
 ROC_ROBOT_CONTROL_s *RocRobotCtrlInfoGet(void);
 void RocRobotCtrlDeltaMoveCoorInput(double x, double y, double z, double h);
-void RocRobotOpenLoopWalkCalculate(uint16_t *pRobotCtrlPwmVal);
+void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo);
 void RocRobotOpenLoopCircleCalculate(float DeltaAngle, float Lift, uint16_t *pRobotCtrlPwmVal);
 
 

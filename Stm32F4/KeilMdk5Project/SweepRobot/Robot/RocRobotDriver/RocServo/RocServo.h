@@ -8,6 +8,9 @@
 #define __ROC_SERVO_H
 
 
+#define ROC_ROBOT_SERVO_DEBUG
+
+
 #define ROC_SERVO_SPEED_DIV_STP         3
 
 #define ROC_SERVO_MAX_SUPPORT_NUM       18U
@@ -19,12 +22,12 @@
 #define ROC_SERVO_MAX_ROTATE_ANGLE      180
 
 
-void RocServoControl(void);
-void RocServoSpeedSet(uint16_t ServoRunTimeMs);
 ROC_RESULT RocServoInit(void);
 ROC_RESULT RocServoTimerStop(void);
 ROC_RESULT RocServoTimerStart(void);
-ROC_RESULT RocServoInputUpdate(uint16_t *pServoInputVal);
+ROC_RESULT RocServoTurnIsFinshed(void);
+void RocServoSpeedSet(uint16_t ServoRunTimeMs);
+void RocServoControl(int16_t *pServoInputVal);
 
 
 extern int16_t          g_PwmExpetVal[ROC_SERVO_MAX_SUPPORT_NUM];
