@@ -11,22 +11,24 @@
 #include <stdint.h>
 
 
-//#define ROC_ROBOT_GAIT_DEBUG
+#define ROC_ROBOT_GAIT_DEBUG
 #define ROC_ROBOT_DISPLAY_GAIT_NAMES
 //#define ROC_ROBOT_GAIT_QUADMODE   // We are building for quad support
 #define cTravelDeadZone 4      //The deadzone for the analog input from the remote
 
 
-#define ROC_ROBOT_RUN_SPEED_DEFAULT     90
+#define ROC_ROBOT_RUN_SPEED_DEFAULT         90
+#define ROC_ROBOT_TURN_ANGLE_DEFAULT        24
 
 
-typedef struct _ROC_COORD_XYZ_s
+typedef struct _ROC_ROBOT_COORD_s
 {
     double              X;
     double              Y;
     double              Z;
+    double              A;
 
-}ROC_COORD_XYZ_s;
+}ROC_ROBOT_COORD_s;
 
 
 typedef enum _ROC_ROBOT_LEG_JOINT_e
@@ -62,6 +64,20 @@ typedef enum _ROC_ROBOT_LEG_e
     ROC_ROBOT_CNT_LEGS,
 }ROC_ROBOT_LEG_e;
 #endif
+
+
+typedef enum _ROC_GAIT_TYPE_e
+{
+    ROC_ROBOT_GAIT_RIPPLE_12 = 0,
+    ROC_ROBOT_GAIT_TRIPOD_8,
+    ROC_ROBOT_GAIT_TRIPLE_12,
+    ROC_ROBOT_GAIT_TRIPLE_16,
+    ROC_ROBOT_GAIT_WAVE_24,
+    ROC_ROBOT_GAIT_TRIPOD_6,
+    ROC_ROBOT_GAIT_CIRCLE_6,
+
+    ROC_ROBOT_GAIT_TYPE_NUM,
+}ROC_GAIT_TYPE_e;
 
 
 //==============================================================================
@@ -102,20 +118,21 @@ typedef struct _ROC_PHOENIX_STATE_s
     uint8_t             PrevRobotOn;            // Previous loop state
 
     //Body position
-    ROC_COORD_XYZ_s     BodyCurPos;
-    ROC_COORD_XYZ_s     LegCurPos[ROC_ROBOT_CNT_LEGS];
-    ROC_COORD_XYZ_s     BodyRotOffset;          // Body rotation offset;
+    ROC_ROBOT_COORD_s   BodyCurPos;
+    ROC_ROBOT_COORD_s   LegCurPos[ROC_ROBOT_CNT_LEGS];
+    ROC_ROBOT_COORD_s   BodyRotOffset;          // Body rotation offset;
 
     //Body Inverse Kinematics
-    ROC_COORD_XYZ_s     BodyRot;                // X-Pitch, Y-Rotation, Z-Roll
+    ROC_ROBOT_COORD_s   BodyRot;                // X-Pitch, Y-Rotation, Z-Roll
 
     //[gait]
-    uint8_t             GaitType;               // Gait type
+    ROC_GAIT_TYPE_e     GaitType;               // Gait type
     uint8_t             GaitStep;               // Actual current step in gait
     uint8_t             TravelRequest;          //Temp to check if the gait is in motion
     double              GaitRot[ROC_ROBOT_CNT_LEGS];//Array containing Relative Z rotation corresponding to the Gait
     uint16_t            LegLiftHeight;          // Current Travel height
-    ROC_COORD_XYZ_s     TravelLength;           // X-Y or Length, Z is rotation
+    ROC_ROBOT_COORD_s   TravelLength;           // X-Y or Length, Z is rotation
+    uint16_t            TurnLength;             // turn angle for clockwise move
 
 #ifdef TurretRotPin
     // Turret information
@@ -125,7 +142,7 @@ typedef struct _ROC_PHOENIX_STATE_s
 
     //[Single Leg Control]
     uint8_t             SelectLegNum;
-    ROC_COORD_XYZ_s     SelectLegCor;
+    ROC_ROBOT_COORD_s     SelectLegCor;
     uint8_t             SelectLegMode;          // Single leg control mode
 
     //[Balance]
@@ -174,9 +191,9 @@ typedef struct _ROC_ROBOT_CONTROL_s
 void RocRobotGaitSeqUpdate(void);
 ROC_RESULT RocRobotAlgoCtrlInit(void);
 ROC_ROBOT_CONTROL_s *RocRobotCtrlInfoGet(void);
-void RocRobotCtrlDeltaMoveCoorInput(double x, double y, double z, double h);
 void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo);
-void RocRobotOpenLoopCircleCalculate(float DeltaAngle, float Lift, uint16_t *pRobotCtrlPwmVal);
+void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo);
+void RocRobotCtrlDeltaMoveCoorInput(double x, double y, double z, double a, double h);
 
 
 #endif

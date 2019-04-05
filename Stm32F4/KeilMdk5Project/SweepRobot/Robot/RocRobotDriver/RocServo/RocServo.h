@@ -8,7 +8,7 @@
 #define __ROC_SERVO_H
 
 
-#define ROC_ROBOT_SERVO_DEBUG
+//#define ROC_ROBOT_SERVO_DEBUG
 
 
 #define ROC_SERVO_SPEED_DIV_STP         3

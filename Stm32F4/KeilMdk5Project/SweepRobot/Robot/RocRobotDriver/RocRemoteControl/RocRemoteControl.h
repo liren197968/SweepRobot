@@ -16,6 +16,7 @@ typedef struct _ROC_REMOTE_CTRL_INPUT_s
     double              X;
     double              Y;
     double              Z;
+    double              A;
     double              H;
 
 }ROC_REMOTE_CTRL_INPUT_s;

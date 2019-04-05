@@ -28,7 +28,7 @@ static double           g_ExpectedAngle = 0;
 #endif
 
 
-static uint32_t g_RobotWalkModeStatus = ROC_ROBOT_WALK_MODE_CAR;
+static uint32_t g_RobotWalkModeStatus = ROC_ROBOT_WALK_MODE_HEXAPOD;
 static ROC_ROBOT_CONTROL_s *g_RocRobotCtrl = NULL;
 static ROC_REMOTE_CTRL_INPUT_s g_RocRobotRemoteCtrlInput = {0};
 
@@ -81,13 +81,22 @@ static uint32_t RocRobotWalkModeGet(void)
  *  Author:
  *              ROC LiRen(2019.03.31)
 **********************************************************************************/
-void RocRobotMoveCtrlCore(void)
+static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *RobotCtrl)
 {
     RocRobotCtrlDeltaMoveCoorInput(g_RocRobotRemoteCtrlInput.X, g_RocRobotRemoteCtrlInput.Y,
-                                   g_RocRobotRemoteCtrlInput.Z, g_RocRobotRemoteCtrlInput.H);
+                                   g_RocRobotRemoteCtrlInput.Z, g_RocRobotRemoteCtrlInput.A,
+                                   g_RocRobotRemoteCtrlInput.H);
 
     RocRobotGaitSeqUpdate();
-    RocRobotOpenLoopWalkCalculate(&g_RocRobotCtrl->CurServo);
+
+    if(ROC_ROBOT_GAIT_CIRCLE_6 != RobotCtrl->CurState.GaitType)
+    {
+        RocRobotOpenLoopWalkCalculate(&RobotCtrl->CurServo);
+    }
+    else
+    {
+        RocRobotOpenLoopCircleCalculate(&RobotCtrl->CurServo);
+    }
 
     //RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
 }
@@ -105,7 +114,7 @@ void RocRobotMoveCtrlCore(void)
  *  Author:
  *              ROC LiRen(2018.12.16)
 **********************************************************************************/
-void RocRobotRemoteControl(void)
+static void RocRobotRemoteControl(void)
 {
     uint8_t RobotCtrlCmd;
 
@@ -115,11 +124,12 @@ void RocRobotRemoteControl(void)
     {
         case ROC_ROBOT_CTRL_CMD_MOSTAND:
         {
-            //if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = 0;
                 g_RocRobotRemoteCtrlInput.Z = 0;
+                g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = 0;
             }
 
@@ -128,11 +138,14 @@ void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_FORWARD:
         {
-            //if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
             {
+                g_RocRobotCtrl->CurState.GaitType = ROC_ROBOT_GAIT_TRIPOD_6;
+
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
                 g_RocRobotRemoteCtrlInput.Z = 0;
+                g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
             }
 
@@ -141,27 +154,50 @@ void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_BAKWARD:
         {
-            //if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
             {
+                g_RocRobotCtrl->CurState.GaitType = ROC_ROBOT_GAIT_TRIPOD_6;
+
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
                 g_RocRobotRemoteCtrlInput.Z = 0;
+                g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
             }
             break;
         }
 
-        case ROC_ROBOT_CTRL_CMD_LFCLOCK:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
-                                            {
-                                                //RocRobotCounterclockwiseWalkCtrl();
-                                            }
-                                            break;
+        case ROC_ROBOT_CTRL_CMD_LFCLOCK:
+        {
+            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+            {
+                g_RocRobotCtrl->CurState.GaitType = ROC_ROBOT_GAIT_CIRCLE_6;
 
-        case ROC_ROBOT_CTRL_CMD_RGCLOCK:    if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
-                                            {
-                                                //RocRobotClockwiseWalkCtrl();
-                                            }
-                                            break;
+                g_RocRobotRemoteCtrlInput.X = 0;
+                g_RocRobotRemoteCtrlInput.Y = 0;
+                g_RocRobotRemoteCtrlInput.Z = 0;
+                g_RocRobotRemoteCtrlInput.A = ROC_ROBOT_TURN_ANGLE_DEFAULT;
+                g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+            }
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_RGCLOCK:
+        {
+            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
+            {
+                g_RocRobotCtrl->CurState.GaitType = ROC_ROBOT_GAIT_CIRCLE_6;
+
+                g_RocRobotRemoteCtrlInput.X = 0;
+                g_RocRobotRemoteCtrlInput.Y = 0;
+                g_RocRobotRemoteCtrlInput.Z = 0;
+                g_RocRobotRemoteCtrlInput.A = -ROC_ROBOT_TURN_ANGLE_DEFAULT;
+                g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+            }
+
+            break;
+        }
 
 #ifdef ROC_ROBOT_GAIT_FUNCTION_DEBUG
         case ROC_ROBOT_CTRL_CMD_PARAMET:    RocRobotForwardWalkCtrl();
@@ -239,7 +275,7 @@ static ROC_RESULT RocRobotStartRun(void)
 
     RocRobotControlInit();
 
-    //RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
+    //RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_LFCLOCK);
 
     RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
 
@@ -419,7 +455,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         if(ROC_TRUE == RocServoTurnIsFinshed())
         {
-            RocRobotMoveCtrlCore();
+            RocRobotMoveCtrlCore(g_RocRobotCtrl);
         }
 
         RocServoControl((int16_t *)(&g_RocRobotCtrl->CurServo));
@@ -452,7 +488,7 @@ void RocRobotMain(void)
 
         RocBluetoothData_Send(g_BtRxBuffer, g_BtRxDatLen);
 
-        memset(g_BtRxBuffer, g_BtRxDatLen, 0);
+        memset(g_BtRxBuffer, 0, g_BtRxDatLen);
 
         g_BtRecvEnd = ROC_FALSE;
     }
