@@ -98,8 +98,8 @@
 #define ROC_ROBOT_LEF_HIN_FET_CENTER                310
 
 
-#define ROC_ROBOT_DEFAULT_LEG_STEP                  80
-#define ROC_ROBOT_DEFAULT_LEG_ANGLE                 12
+#define ROC_ROBOT_DEFAULT_LEG_STEP                  30
+#define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
 #define ROC_ROBOT_DEFAULT_FEET_LIFT                 30
 
 

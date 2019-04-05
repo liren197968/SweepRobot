@@ -14,11 +14,9 @@
 #define ROC_ROBOT_GAIT_DEBUG
 #define ROC_ROBOT_DISPLAY_GAIT_NAMES
 //#define ROC_ROBOT_GAIT_QUADMODE   // We are building for quad support
-#define cTravelDeadZone 4      //The deadzone for the analog input from the remote
 
-
+#define ROC_ROBOT_TRAVEL_DEAD_ZONE          1   //The deadzone for the analog input from the remote
 #define ROC_ROBOT_RUN_SPEED_DEFAULT         90
-#define ROC_ROBOT_TURN_ANGLE_DEFAULT        24
 
 
 typedef struct _ROC_ROBOT_COORD_s

@@ -19,6 +19,32 @@ static int16_t      g_PwmLastdVal[ROC_SERVO_MAX_SUPPORT_NUM] = {0};
 
 static ROC_RESULT   g_ServoTurnIsFinshed = ROC_FALSE;
 
+
+/*********************************************************************************
+ *  Description:
+ *              Init the servo PWM data
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.15)
+**********************************************************************************/
+static void RocServoPwmDatInit(int16_t *pServoInputVal)
+{
+    uint8_t i = 0;
+
+    for(i = 0; i < ROC_SERVO_MAX_SUPPORT_NUM; i++)
+    {
+        g_PwmExpetVal[i] = pServoInputVal[i];
+        g_PwmPreseVal[i] = pServoInputVal[i];
+        g_PwmLastdVal[i] = pServoInputVal[i];
+    }
+}
+
 /*********************************************************************************
  *  Description:
  *              Calculate the increment of the servo PWM pulse
@@ -347,7 +373,7 @@ ROC_RESULT RocServoTimerStop(void)
  *  Author:
  *              ROC LiRen(2018.12.15)
 **********************************************************************************/
-ROC_RESULT RocServoInit(void)
+ROC_RESULT RocServoInit(int16_t *pServoInputVal)
 {
     ROC_RESULT Ret = RET_OK;
 
@@ -356,6 +382,8 @@ ROC_RESULT RocServoInit(void)
     {
         ROC_LOGE("Servo timer init is in error!");
     }
+
+    RocServoPwmDatInit(pServoInputVal);
 
     if(RET_OK != Ret)
     {

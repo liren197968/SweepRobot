@@ -254,9 +254,9 @@ void RocRobotGaitSeqUpdate(void)
     }
     else
     {
-        g_RobotCtrl.CurState.TravelRequest = (abs(g_RobotCtrl.CurState.TravelLength.X) > cTravelDeadZone)
-                                             || (abs(g_RobotCtrl.CurState.TravelLength.Z)>cTravelDeadZone)
-                                             || (abs(g_RobotCtrl.CurState.TravelLength.Y)>cTravelDeadZone);
+        g_RobotCtrl.CurState.TravelRequest = (abs(g_RobotCtrl.CurState.TravelLength.X) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
+                                             || (abs(g_RobotCtrl.CurState.TravelLength.Z) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
+                                             || (abs(g_RobotCtrl.CurState.TravelLength.Y) > ROC_ROBOT_TRAVEL_DEAD_ZONE);
     }
 
     for(LegIndex = 0; LegIndex < ROC_ROBOT_CNT_LEGS; LegIndex++)
@@ -933,8 +933,8 @@ void RocRobotCtrlDeltaMoveCoorInput(double x, double y, double z, double a, doub
 **********************************************************************************/
 ROC_RESULT RocRobotAlgoCtrlInit(void)
 {
-    uint8_t i = 0;
-    ROC_RESULT Ret = RET_OK;	
+    uint8_t     i = 0;
+    ROC_RESULT  Ret = RET_OK;
 
     for(i = 0; i < ROC_ROBOT_CNT_LEGS; i++)
     {
@@ -945,7 +945,7 @@ ROC_RESULT RocRobotAlgoCtrlInit(void)
     }
 
     g_RobotCtrl.CurState.GaitStep = 1;
-    g_RobotCtrl.CurState.GaitType = 5;
+    g_RobotCtrl.CurState.GaitType = ROC_ROBOT_GAIT_TRIPOD_6;
 
     Ret = RocRobotGaitSelect();
     if(RET_OK != Ret)

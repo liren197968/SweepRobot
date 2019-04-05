@@ -176,7 +176,7 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = 0;
                 g_RocRobotRemoteCtrlInput.Z = 0;
-                g_RocRobotRemoteCtrlInput.A = ROC_ROBOT_TURN_ANGLE_DEFAULT;
+                g_RocRobotRemoteCtrlInput.A = ROC_ROBOT_DEFAULT_TURN_ANGLE;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
             }
 
@@ -192,7 +192,7 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = 0;
                 g_RocRobotRemoteCtrlInput.Z = 0;
-                g_RocRobotRemoteCtrlInput.A = -ROC_ROBOT_TURN_ANGLE_DEFAULT;
+                g_RocRobotRemoteCtrlInput.A = -ROC_ROBOT_DEFAULT_TURN_ANGLE;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
             }
 
@@ -244,15 +244,23 @@ static void RocRobotRemoteControl(void)
  *  Author:
  *              ROC LiRen(2018.12.16)
 **********************************************************************************/
-static void RocRobotControlInit(void)
+static ROC_RESULT RocRobotControlInit(void)
 {
+    ROC_RESULT Ret = RET_OK;
+
     g_RocRobotCtrl = RocRobotCtrlInfoGet();
 
     g_RocRobotCtrl->CurGait.NomGaitSpeed = ROC_ROBOT_RUN_SPEED_DEFAULT;
 
     RocRobotOpenLoopWalkCalculate(&g_RocRobotCtrl->CurServo);
 
-    RocServoControl((int16_t *)(&g_RocRobotCtrl->CurServo));
+    Ret = RocServoInit((int16_t *)(&g_RocRobotCtrl->CurServo));
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    }
+
+    return Ret;
 }
 
 /*********************************************************************************
@@ -273,9 +281,7 @@ static ROC_RESULT RocRobotStartRun(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    RocRobotControlInit();
-
-    //RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_LFCLOCK);
+    //RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
 
     RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
 
@@ -325,11 +331,40 @@ static ROC_RESULT RocRobotStopRun(void)
 
 /*********************************************************************************
  *  Description:
- *              Robot control control init
+ *              Start the measure of robot sensor
  *
  *  Parameter:
  *              None
  *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.15)
+**********************************************************************************/
+static void RocRobotSensorMeasure(void)
+{
+    if(ROC_ROBOT_CTRL_MEASURE_START == RocBluetoothCtrlCmd_Get())
+    {
+        RocZmode4410MeasureStart();
+
+        if(ROC_TRUE == RocZmod4410SensorStatusIsChange())
+        {
+            RocBeeperBlink(4, 800);
+        }
+    }
+    else if(ROC_ROBOT_CTRL_MEASURE_STOP == RocBluetoothCtrlCmd_Get())
+    {
+        RocZmode4410MeasureStop();
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot control control init
+ *
+ *  Parameter:
+ *              None
  *
  *  Return:
  *              None
@@ -351,6 +386,14 @@ void RocRobotInit(void)
         while(1);
     }
 
+    Ret = RocPca9685Init();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+
     Ret = RocBatteryInit();
     if(RET_OK != Ret)
     {
@@ -360,22 +403,6 @@ void RocRobotInit(void)
     }
 
     Ret = RocBluetoothInit();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-
-        while(1);
-    }
-
-    Ret = RocPca9685Init();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-
-        while(1);
-    }
-
-    Ret = RocServoInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -415,8 +442,6 @@ void RocRobotInit(void)
         while(1);
     }
 
-    ROC_LOGI("Robot hardware init is in success, and the system start running.");
-
     Ret = RocRobotAlgoCtrlInit();
     if(RET_OK != Ret)
     {
@@ -424,6 +449,16 @@ void RocRobotInit(void)
     
         while(1);
     }
+
+    Ret = RocRobotControlInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
+        while(1);
+    }
+
+    ROC_LOGI("Robot hardware init is in success, and the system start running.");
 
     Ret = RocRobotStartRun();
     if(RET_OK == Ret)
@@ -488,7 +523,7 @@ void RocRobotMain(void)
 
         RocBluetoothData_Send(g_BtRxBuffer, g_BtRxDatLen);
 
-        memset(g_BtRxBuffer, 0, g_BtRxDatLen);
+        //memset(g_BtRxBuffer, 0, g_BtRxDatLen);
 
         g_BtRecvEnd = ROC_FALSE;
     }
@@ -497,19 +532,14 @@ void RocRobotMain(void)
     {
         //RocRobotStopRun();
     }
-
-    if(ROC_ROBOT_CTRL_MEASURE_START == RocBluetoothCtrlCmd_Get())
+    else
     {
-        RocZmode4410MeasureStart();
+        RocRobotSensorMeasure();
+    }
 
-        if(ROC_TRUE == RocZmod4410SensorStatusIsChange())
-        {
-            RocBeeperBlink(4, 800);
-        }
-    }
-    else if(ROC_ROBOT_CTRL_MEASURE_STOP == RocBluetoothCtrlCmd_Get())
-    {
-        RocZmode4410MeasureStop();
-    }
+//    ROC_LOGN("g_RocRobotRemoteCtrlInput.Y: %.2f", g_RocRobotRemoteCtrlInput.Y);
+//    ROC_LOGN("RocServoTurnIsFinshed: %d", RocServoTurnIsFinshed());
+//    ROC_LOGN("g_RocRobotCtrl->CurState.TravelLength.Y: %.2f", g_RocRobotCtrl->CurState.TravelLength.Y);
+    HAL_Delay(100);
 }
 
