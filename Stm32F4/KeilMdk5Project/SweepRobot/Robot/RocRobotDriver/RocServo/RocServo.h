@@ -8,11 +8,16 @@
 #define __ROC_SERVO_H
 
 
+#include <stdint.h>
+
+#include "RocError.h"
+
 //#define ROC_ROBOT_SERVO_DEBUG
 
 
 #define ROC_SERVO_SPEED_DIV_STP         3
 #define ROC_SERVO_SPEED_DOWN_MAG        1.2
+
 
 
 #define ROC_SERVO_PWM_CYCLE             20  /* ms */

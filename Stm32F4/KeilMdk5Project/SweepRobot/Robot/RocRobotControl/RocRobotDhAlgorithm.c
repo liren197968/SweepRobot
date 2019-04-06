@@ -4,12 +4,9 @@
  * Author        Data            Version
  * Liren         2018/12/16      1.0
 ********************************************************************************/
-#include <math.h>
 #include <stdint.h>
 
 #include "RocLog.h"
-#include "RocServo.h"
-#include "RocRobotControl.h"
 #include "RocRobotDhAlgorithm.h"
 
 
@@ -46,6 +43,7 @@ static ROC_PHOENIX_GAIT_s g_RobotGait[] =
     [ROC_ROBOT_GAIT_CIRCLE_6]   =   {ROC_ROBOT_RUN_SPEED_DEFAULT,   6,  2,  1,  2,  4,  1, {1,  4,  1,  4,  1,  4}, "Circle 6"},    // In-situ circle 6 steps
 };
 #endif
+
 
 static ROC_ROBOT_CONTROL_s g_RobotCtrl = {0};
 
@@ -245,19 +243,19 @@ void RocRobotGaitSeqUpdate(void)
 {
     uint8_t            LegIndex = 0;    //Index used for leg Index Number
 
-    g_RobotCtrl.CurState.IsWalking = ROC_TRUE;
-
     //Check if the Gait is in motion
-    if((ROC_TRUE == g_RobotCtrl.CurState.IsWalking) || (g_RobotCtrl.CurState.ForceGaitStepCnt != 0))
+    if((g_RobotCtrl.CurState.ForceGaitStepCnt != 0))
     {
         g_RobotCtrl.CurState.TravelRequest = ROC_ENABLE;
     }
     else
     {
-        g_RobotCtrl.CurState.TravelRequest = (abs(g_RobotCtrl.CurState.TravelLength.X) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
+        g_RobotCtrl.CurState.TravelRequest =    (abs(g_RobotCtrl.CurState.TravelLength.X) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
                                              || (abs(g_RobotCtrl.CurState.TravelLength.Z) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
                                              || (abs(g_RobotCtrl.CurState.TravelLength.Y) > ROC_ROBOT_TRAVEL_DEAD_ZONE);
     }
+
+    g_RobotCtrl.CurState.TravelRequest = ROC_ENABLE;
 
     for(LegIndex = 0; LegIndex < ROC_ROBOT_CNT_LEGS; LegIndex++)
     {
@@ -894,6 +892,42 @@ ROC_ROBOT_CONTROL_s *RocRobotCtrlInfoGet(void)
 
 /*********************************************************************************
  *  Description:
+ *              Set the robot move status
+ *
+ *  Parameter:
+ *              MoveStatus: the robot current move status
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+void RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_e MoveStatus)
+{
+    g_RobotCtrl.CurState.MoveStatus = MoveStatus;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Get the robot move status
+ *
+ *  Parameter:
+ *              MoveStatus: the robot current move status
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+ROC_ROBOT_MOVE_STATUS_e RocRobotMoveStatus_Get(void)
+{
+    return g_RobotCtrl.CurState.MoveStatus;
+}
+
+/*********************************************************************************
+ *  Description:
  *              Input the delta move coordinate
  *              For example: move (5, 5) every cycle
  *
@@ -916,6 +950,72 @@ void RocRobotCtrlDeltaMoveCoorInput(double x, double y, double z, double a, doub
     g_RobotCtrl.CurState.TravelLength.Z = z;
     g_RobotCtrl.CurState.TravelLength.A = a;
     g_RobotCtrl.CurState.LegLiftHeight  = h;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Update robot current leg position
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+static void RocRobotCurLegPosUpdate(void)
+{
+    uint8_t i = 0;
+
+    for(i = 0; i < ROC_ROBOT_CNT_LEGS; i++)
+    {
+        g_RobotCtrl.CurState.LegCurPos[i].X = g_RobotCtrl.CurState.TravelLength.X;
+        g_RobotCtrl.CurState.LegCurPos[i].Y = g_RobotCtrl.CurState.TravelLength.Y;
+        g_RobotCtrl.CurState.LegCurPos[i].Z = g_RobotCtrl.CurState.TravelLength.Z;
+        g_RobotCtrl.CurState.LegCurPos[i].A = g_RobotCtrl.CurState.TravelLength.A;
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Update the robot single position
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+void RocRobotSingleLegPosUpdate(ROC_ROBOT_SERVO_s *pRobotServo)
+{
+    uint8_t i = 0;
+
+    g_RobotCtrl.CurState.SelectLegIsAllDown = ROC_TRUE;
+
+    RocRobotCurLegPosUpdate();
+
+    for(i = 0; i < ROC_ROBOT_CNT_LEGS; i++)
+    {
+        if(0 != g_RobotCtrl.CurState.LegCurPos[i].Z)
+        {
+            g_RobotCtrl.CurState.SelectLegIsAllDown = ROC_FALSE;
+        }
+    }
+
+    if(ROC_FALSE == g_RobotCtrl.CurState.SelectLegIsAllDown)
+    {
+        RocRobotOpenLoopWalkCalculate(pRobotServo);
+    }
+    else if(ROC_TRUE == g_RobotCtrl.CurState.SelectLegIsAllDown)
+    {
+        g_RobotCtrl.CurState.LegCurPos[g_RobotCtrl.CurState.SelectLegNum].Z = 20;
+    }
+
 }
 
 /*********************************************************************************

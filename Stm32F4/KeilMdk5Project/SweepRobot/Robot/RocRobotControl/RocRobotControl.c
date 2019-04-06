@@ -98,6 +98,8 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.Z = 0;
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = 0;
+
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
             }
 
             break;
@@ -114,6 +116,8 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.Z = 0;
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
             }
 
             break;
@@ -130,6 +134,8 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.Z = 0;
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
             }
             break;
         }
@@ -145,6 +151,8 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.Z = 0;
                 g_RocRobotRemoteCtrlInput.A = ROC_ROBOT_DEFAULT_TURN_ANGLE;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_CIRCLING);
             }
 
             break;
@@ -161,6 +169,8 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.Z = 0;
                 g_RocRobotRemoteCtrlInput.A = -ROC_ROBOT_DEFAULT_TURN_ANGLE;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_CIRCLING);
             }
 
             break;
@@ -213,8 +223,8 @@ static void RocRobotRemoteControl(void)
 **********************************************************************************/
 static ROC_RESULT RocRobotCtrlCmdIsChanged(void)
 {
-    uint8_t         CurCtrlCmd = ROC_ROBOT_CTRL_CMD_MOSTAND;
-    static uint8_t  LastCtrlCmd = ROC_ROBOT_CTRL_CMD_MOSTAND;
+    uint8_t         CurCtrlCmd = ROC_NONE;
+    static uint8_t  LastCtrlCmd = ROC_NONE;
 
     CurCtrlCmd = RocBluetoothCtrlCmd_Get();
 
@@ -232,7 +242,7 @@ static ROC_RESULT RocRobotCtrlCmdIsChanged(void)
 
 /*********************************************************************************
  *  Description:
- *              Switch the move context to forbid action mutation
+ *              Switch the move context to forbid mutation action
  *
  *  Parameter:
  *              None
@@ -271,30 +281,84 @@ static void RocRobotMoveContextSwitch(ROC_ROBOT_CONTROL_s *RobotCtrl)
 **********************************************************************************/
 static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *RobotCtrl)
 {
-    ROC_RESULT ChangeStatus = 0;
+    ROC_RESULT                  ChangeStatus = ROC_NONE;
+    ROC_ROBOT_MOVE_STATUS_e     MoveStatus = ROC_ROBOT_MOVE_STATUS_NUM;
 
     RocRobotCtrlDeltaMoveCoorInput(g_RocRobotRemoteCtrlInput.X, g_RocRobotRemoteCtrlInput.Y,
                                    g_RocRobotRemoteCtrlInput.Z, g_RocRobotRemoteCtrlInput.A,
                                    g_RocRobotRemoteCtrlInput.H);
 
-    ChangeStatus = RocRobotCtrlCmdIsChanged();
-    if(ROC_TRUE == ChangeStatus)
-    {
-       RocRobotMoveContextSwitch(RobotCtrl);
-    }
+    MoveStatus = RocRobotMoveStatus_Get();
 
-    RocRobotGaitSeqUpdate();
-
-    if(ROC_ROBOT_GAIT_CIRCLE_6 != RobotCtrl->CurState.GaitType)
+    if(ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus)
     {
-        RocRobotOpenLoopWalkCalculate(&RobotCtrl->CurServo);
+        RocRobotSingleLegPosUpdate(&RobotCtrl->CurServo);
     }
     else
     {
-        RocRobotOpenLoopCircleCalculate(&RobotCtrl->CurServo);
+        ChangeStatus = RocRobotCtrlCmdIsChanged();
+        if(ROC_TRUE == ChangeStatus)
+        {
+           RocRobotMoveContextSwitch(RobotCtrl);
+        }
+
+        RocRobotGaitSeqUpdate();
+
+        if(ROC_ROBOT_GAIT_CIRCLE_6 != RobotCtrl->CurState.GaitType)
+        {
+            RocRobotOpenLoopWalkCalculate(&RobotCtrl->CurServo);
+        }
+        else
+        {
+            RocRobotOpenLoopCircleCalculate(&RobotCtrl->CurServo);
+        }
     }
 
     //RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot run special gait sequence when power on
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+static void RocRobotPowerOnGaitSeq_Run(void)
+{
+    g_RocRobotRemoteCtrlInput.X = 0;
+    g_RocRobotRemoteCtrlInput.Y = 0;
+    g_RocRobotRemoteCtrlInput.Z = ROC_ROBOT_DEFAULT_FEET_LIFT;
+    g_RocRobotRemoteCtrlInput.A = 0;
+    g_RocRobotRemoteCtrlInput.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+    g_RocRobotRemoteCtrlInput.X = 0;
+    g_RocRobotRemoteCtrlInput.Y = 0;
+    g_RocRobotRemoteCtrlInput.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 2;
+    g_RocRobotRemoteCtrlInput.A = 0;
+    g_RocRobotRemoteCtrlInput.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+    g_RocRobotRemoteCtrlInput.X = 0;
+    g_RocRobotRemoteCtrlInput.Y = 0;
+    g_RocRobotRemoteCtrlInput.Z = ROC_ROBOT_DEFAULT_FEET_LIFT;
+    g_RocRobotRemoteCtrlInput.A = 0;
+    g_RocRobotRemoteCtrlInput.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+    g_RocRobotRemoteCtrlInput.X = 0;
+    g_RocRobotRemoteCtrlInput.Y = 0;
+    g_RocRobotRemoteCtrlInput.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 0.1;
+    g_RocRobotRemoteCtrlInput.A = 0;
+    g_RocRobotRemoteCtrlInput.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
 }
 
 /*********************************************************************************
@@ -315,8 +379,6 @@ static ROC_RESULT RocRobotControlInit(void)
     ROC_RESULT Ret = RET_OK;
 
     g_RocRobotCtrl = RocRobotCtrlInfoGet();
-
-    g_RocRobotCtrl->CurGait.NomGaitSpeed = ROC_ROBOT_RUN_SPEED_DEFAULT;
 
     RocRobotOpenLoopWalkCalculate(&g_RocRobotCtrl->CurServo);
 
@@ -349,6 +411,7 @@ static ROC_RESULT RocRobotStartRun(void)
 
     //RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
 
+    g_RocRobotCtrl->CurGait.NomGaitSpeed = ROC_ROBOT_RUN_SPEED_POWER_ON;
     RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
 
     Ret = RocServoTimerStart();
@@ -358,6 +421,13 @@ static ROC_RESULT RocRobotStartRun(void)
 
         while(1);
     }
+
+    RocRobotPowerOnGaitSeq_Run();
+
+    g_RocRobotCtrl->CurGait.NomGaitSpeed = ROC_ROBOT_RUN_SPEED_DEFAULT;
+    RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
+
+    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
 
     return Ret;
 }
@@ -443,6 +513,8 @@ void RocRobotInit(void)
     ROC_RESULT Ret = RET_OK;
 
     ROC_LOGW("############# Robot hardware version is 0.5! #############");
+
+    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_POWER_ON);
 
     Ret = RocLedInit();
     if(RET_OK != Ret)
@@ -531,6 +603,8 @@ void RocRobotInit(void)
     {
         ROC_LOGW("############# Robot is running! Be careful! #############");
     }
+
+    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
 }
 
 /*********************************************************************************
@@ -593,10 +667,5 @@ void RocRobotMain(void)
     {
         RocRobotSensorMeasure();
     }
-
-//    ROC_LOGN("g_RocRobotRemoteCtrlInput.Y: %.2f", g_RocRobotRemoteCtrlInput.Y);
-//    ROC_LOGN("RocServoTurnIsFinshed: %d", RocServoTurnIsFinshed());
-//    ROC_LOGN("g_RocRobotCtrl->CurState.TravelLength.Y: %.2f", g_RocRobotCtrl->CurState.TravelLength.Y);
-    HAL_Delay(100);
 }
 
