@@ -70,39 +70,6 @@ static uint32_t RocRobotWalkModeGet(void)
 
 /*********************************************************************************
  *  Description:
- *              Robot move core
- *
- *  Parameter:
- *              None
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2019.03.31)
-**********************************************************************************/
-static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *RobotCtrl)
-{
-    RocRobotCtrlDeltaMoveCoorInput(g_RocRobotRemoteCtrlInput.X, g_RocRobotRemoteCtrlInput.Y,
-                                   g_RocRobotRemoteCtrlInput.Z, g_RocRobotRemoteCtrlInput.A,
-                                   g_RocRobotRemoteCtrlInput.H);
-
-    RocRobotGaitSeqUpdate();
-
-    if(ROC_ROBOT_GAIT_CIRCLE_6 != RobotCtrl->CurState.GaitType)
-    {
-        RocRobotOpenLoopWalkCalculate(&RobotCtrl->CurServo);
-    }
-    else
-    {
-        RocRobotOpenLoopCircleCalculate(&RobotCtrl->CurServo);
-    }
-
-    //RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
-}
-
-/*********************************************************************************
- *  Description:
  *              Robot remote control function
  *
  *  Parameter:
@@ -229,6 +196,105 @@ static void RocRobotRemoteControl(void)
         default:                            RocMotorRotateDirectionSet(ROC_MOTOR_STOPPED_ROTATE);
                                             break;
     }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Check robot control command is changed
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              The running state
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+static ROC_RESULT RocRobotCtrlCmdIsChanged(void)
+{
+    uint8_t         CurCtrlCmd = ROC_ROBOT_CTRL_CMD_MOSTAND;
+    static uint8_t  LastCtrlCmd = ROC_ROBOT_CTRL_CMD_MOSTAND;
+
+    CurCtrlCmd = RocBluetoothCtrlCmd_Get();
+
+    if(LastCtrlCmd != CurCtrlCmd)
+    {
+        LastCtrlCmd = CurCtrlCmd;
+
+        return ROC_TRUE;
+    }
+    else
+    {
+        return ROC_FALSE;
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Switch the move context to forbid action mutation
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+static void RocRobotMoveContextSwitch(ROC_ROBOT_CONTROL_s *RobotCtrl)
+{
+    uint8_t i = 0;
+
+    for(i = 0; i < ROC_ROBOT_CNT_LEGS; i++)
+    {
+        RobotCtrl->CurState.LegCurPos[i].X = RobotCtrl->CurState.TravelLength.X / 2;
+        RobotCtrl->CurState.LegCurPos[i].Y = RobotCtrl->CurState.TravelLength.Y / 2;
+        RobotCtrl->CurState.LegCurPos[i].Z = RobotCtrl->CurState.TravelLength.Z / 2;
+        RobotCtrl->CurState.LegCurPos[i].A = RobotCtrl->CurState.TravelLength.A / 2;
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot move core
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.03.31)
+**********************************************************************************/
+static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *RobotCtrl)
+{
+    ROC_RESULT ChangeStatus = 0;
+
+    RocRobotCtrlDeltaMoveCoorInput(g_RocRobotRemoteCtrlInput.X, g_RocRobotRemoteCtrlInput.Y,
+                                   g_RocRobotRemoteCtrlInput.Z, g_RocRobotRemoteCtrlInput.A,
+                                   g_RocRobotRemoteCtrlInput.H);
+
+    ChangeStatus = RocRobotCtrlCmdIsChanged();
+    if(ROC_TRUE == ChangeStatus)
+    {
+       RocRobotMoveContextSwitch(RobotCtrl);
+    }
+
+    RocRobotGaitSeqUpdate();
+
+    if(ROC_ROBOT_GAIT_CIRCLE_6 != RobotCtrl->CurState.GaitType)
+    {
+        RocRobotOpenLoopWalkCalculate(&RobotCtrl->CurServo);
+    }
+    else
+    {
+        RocRobotOpenLoopCircleCalculate(&RobotCtrl->CurServo);
+    }
+
+    //RocServoSpeedSet(g_RocRobotCtrl->CurGait.NomGaitSpeed);
 }
 
 /*********************************************************************************
@@ -517,16 +583,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 **********************************************************************************/
 void RocRobotMain(void)
 {
-    if(g_BtRecvEnd == ROC_TRUE)
-    {
-        ROC_LOGI("Bluetooth receive (%d) data(%s).", g_BtRxDatLen, g_BtRxBuffer);
-
-        RocBluetoothData_Send(g_BtRxBuffer, g_BtRxDatLen);
-
-        //memset(g_BtRxBuffer, 0, g_BtRxDatLen);
-
-        g_BtRecvEnd = ROC_FALSE;
-    }
+    RocBluetoothRecvIsFinshed();
 
     if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > RocBatteryVoltageGet())
     {

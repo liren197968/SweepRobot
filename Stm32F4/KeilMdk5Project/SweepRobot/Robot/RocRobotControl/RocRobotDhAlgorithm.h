@@ -9,14 +9,17 @@
 
 
 #include <stdint.h>
+#include "RocServo.h"
 
 
-#define ROC_ROBOT_GAIT_DEBUG
+//#define ROC_ROBOT_GAIT_DEBUG
 #define ROC_ROBOT_DISPLAY_GAIT_NAMES
-//#define ROC_ROBOT_GAIT_QUADMODE   // We are building for quad support
+//#define ROC_ROBOT_GAIT_QUADMODE               // We are building for quad support
 
 #define ROC_ROBOT_TRAVEL_DEAD_ZONE          1   //The deadzone for the analog input from the remote
-#define ROC_ROBOT_RUN_SPEED_DEFAULT         90
+
+
+#define ROC_ROBOT_RUN_SPEED_DEFAULT         ROC_SERVO_PWM_CYCLE * ROC_SERVO_SPEED_DIV_STP * ROC_SERVO_SPEED_DOWN_MAG
 
 
 typedef struct _ROC_ROBOT_COORD_s

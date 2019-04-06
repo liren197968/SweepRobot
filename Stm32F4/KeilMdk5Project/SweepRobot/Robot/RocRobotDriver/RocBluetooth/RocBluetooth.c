@@ -10,10 +10,10 @@
 #include "RocBluetooth.h"
 
 
-uint8_t g_BtRecvEnd = ROC_FALSE;
-uint8_t g_BtRxDatLen = ROC_NONE;
-uint8_t g_BtTxBuffer[ROC_BT_TXD_LENGTH] = "Start";
-uint8_t g_BtRxBuffer[ROC_BT_RXD_LENGTH] = {0};
+static uint8_t g_BtRecvEnd = ROC_FALSE;
+static uint8_t g_BtRxDatLen = ROC_NONE;
+static uint8_t g_BtTxBuffer[ROC_BT_TXD_LENGTH] = "Start";
+static uint8_t g_BtRxBuffer[ROC_BT_RXD_LENGTH] = {0};
 
 
 /*********************************************************************************
@@ -224,6 +224,39 @@ void RocBluetoothCtrlCmd_Set(uint8_t CtrlCmd)
 uint8_t RocBluetoothCtrlCmd_Get(void)
 {
     return g_BtRxBuffer[0];
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Check bluetooth receive is finshed
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              The running state
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.15)
+**********************************************************************************/
+ROC_RESULT RocBluetoothRecvIsFinshed(void)
+{
+    if(g_BtRecvEnd == ROC_TRUE)
+    {
+        ROC_LOGI("Bluetooth receive (%d) data(%s).", g_BtRxDatLen, g_BtRxBuffer);
+
+        RocBluetoothData_Send(g_BtRxBuffer, g_BtRxDatLen);
+
+        //memset(g_BtRxBuffer, 0, g_BtRxDatLen);
+
+        g_BtRecvEnd = ROC_FALSE;
+
+        return ROC_TRUE;
+    }
+    else
+    {
+        return ROC_FALSE;
+    }
 }
 
 /*********************************************************************************
