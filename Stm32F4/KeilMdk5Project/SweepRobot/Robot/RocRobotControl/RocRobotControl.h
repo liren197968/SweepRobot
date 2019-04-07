@@ -8,11 +8,6 @@
 #define __ROC_ROBOTCONTROL_H
 
 
-#define ROC_ROBOT_DEFAULT_LEG_STEP                  40
-#define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
-#define ROC_ROBOT_DEFAULT_FEET_LIFT                 24
-
-
 typedef enum _ROC_ROBOT_WALK_MODE_e
 {
     ROC_ROBOT_WALK_MODE_CAR = 0,

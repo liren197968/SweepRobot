@@ -112,7 +112,7 @@ static void RocRobotGaitPosUpdate(uint8_t CurLegNum)
             || g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] + (g_RobotCtrl.CurGait.StepsInGait - 1))))
             && g_RobotCtrl.CurState.TravelRequest)
     {    //Optional Half heigth Rear (2, 3, 5 lifted positions)
-        if(ROC_ROBOT_GAIT_CIRCLE_6 != g_RobotCtrl.CurState.GaitType)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
         {
             g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.LiftDivFactor;
             g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.LiftDivFactor;
@@ -135,7 +135,7 @@ static void RocRobotGaitPosUpdate(uint8_t CurLegNum)
             || g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] - (g_RobotCtrl.CurGait.StepsInGait-1))
             && g_RobotCtrl.CurState.TravelRequest)
     {    // Optional Half heigth front (2, 3, 5 lifted positions)
-        if(ROC_ROBOT_GAIT_CIRCLE_6 != g_RobotCtrl.CurState.GaitType)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
         {
             g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.LiftDivFactor;
             g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.LiftDivFactor;
@@ -189,7 +189,7 @@ static void RocRobotGaitPosUpdate(uint8_t CurLegNum)
     }
     else
     {   //Move body forward
-        if(ROC_ROBOT_GAIT_CIRCLE_6 != g_RobotCtrl.CurState.GaitType)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
         {
             g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.LegCurPos[CurLegNum].X - (g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.SlidDivFactor);
             g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y - (g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.SlidDivFactor);
@@ -981,10 +981,10 @@ static void RocRobotCurLegPosUpdate(void)
 
 /*********************************************************************************
  *  Description:
- *              Update the robot single position
+ *              Select which leg to control
  *
  *  Parameter:
- *              None
+ *              SlecetLegNum: the number of the selected leg
  *
  *  Return:
  *              None
@@ -992,13 +992,58 @@ static void RocRobotCurLegPosUpdate(void)
  *  Author:
  *              ROC LiRen(2019.04.06)
 **********************************************************************************/
-void RocRobotSingleLegPosUpdate(ROC_ROBOT_SERVO_s *pRobotServo)
+void RocRobotSingleLegSelect(ROC_ROBOT_LEG_e SlecetLegNum)
 {
-    uint8_t i = 0;
+    g_RobotCtrl.CurState.SelectLegNum = SlecetLegNum;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Control the robot single leg
+ *
+ *  Parameter:
+ *              pRobotCtrl: the pointer to the robot control structure
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+void RocRobotSingleLegCtrl(ROC_ROBOT_SERVO_s *pRobotServo)
+{
+    uint8_t                 i = 0;
+    static ROC_ROBOT_LEG_e  PrevSelectedLeg = ROC_ROBOT_RIG_FRO_LEG;
+
+    if(ROC_ROBOT_CNT_LEGS == g_RobotCtrl.CurState.SelectLegNum)
+    {
+        if(ROC_FALSE == g_RobotCtrl.CurState.SelectLegIsAllDown)
+        {
+            RocRobotCurLegPosUpdate();  /* control all the legs */
+        }
+    }
+    else
+    {
+        if(ROC_FALSE == g_RobotCtrl.CurState.SelectLegIsAllDown)
+        {
+            g_RobotCtrl.CurState.LegCurPos[PrevSelectedLeg].Z = 0;
+
+            g_RobotCtrl.CurState.LegCurPos[g_RobotCtrl.CurState.SelectLegNum].Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5;
+            //ROC_LOGN("SelectLegNum: %u, PrevSelectedLeg: %u", g_RobotCtrl.CurState.SelectLegNum, PrevSelectedLeg);
+
+            PrevSelectedLeg = g_RobotCtrl.CurState.SelectLegNum;
+        }
+        else if(ROC_TRUE == g_RobotCtrl.CurState.SelectLegIsAllDown)
+        {
+            g_RobotCtrl.CurState.LegCurPos[g_RobotCtrl.CurState.SelectLegNum].Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5;
+        }
+
+        //ROC_LOGN("LegCurPos.Z: %.2f ", g_RobotCtrl.CurState.LegCurPos[g_RobotCtrl.CurState.SelectLegNum].Z);
+    }
+
+    RocRobotOpenLoopWalkCalculate(pRobotServo);
 
     g_RobotCtrl.CurState.SelectLegIsAllDown = ROC_TRUE;
-
-    RocRobotCurLegPosUpdate();
 
     for(i = 0; i < ROC_ROBOT_CNT_LEGS; i++)
     {
@@ -1007,16 +1052,6 @@ void RocRobotSingleLegPosUpdate(ROC_ROBOT_SERVO_s *pRobotServo)
             g_RobotCtrl.CurState.SelectLegIsAllDown = ROC_FALSE;
         }
     }
-
-    if(ROC_FALSE == g_RobotCtrl.CurState.SelectLegIsAllDown)
-    {
-        RocRobotOpenLoopWalkCalculate(pRobotServo);
-    }
-    else if(ROC_TRUE == g_RobotCtrl.CurState.SelectLegIsAllDown)
-    {
-        g_RobotCtrl.CurState.LegCurPos[g_RobotCtrl.CurState.SelectLegNum].Z = 20;
-    }
-
 }
 
 /*********************************************************************************

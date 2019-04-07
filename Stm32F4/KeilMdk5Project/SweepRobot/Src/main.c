@@ -198,7 +198,7 @@ void SystemClock_Config(void)
 static void MX_NVIC_Init(void)
 {
     /* TIM6_DAC_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 4, 0);
+    HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
     /* TIM7_DAC_IRQn interrupt configuration */
     HAL_NVIC_SetPriority(TIM7_IRQn, 7, 0);

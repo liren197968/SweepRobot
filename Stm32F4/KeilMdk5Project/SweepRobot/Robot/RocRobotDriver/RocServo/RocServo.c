@@ -289,8 +289,12 @@ void RocServoSpeedSet(uint16_t ServoRunTimeMs)
         while(1);
     }
 
-    htim6.Init.Period = ServoRunTimeMs * 10 / ROC_SERVO_SPEED_DIV_STP;
-    TIM_Base_SetConfig(htim6.Instance, &htim6.Init);
+    htim6.Init.Period = (uint32_t)((ServoRunTimeMs + 32) * 2 / ROC_SERVO_SPEED_DIV_STP);    /* 32 is the timer error */
+
+    htim6.Instance->CNT = 0;
+    htim6.Instance->ARR = htim6.Init.Period;
+
+    htim6.Instance->CR1 &= ~TIM_CR1_ARPE;
 
     Ret = RocServoTimerStart();
     if(RET_OK != Ret)

@@ -100,15 +100,20 @@
 #define ROC_ROBOT_LEF_HIN_FET_CENTER                310
 
 
+#define ROC_ROBOT_DEFAULT_LEG_STEP                  40
+#define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
+#define ROC_ROBOT_DEFAULT_FEET_LIFT                 24
+
+
 //#define ROC_ROBOT_GAIT_DEBUG
 #define ROC_ROBOT_DISPLAY_GAIT_NAMES
-//#define ROC_ROBOT_GAIT_QUADMODE                   // We are building for quad support
+//#define ROC_ROBOT_GAIT_QUADMODE                       // We are building for quad support
 
 
 #define ROC_ROBOT_TRAVEL_DEAD_ZONE                  1   //The deadzone for the analog input from the remote
 
-#define ROC_ROBOT_RUN_SPEED_POWER_ON                ROC_SERVO_PWM_CYCLE * ROC_SERVO_SPEED_DIV_STP * ROC_SERVO_SPEED_DOWN_MAG * 4
-#define ROC_ROBOT_RUN_SPEED_DEFAULT                 ROC_SERVO_PWM_CYCLE * ROC_SERVO_SPEED_DIV_STP * ROC_SERVO_SPEED_DOWN_MAG
+#define ROC_ROBOT_RUN_SPEED_POWER_ON                (ROC_SERVO_PWM_CYCLE * ROC_SERVO_SPEED_DIV_STP * ROC_SERVO_SPEED_DOWN_MAG * 4)
+#define ROC_ROBOT_RUN_SPEED_DEFAULT                 (ROC_SERVO_PWM_CYCLE * ROC_SERVO_SPEED_DIV_STP * ROC_SERVO_SPEED_DOWN_MAG)
 
 
 typedef struct _ROC_ROBOT_COORD_s
@@ -237,7 +242,7 @@ typedef struct _ROC_PHOENIX_STATE_s
 #endif
 
     //[Single Leg Control]
-    uint8_t                     SelectLegNum;
+    ROC_ROBOT_LEG_e             SelectLegNum;
     ROC_ROBOT_COORD_s           SelectLegCor;
     uint8_t                     SelectLegMode;          // Single leg control mode
     uint8_t                     SelectLegIsAllDown;     // True if the robot legs are all down
@@ -285,7 +290,8 @@ ROC_RESULT RocRobotAlgoCtrlInit(void);
 ROC_ROBOT_CONTROL_s *RocRobotCtrlInfoGet(void);
 ROC_ROBOT_MOVE_STATUS_e RocRobotMoveStatus_Get(void);
 void RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_e MoveStatus);
-void RocRobotSingleLegPosUpdate(ROC_ROBOT_SERVO_s *pRobotServo);
+void RocRobotSingleLegSelect(ROC_ROBOT_LEG_e SlecetLegNum);
+void RocRobotSingleLegCtrl(ROC_ROBOT_SERVO_s *pRobotServo);
 void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo);
 void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo);
 void RocRobotCtrlDeltaMoveCoorInput(double x, double y, double z, double a, double h);
