@@ -10,18 +10,18 @@
 
 #define ROC_ROBOT_DEFAULT_LEG_STEP                  40
 #define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
-#define ROC_ROBOT_DEFAULT_FEET_LIFT                 20
+#define ROC_ROBOT_DEFAULT_FEET_LIFT                 24
 
 
-typedef enum _ROC_ROBOT_CTRL_CMD_e
+typedef enum _ROC_ROBOT_WALK_MODE_e
 {
     ROC_ROBOT_WALK_MODE_CAR = 0,
     ROC_ROBOT_WALK_MODE_HEXAPOD = 1,
 
-}ROC_ROBOT_CTRL_CMD_e;
+}ROC_ROBOT_WALK_MODE_e;
 
 
-typedef enum _ROC_ROBOT_WALK_MODE_e
+typedef enum _ROC_ROBOT_CTRL_CMD_e
 {
     ROC_ROBOT_CTRL_CMD_MOSTAND = 'C',
     ROC_ROBOT_CTRL_CMD_FORWARD = 'W',
@@ -37,7 +37,7 @@ typedef enum _ROC_ROBOT_WALK_MODE_e
     ROC_ROBOT_CTRL_CMD_TURNRDR = 'E',
 
     ROC_ROBOT_CTRL_CMD_NUM = 13,
-}ROC_ROBOT_WALK_MODE_e;
+}ROC_ROBOT_CTRL_CMD_e;
 
 
 void RocRobotInit(void);
