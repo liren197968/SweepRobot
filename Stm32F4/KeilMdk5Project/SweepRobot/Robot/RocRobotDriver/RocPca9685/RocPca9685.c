@@ -259,7 +259,17 @@ ROC_RESULT RocPca9685Init(void)
     RocPca9685Enable();
     HAL_Delay(20);
 
-    RocPca9685WriteReg(PWM_ADDRESS_L, PCA9685_MODE1, &InitDat);
+    WriteStatus = RocPca9685WriteReg(PWM_ADDRESS_L, PCA9685_MODE1, &InitDat);
+    if(HAL_OK != WriteStatus)
+    {
+        ROC_LOGE("Setting PCA9685 Mode is in error, and will reset it one more time!");
+
+        HAL_I2C_DeInit(&hi2c1);     /* For the ST IIC BUSY flag hardware error */
+        HAL_I2C_Init(&hi2c1);       /* Reset the IIC */
+
+        RocPca9685WriteReg(PWM_ADDRESS_L, PCA9685_MODE1, &InitDat);
+    }
+
     RocPca9685WriteReg(PWM_ADDRESS_H, PCA9685_MODE1, &InitDat);
 
     WriteStatus = RocPca9685SetPwmFreq(PWM_ADDRESS_L, 50);

@@ -244,6 +244,7 @@ void RocRobotGaitSeqUpdate(void)
     uint8_t            LegIndex = 0;    //Index used for leg Index Number
 
     //Check if the Gait is in motion
+
     if(g_RobotCtrl.CurState.ForceGaitStepCnt != 0)
     {
         g_RobotCtrl.CurState.TravelRequest = ROC_ENABLE;
@@ -254,6 +255,8 @@ void RocRobotGaitSeqUpdate(void)
                                              || (abs(g_RobotCtrl.CurState.TravelLength.Z) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
                                              || (abs(g_RobotCtrl.CurState.TravelLength.Y) > ROC_ROBOT_TRAVEL_DEAD_ZONE);
     }
+
+    g_RobotCtrl.CurState.TravelRequest = ROC_ENABLE;
 
     for(LegIndex = 0; LegIndex < ROC_ROBOT_CNT_LEGS; LegIndex++)
     {

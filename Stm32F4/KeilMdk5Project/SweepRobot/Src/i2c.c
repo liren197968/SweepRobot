@@ -103,6 +103,18 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         PB7     ------> I2C1_SDA
         */
         GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;
+        GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+        GPIO_InitStruct.Pull = GPIO_PULLUP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+        HAL_GPIO_WritePin(GPIOB, 6, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOB, 7, GPIO_PIN_SET); 
+
+        i2cHandle->Instance->CR1 = I2C_CR1_SWRST;
+        i2cHandle->Instance->CR1 = 0;
+
+        GPIO_InitStruct.Pin = GPIO_PIN_6 | GPIO_PIN_7;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
         GPIO_InitStruct.Pull = GPIO_PULLUP;
         GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
@@ -114,8 +126,6 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         /* USER CODE BEGIN I2C1_MspInit 1 */
         //__HAL_RCC_I2C1_FORCE_RESET();
         //__HAL_RCC_I2C1_RELEASE_RESET();
-        i2cHandle->Instance->CR1 |= 0x8000;
-        i2cHandle->Instance->CR1 &= ~0x8000;
         /* USER CODE END I2C1_MspInit 1 */
     }
     else if(i2cHandle->Instance == I2C2)
@@ -128,6 +138,18 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         PB10     ------> I2C2_SCL
         PB11     ------> I2C2_SDA
         */
+        GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_11;
+        GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+        GPIO_InitStruct.Pull = GPIO_PULLUP;
+        GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
+        HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+        HAL_GPIO_WritePin(GPIOB, 10, GPIO_PIN_SET);
+        HAL_GPIO_WritePin(GPIOB, 11, GPIO_PIN_SET);
+
+        i2cHandle->Instance->CR1 = I2C_CR1_SWRST;
+        i2cHandle->Instance->CR1 = 0;
+
         GPIO_InitStruct.Pin = GPIO_PIN_10 | GPIO_PIN_11;
         GPIO_InitStruct.Mode = GPIO_MODE_AF_OD;
         GPIO_InitStruct.Pull = GPIO_PULLUP;
