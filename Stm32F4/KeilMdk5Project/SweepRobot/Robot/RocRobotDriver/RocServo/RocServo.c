@@ -173,7 +173,7 @@ static void RocServoPwmRecod(void)
  *  Author:
  *              ROC LiRen(2018.12.15)
 **********************************************************************************/
-static void RocServoPwmOut(void)
+static void RocServoPwmOutput(void)
 {
     uint8_t             i = 0U;
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
@@ -261,7 +261,7 @@ void RocServoControl(int16_t *pServoInputVal)
         g_ServoTurnIsFinshed = ROC_FALSE;
     }
 
-    RocServoPwmOut();
+    RocServoPwmOutput();
 }
 
 /*********************************************************************************
@@ -289,7 +289,7 @@ void RocServoSpeedSet(uint16_t ServoRunTimeMs)
         while(1);
     }
 
-    htim6.Init.Period = (uint32_t)((ServoRunTimeMs + 32) * 2 / ROC_SERVO_SPEED_DIV_STP);    /* 32 is the timer error */
+    htim6.Init.Period = (uint32_t)((ServoRunTimeMs + 0) * 2 / ROC_SERVO_SPEED_DIV_STP);    /* 32 is the timer error */
 
     htim6.Instance->CNT = 0;
     htim6.Instance->ARR = htim6.Init.Period;
@@ -397,6 +397,8 @@ ROC_RESULT RocServoInit(int16_t *pServoInputVal)
     {
         ROC_LOGI("Servo module init is in success.");
     }
+
+    //RocServoPwmOutput();
 
     return Ret;
 }

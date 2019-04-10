@@ -338,27 +338,43 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
 
     MoveStatus = RocRobotMoveStatus_Get();
 
-    if(ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus)
+    switch(MoveStatus)
     {
-        RocRobotSingleLegCtrl(&pRobotCtrl->CurServo);
-    }
-    else
-    {
-        ChangeStatus = RocRobotCtrlCmdIsChanged();
-        if(ROC_TRUE == ChangeStatus)
+        case ROC_ROBOT_MOVE_STATUS_POWER_ON:
         {
-           RocRobotMoveContextSwitch(pRobotCtrl);
+            RocRobotSingleLegCtrl(&pRobotCtrl->CurServo);
+
+            break;
         }
 
-        RocRobotGaitSeqUpdate();
-
-        if(ROC_ROBOT_MOVE_STATUS_WALKING == MoveStatus)
+        case ROC_ROBOT_MOVE_STATUS_WALKING:
         {
+            ChangeStatus = RocRobotCtrlCmdIsChanged();
+            if(ROC_TRUE == ChangeStatus)
+            {
+               RocRobotMoveContextSwitch(pRobotCtrl);
+            }
+
+            RocRobotGaitSeqUpdate();
+
             RocRobotOpenLoopWalkCalculate(&pRobotCtrl->CurServo);
+
+            break;
         }
-        else if(ROC_ROBOT_MOVE_STATUS_CIRCLING == MoveStatus)
+
+        case ROC_ROBOT_MOVE_STATUS_CIRCLING:
         {
+            ChangeStatus = RocRobotCtrlCmdIsChanged();
+            if(ROC_TRUE == ChangeStatus)
+            {
+               RocRobotMoveContextSwitch(pRobotCtrl);
+            }
+
+            RocRobotGaitSeqUpdate();
+
             RocRobotOpenLoopCircleCalculate(&pRobotCtrl->CurServo);
+
+            break;
         }
     }
 
@@ -412,8 +428,6 @@ static void RocRobotPowerOnGaitSeq_Run(void)
 
     for(SelectNum = ROC_ROBOT_RIG_FRO_LEG; SelectNum < ROC_ROBOT_CNT_LEGS; SelectNum++)
     {
-        //ROC_LOGN("SelectNum %u", SelectNum);
-
         RocRobotSingleLegSelect(SelectNum);
         HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
     }
@@ -665,6 +679,107 @@ void RocRobotInit(void)
 
 /*********************************************************************************
  *  Description:
+ *              Robot power on control task entry
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.10)
+**********************************************************************************/
+static void RocRobotPowerOnTaskEntry(void)
+{
+    if(ROC_TRUE == RocServoTurnIsFinshed())
+    {
+        RocRobotMoveCtrlCore(g_pRocRobotCtrl);
+    }
+
+    RocServoControl((int16_t *)(&g_pRocRobotCtrl->CurServo));
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot battery check task entry
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.10)
+**********************************************************************************/
+static void RocBatteryCheckTaskEntry(void)
+{
+    if(ROC_TRUE == g_pRocRobotCtrl->CurState.BatTimeIsReady)
+    {
+        g_pRocRobotCtrl->CurState.BatTimeIsReady = ROC_FALSE;
+
+        RocBatteryVoltageAdcSample();
+    }
+
+#ifndef ROC_ROBOT_GAIT_DEBUG
+    if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > RocBatteryVoltageGet())
+    {
+        RocRobotStopRun();
+    }
+#endif
+
+#ifdef ROC_ROBOT_SENSOR_MEASURE
+    {
+        RocRobotSensorMeasure();
+    }
+#endif
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot control task entry
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.10)
+**********************************************************************************/
+static void RocRobotCtrlTaskEntry(void)
+{
+    uint32_t CurrentExecutionTime = 0;
+    static uint32_t LastExecutionTime = 0;
+
+    if(ROC_TRUE == g_pRocRobotCtrl->CurState.CtrlTimeIsReady)
+    {
+        RocLedToggle();
+
+        RocRobotRemoteControl();
+
+        if(ROC_TRUE == RocServoTurnIsFinshed())
+        {
+            RocRobotMoveCtrlCore(g_pRocRobotCtrl);
+        }
+        
+        RocServoControl((int16_t *)(&g_pRocRobotCtrl->CurServo));
+
+#ifdef ROC_ROBOT_GAIT_DEBUG
+        ROC_LOGN("Exetime: %d \r\n", CurrentExecutionTime - LastExecutionTime);
+#endif
+
+        LastExecutionTime = CurrentExecutionTime;
+        LastExecutionTime = LastExecutionTime;
+
+        g_pRocRobotCtrl->CurState.CtrlTimeIsReady = ROC_FALSE;
+    }
+}
+
+/*********************************************************************************
+ *  Description:
  *              The interrupt service handle for timer
  *
  *  Parameter:
@@ -678,24 +793,27 @@ void RocRobotInit(void)
 **********************************************************************************/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+    ROC_ROBOT_MOVE_STATUS_e     MoveStatus;
+
     if(TIM6 == htim->Instance)
     {
-        RocLedToggle();
+        MoveStatus = RocRobotMoveStatus_Get();
 
-        RocRobotRemoteControl();
-
-        if(ROC_TRUE == RocServoTurnIsFinshed())
+        if(ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus)
         {
-            RocRobotMoveCtrlCore(g_pRocRobotCtrl);
+            RocRobotPowerOnTaskEntry();
         }
-
-        RocServoControl((int16_t *)(&g_pRocRobotCtrl->CurServo));
+        else
+        {
+            g_pRocRobotCtrl->CurState.CtrlTimeIsReady = ROC_TRUE;
+        }
     }
     else if(TIM7 == htim->Instance)
     {
-        RocBatteryVoltageAdcSample();
+        g_pRocRobotCtrl->CurState.BatTimeIsReady = ROC_TRUE;
     }
 }
+
 
 /*********************************************************************************
  *  Description:
@@ -712,15 +830,10 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 **********************************************************************************/
 void RocRobotMain(void)
 {
-    RocBluetoothRecvIsFinshed();
+    RocRobotCtrlTaskEntry();
 
-    if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > RocBatteryVoltageGet())
-    {
-        //RocRobotStopRun();
-    }
-    else
-    {
-        RocRobotSensorMeasure();
-    }
+    RocBatteryCheckTaskEntry();
+
+    RocBluetoothRecvIsFinshed();
 }
 
