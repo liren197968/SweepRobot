@@ -175,19 +175,16 @@ static void RocServoPwmRecod(void)
 **********************************************************************************/
 static void RocServoPwmOutput(void)
 {
-    uint8_t             i = 0U;
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
 
-    for(i = 0U; i < ROC_SERVO_MAX_SUPPORT_NUM; i++)
+    WriteStatus = RocPca9685OutPwmAll(PWM_ADDRESS_L, (uint16_t *)g_PwmPreseVal, ROC_PCA9685_CHANNEL_MAX_NUM);
+    if(HAL_OK != WriteStatus)
     {
-        WriteStatus = RocPca9685OutPwm(PWM_ADDRESS_L, i, 0U, (uint16_t)g_PwmPreseVal[i]);
-
-        if(ROC_PCA9685_MAX_NUM <= i)
-        {
-            WriteStatus = RocPca9685OutPwm(PWM_ADDRESS_H, i - ROC_PCA9685_MAX_NUM, 0U, (uint16_t)g_PwmPreseVal[i]);
-        }
+        ROC_LOGE("Servo PWM out is in error, and servo will stop running!");
+        while(1);
     }
 
+    WriteStatus = RocPca9685OutPwmAll(PWM_ADDRESS_H, (uint16_t *)g_PwmPreseVal + ROC_PCA9685_CHANNEL_MAX_NUM, ROC_SERVO_MAX_SUPPORT_NUM - ROC_PCA9685_CHANNEL_MAX_NUM);
     if(HAL_OK != WriteStatus)
     {
         ROC_LOGE("Servo PWM out is in error, and servo will stop running!");
@@ -398,7 +395,9 @@ ROC_RESULT RocServoInit(int16_t *pServoInputVal)
         ROC_LOGI("Servo module init is in success.");
     }
 
-    //RocServoPwmOutput();
+    ROC_LOGN("1");
+    RocServoPwmOutput();
+    ROC_LOGN("2");
 
     return Ret;
 }

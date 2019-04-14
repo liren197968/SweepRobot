@@ -9,10 +9,12 @@
 
 
 #include <stdint.h>
-#include <stdlib.h>
-#include <math.h>
+
+#include "stm32f4xx_hal.h"
+#include "arm_math.h"
 
 #include "RocServo.h"
+#include "RocRobotMath.h"
 
 
 #define ROC_ROBOT_MATH_CONST_PI                     3.1415926
@@ -58,24 +60,24 @@
 
 
 #define ROC_ROBOT_INIT_DOWN_ANGLE                   0
-#define ROC_ROBOT_ANGLE_TO_RADIAN                   (ROC_ROBOT_MATH_CONST_PI / ROC_SERVO_MAX_ROTATE_ANGLE)
+#define ROC_ROBOT_ANGLE_TO_RADIAN                   (ROC_ROBOT_MATH_CONST_PI / 180)
 #define ROC_ROBOT_ROTATE_ANGLE_TO_PWM               ((ROC_SERVO_MAX_PWM_VAL - ROC_SERVO_MIN_PWM_VAL) / ROC_SERVO_MAX_ROTATE_ANGLE)
 
 
-#define ROC_ROBOT_WIDTH                             (ROC_ROBOT_DH_CONST_A1 + ROC_ROBOT_DH_CONST_A2 * cos(ROC_ROBOT_INIT_DOWN_ANGLE \
+#define ROC_ROBOT_WIDTH                             (ROC_ROBOT_DH_CONST_A1 + ROC_ROBOT_DH_CONST_A2 * Cos(ROC_ROBOT_INIT_DOWN_ANGLE \
                                                     * ROC_ROBOT_ANGLE_TO_RADIAN) + ROC_ROBOT_FEET_WIDTH)
-#define ROC_ROBOT_HEIGHT                            (ROC_ROBOT_DH_CONST_A2 * sin(ROC_ROBOT_INIT_DOWN_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN) \
+#define ROC_ROBOT_HEIGHT                            (ROC_ROBOT_DH_CONST_A2 * Sin(ROC_ROBOT_INIT_DOWN_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN) \
                                                     + ROC_ROBOT_LEG_HEIGHT)
 
 
-#define ROC_ROBOT_FRO_INIT_X                        (ROC_ROBOT_WIDTH * cos(ROC_ROBOT_FRO_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
-#define ROC_ROBOT_FRO_INIT_Y                        (ROC_ROBOT_WIDTH * sin(ROC_ROBOT_FRO_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
+#define ROC_ROBOT_FRO_INIT_X                        (ROC_ROBOT_WIDTH * Cos(ROC_ROBOT_FRO_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
+#define ROC_ROBOT_FRO_INIT_Y                        (ROC_ROBOT_WIDTH * Sin(ROC_ROBOT_FRO_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
 #define ROC_ROBOT_FRO_INIT_Z                        -ROC_ROBOT_HEIGHT
-#define ROC_ROBOT_MID_INIT_X                        (ROC_ROBOT_WIDTH * cos(ROC_ROBOT_MID_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
-#define ROC_ROBOT_MID_INIT_Y                        (ROC_ROBOT_WIDTH * sin(ROC_ROBOT_MID_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
+#define ROC_ROBOT_MID_INIT_X                        (ROC_ROBOT_WIDTH * Cos(ROC_ROBOT_MID_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
+#define ROC_ROBOT_MID_INIT_Y                        (ROC_ROBOT_WIDTH * Sin(ROC_ROBOT_MID_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
 #define ROC_ROBOT_MID_INIT_Z                        -ROC_ROBOT_HEIGHT
-#define ROC_ROBOT_HIN_INIT_X                        (ROC_ROBOT_WIDTH * cos(ROC_ROBOT_HIN_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
-#define ROC_ROBOT_HIN_INIT_Y                        (ROC_ROBOT_WIDTH * sin(ROC_ROBOT_HIN_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
+#define ROC_ROBOT_HIN_INIT_X                        (ROC_ROBOT_WIDTH * Cos(ROC_ROBOT_HIN_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
+#define ROC_ROBOT_HIN_INIT_Y                        (ROC_ROBOT_WIDTH * Sin(ROC_ROBOT_HIN_HIP_INIT_ANGLE * ROC_ROBOT_ANGLE_TO_RADIAN))
 #define ROC_ROBOT_HIN_INIT_Z                        -ROC_ROBOT_HEIGHT
 
 

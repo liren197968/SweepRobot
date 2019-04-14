@@ -16,7 +16,6 @@
 #include "RocBeeper.h"
 #include "RocBattery.h"
 #include "RocPca9685.h"
-#include "RocZmod4410.h"
 #include "RocBluetooth.h"
 #include "RocRemoteControl.h"
 #include "RocRobotControl.h"
@@ -31,6 +30,32 @@ static double           g_ExpectedAngle = 0;
 static ROC_ROBOT_CONTROL_s      *g_pRocRobotCtrl = NULL;
 static ROC_REMOTE_CTRL_INPUT_s  g_RocRobotRemoteCtrlInput = {0};
 static ROC_ROBOT_WALK_MODE_e    g_RobotWalkModeStatus = ROC_ROBOT_WALK_MODE_HEXAPOD;
+
+
+/*********************************************************************************
+ *  Description:
+ *              Start the measure of robot sensor
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.15)
+**********************************************************************************/
+static void RocRobotSensorMeasure(void)
+{
+    if(ROC_ROBOT_CTRL_MEASURE_START == RocBluetoothCtrlCmd_Get())
+    {
+      
+    }
+    else if(ROC_ROBOT_CTRL_MEASURE_STOP == RocBluetoothCtrlCmd_Get())
+    {
+
+    }
+}
 
 /*********************************************************************************
  *  Description:
@@ -246,6 +271,12 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_TURNRDR:
         {
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_MEASURE_START:
+        {
+            RocRobotSensorMeasure();
             break;
         }
 
@@ -532,36 +563,6 @@ static ROC_RESULT RocRobotStopRun(void)
     while(1)
     {
         RocBeeperBlink(4, 800);
-    }
-}
-
-/*********************************************************************************
- *  Description:
- *              Start the measure of robot sensor
- *
- *  Parameter:
- *              None
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2018.12.15)
-**********************************************************************************/
-static void RocRobotSensorMeasure(void)
-{
-    if(ROC_ROBOT_CTRL_MEASURE_START == RocBluetoothCtrlCmd_Get())
-    {
-        RocZmode4410MeasureStart();
-
-        if(ROC_TRUE == RocZmod4410SensorStatusIsChange())
-        {
-            RocBeeperBlink(4, 800);
-        }
-    }
-    else if(ROC_ROBOT_CTRL_MEASURE_STOP == RocBluetoothCtrlCmd_Get())
-    {
-        RocZmode4410MeasureStop();
     }
 }
 

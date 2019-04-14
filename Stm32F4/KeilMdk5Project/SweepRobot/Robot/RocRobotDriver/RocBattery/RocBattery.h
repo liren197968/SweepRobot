@@ -8,7 +8,7 @@
 #define _ROC_BATTERY_H
 
 
-#define ROC_ADC_REFERENCE_VOLTAGE               3.3
+#define ROC_ADC_REFERENCE_VOLTAGE               3.3F
 #define ROC_ADC_CHANNEL_RESOLUTION              12
 #define ROC_ADC_CONVERTED_TO_VOLTAGE            (ROC_ADC_REFERENCE_VOLTAGE / (1 << 12))
 
@@ -18,8 +18,8 @@
 
 
 #define ROC_ADC_VOLTAGE_DIVIDE_FACTOR           4
-#define ROC_ADC_VOLTAGE_DROP_ERROR              0.53
-#define ROC_ROBOT_BATTERY_LIMITED_VOLTATE       7.4
+#define ROC_ADC_VOLTAGE_DROP_ERROR              0.53F
+#define ROC_ROBOT_BATTERY_LIMITED_VOLTATE       7.4F
 
 
 void RocBatteryVoltageAdcSample(void);

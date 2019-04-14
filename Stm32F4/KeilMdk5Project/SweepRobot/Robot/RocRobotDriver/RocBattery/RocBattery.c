@@ -12,7 +12,7 @@
 
 
 static uint16_t g_AdcConvertedValue = 0;
-static float g_BatteryVoltageValue = ROC_ROBOT_BATTERY_LIMITED_VOLTATE + 0.02;
+static float g_BatteryVoltageValue = ROC_ROBOT_BATTERY_LIMITED_VOLTATE + 0.02F;
 
 /*********************************************************************************
  *  Description:

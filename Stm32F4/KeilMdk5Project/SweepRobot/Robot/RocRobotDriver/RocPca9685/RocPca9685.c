@@ -4,6 +4,8 @@
  * Author        Data            Version
  * Liren         2018/12/15      1.0
 ********************************************************************************/
+#include <string.h>
+
 #include "i2c.h"
 
 #include "RocLog.h"
@@ -69,7 +71,7 @@ static HAL_StatusTypeDef RocPca9685WriteReg(uint16_t SlaveAddr, uint16_t Reg, ui
 {
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
 
-    WriteStatus = HAL_I2C_Mem_Write(&hi2c1, SlaveAddr, Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, 1, 1000);
+    WriteStatus = HAL_I2C_Mem_Write(&hi2c1, SlaveAddr, Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, 1, 10);
     if(HAL_OK != WriteStatus)
     {
         ROC_LOGE("IIC1 write reg is in error(%d)!", WriteStatus);
@@ -97,7 +99,7 @@ static HAL_StatusTypeDef RocPca9685ReadReg(uint16_t SlaveAddr, uint16_t Reg, uin
 {
     HAL_StatusTypeDef   ReadStatus = HAL_OK;
 
-    ReadStatus = HAL_I2C_Mem_Read(&hi2c1, SlaveAddr, Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, 1, 1000);
+    ReadStatus = HAL_I2C_Mem_Read(&hi2c1, SlaveAddr, Reg, I2C_MEMADD_SIZE_8BIT, BufferAddr, 1, 10);
     if(HAL_OK != ReadStatus)
     {
         ROC_LOGE("IIC1 read reg is in error(%d)!", ReadStatus);
@@ -139,7 +141,6 @@ static HAL_StatusTypeDef RocPca9685SetPwmFreq(uint8_t SlaveAddr, uint8_t Freq)
     WriteStatus = RocPca9685WriteReg(SlaveAddr, PCA9685_PRESCALE, &Prescale);   // set the prescaler
 
     RocPca9685WriteReg(SlaveAddr, PCA9685_MODE1, &OldMode);
-    HAL_Delay(5);
 
     OldMode = OldMode | 0xA1;
     RocPca9685WriteReg(SlaveAddr, PCA9685_MODE1, &OldMode);                     // This sets the MODE1 register to turn on auto increment
@@ -174,7 +175,44 @@ HAL_StatusTypeDef RocPca9685OutPwm(uint8_t SlaveAddr, uint8_t NumPin, uint16_t L
     Buffer[3] = LedOffTime & 0xFFU;
     Buffer[4] = (LedOffTime >> 8U) & 0xFFU;
 
-    WriteStatus = HAL_I2C_Mem_Write(&hi2c1, SlaveAddr, Buffer[0], I2C_MEMADD_SIZE_8BIT, &(Buffer[1]), 4, 1000);
+    WriteStatus = HAL_I2C_Mem_Write(&hi2c1, SlaveAddr, Buffer[0], I2C_MEMADD_SIZE_8BIT, Buffer + 1, 4, 10);
+
+    return WriteStatus;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Sets pin without having to deal with on/off tick placement and
+ *              properly handles a zero value as completely off
+ *
+ *  Parameter:
+ *              SlaveAddr:  the address of slave device
+ *              NumPin:     the expected pin to output PWM pulse
+ *              LedOnTime:  the time to start turn on LED
+ *              LedOffTime:  the time to start turn off LED
+ *
+ *  Return:
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.15)
+**********************************************************************************/
+HAL_StatusTypeDef RocPca9685OutPwmAll(uint8_t SlaveAddr, uint16_t *pPwmData, uint16_t PwmDataNum)
+{
+    uint8_t             i = 0;
+    HAL_StatusTypeDef   WriteStatus = HAL_OK;
+    uint8_t             Buffer[ROC_PCA9685_DATA_REG_NUM * PwmDataNum + 1];
+
+    Buffer[0] = LED0_ON_L;
+
+    for(i = 0; i < PwmDataNum; i++)
+    {
+        Buffer[i * ROC_PCA9685_DATA_REG_NUM + 1] = 0x00U;
+        Buffer[i * ROC_PCA9685_DATA_REG_NUM + 2] = 0x00U;
+        Buffer[i * ROC_PCA9685_DATA_REG_NUM + 3] = pPwmData[i] & 0xFFU;
+        Buffer[i * ROC_PCA9685_DATA_REG_NUM + 4] = (pPwmData[i] >> 8U) & 0xFFU;
+    }
+
+    WriteStatus = HAL_I2C_Mem_Write(&hi2c1, SlaveAddr, Buffer[0], I2C_MEMADD_SIZE_8BIT, Buffer + 1, ROC_PCA9685_DATA_REG_NUM * PwmDataNum, 10);
 
     return WriteStatus;
 }
@@ -260,14 +298,16 @@ ROC_RESULT RocPca9685Init(void)
     HAL_Delay(20);
 
     WriteStatus = RocPca9685WriteReg(PWM_ADDRESS_L, PCA9685_MODE1, &InitDat);
-    if(HAL_OK != WriteStatus)
+    while(HAL_OK != WriteStatus)
     {
+        HAL_Delay(5);
+
         ROC_LOGE("Setting PCA9685 Mode is in error, and will reset it one more time!");
 
         HAL_I2C_DeInit(&hi2c1);     /* For the ST IIC BUSY flag hardware error */
         HAL_I2C_Init(&hi2c1);       /* Reset the IIC */
 
-        RocPca9685WriteReg(PWM_ADDRESS_L, PCA9685_MODE1, &InitDat);
+        WriteStatus = RocPca9685WriteReg(PWM_ADDRESS_L, PCA9685_MODE1, &InitDat);
     }
 
     RocPca9685WriteReg(PWM_ADDRESS_H, PCA9685_MODE1, &InitDat);
