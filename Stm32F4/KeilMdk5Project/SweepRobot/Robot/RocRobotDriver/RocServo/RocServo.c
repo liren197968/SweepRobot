@@ -395,10 +395,6 @@ ROC_RESULT RocServoInit(int16_t *pServoInputVal)
         ROC_LOGI("Servo module init is in success.");
     }
 
-    ROC_LOGN("1");
-    RocServoPwmOutput();
-    ROC_LOGN("2");
-
     return Ret;
 }
 

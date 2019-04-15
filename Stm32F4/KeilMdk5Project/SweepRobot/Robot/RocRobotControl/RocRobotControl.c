@@ -8,6 +8,7 @@
 
 #include "tim.h"
 #include "usart.h"
+#include "inv_mpu.h"
 
 #include "RocLog.h"
 #include "RocLed.h"
@@ -16,6 +17,7 @@
 #include "RocBeeper.h"
 #include "RocBattery.h"
 #include "RocPca9685.h"
+#include "RocMpu6050.h"
 #include "RocBluetooth.h"
 #include "RocRemoteControl.h"
 #include "RocRobotControl.h"
@@ -515,8 +517,6 @@ static ROC_RESULT RocRobotStartRun(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    //RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
-
     RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_HEXAPOD);
 
     RocRobotSingleLegSelect(ROC_ROBOT_CNT_LEGS);
@@ -595,6 +595,14 @@ void RocRobotInit(void)
         while(1);
     }
 
+    Ret = RocBluetoothInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+
     Ret = RocPca9685Init();
     if(RET_OK != Ret)
     {
@@ -604,14 +612,6 @@ void RocRobotInit(void)
     }
 
     Ret = RocBatteryInit();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-
-        while(1);
-    }
-
-    Ret = RocBluetoothInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -664,6 +664,14 @@ void RocRobotInit(void)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
     
+        while(1);
+    }
+
+    Ret = Mpu6050_Init();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
         while(1);
     }
 
@@ -726,6 +734,7 @@ static void RocBatteryCheckTaskEntry(void)
 #ifndef ROC_ROBOT_GAIT_DEBUG
     if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > RocBatteryVoltageGet())
     {
+        ROC_LOGN("Battery is in low electricity! Charge it!");
         RocRobotStopRun();
     }
 #endif
@@ -754,6 +763,8 @@ static void RocRobotCtrlTaskEntry(void)
 {
     uint32_t CurrentExecutionTime = 0;
     static uint32_t LastExecutionTime = 0;
+    float       pitch, roll, yaw;
+    long temper, time;
 
     if(ROC_TRUE == g_pRocRobotCtrl->CurState.CtrlTimeIsReady)
     {
@@ -776,6 +787,11 @@ static void RocRobotCtrlTaskEntry(void)
         LastExecutionTime = LastExecutionTime;
 
         g_pRocRobotCtrl->CurState.CtrlTimeIsReady = ROC_FALSE;
+
+        mpu_get_temperature(&temper, &temper);
+        EulerAngle_Get(&pitch, &roll, &yaw);
+        ROC_LOGN("Pitch: %.2f, Roll: %.2f, Yaw: %.2f", pitch, roll, yaw);
+        ROC_LOGN("Temper: %.2f", -temper/65536L);
     }
 }
 
@@ -814,7 +830,6 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         g_pRocRobotCtrl->CurState.BatTimeIsReady = ROC_TRUE;
     }
 }
-
 
 /*********************************************************************************
  *  Description:

@@ -20,7 +20,6 @@
 #define ROC_SERVO_SPEED_DOWN_MAG        1.2
 
 
-
 #define ROC_SERVO_PWM_CYCLE             20  /* ms */
 
 

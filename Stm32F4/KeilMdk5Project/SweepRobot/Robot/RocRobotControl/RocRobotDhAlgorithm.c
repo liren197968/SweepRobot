@@ -10,20 +10,8 @@
 
 #include "RocLog.h"
 #include "RocRobotMath.h"
+#include "RocMpu6050.h"
 #include "RocRobotDhAlgorithm.h"
-
-
-static double           g_DhAngleBuffer[3];
-
-#ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
-static double           g_FirstAngleError = 0;
-static double           g_SecndAngleError = 0;
-#endif
-
-
-uint16_t                g_RobotStandPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
-uint16_t                g_RobotForwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
-uint16_t                g_RobotBackwardPwmVal[ROC_SERVO_MAX_SUPPORT_NUM * 2] = {0};
 
 
 #ifdef ROC_ROBOT_GAIT_QUADMODE
@@ -48,7 +36,8 @@ static ROC_PHOENIX_GAIT_s g_RobotGait[] =
 #endif
 
 
-static ROC_ROBOT_CONTROL_s g_RobotCtrl = {0};
+static double               g_DhAngleBuffer[3];
+static ROC_ROBOT_CONTROL_s  g_RobotCtrl = {0};
 
 
 /*********************************************************************************
@@ -248,7 +237,6 @@ void RocRobotGaitSeqUpdate(void)
     uint8_t            LegIndex = 0;    //Index used for leg Index Number
 
     //Check if the Gait is in motion
-
     if(g_RobotCtrl.CurState.ForceGaitStepCnt != 0)
     {
         g_RobotCtrl.CurState.TravelRequest = ROC_ENABLE;
@@ -554,19 +542,19 @@ static void RocCorrectionPositionCaculate(uint8_t LegNum, double DeltaAlpha, dou
         gamma2 = ROC_ROBOT_INIT_ANGLE_BETA_2 - DeltaAlpha;
         gamma3 = ROC_ROBOT_INIT_ANGLE_BETA_3 - DeltaAlpha;
 
-        c1 = sqrt( r * r - 2 * l * r * cos(gamma1 * ROC_ROBOT_ANGLE_TO_RADIAN) + l * l);
-        c2 = sqrt( r * r - 2 * l * r * cos(gamma2 * ROC_ROBOT_ANGLE_TO_RADIAN) + l * l);
-        c3 = sqrt( r * r - 2 * l * r * cos(gamma3 * ROC_ROBOT_ANGLE_TO_RADIAN) + l * l);
-        c4 = sqrt( r * r - 2 * l * r * cos( (180 - gamma1) * ROC_ROBOT_ANGLE_TO_RADIAN ) + l * l);
-        c5 = sqrt( r * r - 2 * l * r * cos( (180 - gamma2) * ROC_ROBOT_ANGLE_TO_RADIAN ) + l * l);
-        c6 = sqrt( r * r - 2 * l * r * cos( (180 - gamma3) * ROC_ROBOT_ANGLE_TO_RADIAN ) + l * l);
+        Sqrt(( r * r - 2 * l * r * Cos(gamma1 * ROC_ROBOT_ANGLE_TO_RADIAN) + l * l), &c1);
+        Sqrt(( r * r - 2 * l * r * Cos(gamma2 * ROC_ROBOT_ANGLE_TO_RADIAN) + l * l), &c1);
+        Sqrt(( r * r - 2 * l * r * Cos(gamma3 * ROC_ROBOT_ANGLE_TO_RADIAN) + l * l), &c1);
+        Sqrt(( r * r - 2 * l * r * Cos( (180 - gamma1) * ROC_ROBOT_ANGLE_TO_RADIAN ) + l * l), &c1);
+        Sqrt(( r * r - 2 * l * r * Cos( (180 - gamma2) * ROC_ROBOT_ANGLE_TO_RADIAN ) + l * l), &c1);
+        Sqrt(( r * r - 2 * l * r * Cos( (180 - gamma3) * ROC_ROBOT_ANGLE_TO_RADIAN ) + l * l), &c1);
 
-        alfa1 = acos( (c1 * c1 + r * r - l * l) / (2 * c1 * r));
-        alfa2 = acos( (c2 * c2 + r * r - l * l) / (2 * c2 * r));
-        alfa3 = acos( (c3 * c3 + r * r - l * l) / (2 * c3 * r));
-        alfa4 = acos( (c4 * c4 + r * r - l * l) / (2 * c4 * r));
-        alfa5 = acos( (c5 * c5 + r * r - l * l) / (2 * c5 * r));
-        alfa6 = acos( (c6 * c6 + r * r - l * l) / (2 * c6 * r));
+        alfa1 = ACos( (c1 * c1 + r * r - l * l) / (2 * c1 * r));
+        alfa2 = ACos( (c2 * c2 + r * r - l * l) / (2 * c2 * r));
+        alfa3 = ACos( (c3 * c3 + r * r - l * l) / (2 * c3 * r));
+        alfa4 = ACos( (c4 * c4 + r * r - l * l) / (2 * c4 * r));
+        alfa5 = ACos( (c5 * c5 + r * r - l * l) / (2 * c5 * r));
+        alfa6 = ACos( (c6 * c6 + r * r - l * l) / (2 * c6 * r));
     }
 
     if(ROC_ROBOT_RIG_FRO_LEG == LegNum)
@@ -621,259 +609,85 @@ void RocRobotAdjustRobotStepCalculate(double ExpectedAngle, uint8_t Direction)
 {
     double      CurrentAngle = 0;
     double      x = 0, y = 0, z = 0;
+    double      g_FirstAngleError = 0;
+    double      g_SecndAngleError = 0;
 
     CurrentAngle = g_ImuYawAngle;
     /********************************For the forward direction*************************************************/
-    if(Direction == 0)
+    g_FirstAngleError = (CurrentAngle - ExpectedAngle) * ROC_ROBOT_PID_CONST_P;
+    g_SecndAngleError = (ExpectedAngle - CurrentAngle) * ROC_ROBOT_PID_CONST_P + ROC_ROBOT_FIRST_STEP_ERROR;
+
+    if(g_FirstAngleError >= 15)
     {
-        g_FirstAngleError = (CurrentAngle - ExpectedAngle) * ROC_ROBOT_PID_CONST_P;
-        g_SecndAngleError = (ExpectedAngle - CurrentAngle) * ROC_ROBOT_PID_CONST_P + ROC_ROBOT_FIRST_STEP_ERROR;
-
-        if(g_FirstAngleError >= 15)
+        g_FirstAngleError = 15;
+    }
+    else
+    {
+        if(g_FirstAngleError < -15)
         {
-            g_FirstAngleError = 15;
+            g_FirstAngleError = -15;
         }
-        else
-        {
-            if(g_FirstAngleError < -15)
-            {
-                g_FirstAngleError = -15;
-            }
-        }
-
-        if(g_SecndAngleError >= 15)
-        {
-            g_SecndAngleError = 15;
-        }
-        else
-        {
-            if(g_SecndAngleError < -15)
-            {
-                g_SecndAngleError = -15;
-            }
-        }
-        /*********************************** the first group legs *******************************/
-        RocCorrectionPositionCaculate(1, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[0] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[1] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[2] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(2, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[12] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[13] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[14] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(3, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[6] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[7] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[8] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-        /************************************* the second group legs ************************************/
-        RocCorrectionPositionCaculate(1, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[9] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[10] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[11] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(2, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[3] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[4] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[5] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(3, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[15] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[16] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[17] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        /*********************************** the first group legs *************************************/
-        RocCorrectionPositionCaculate(4, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[18] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[19] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[20] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(5, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[30] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[31] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[32] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(6, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[24] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[25] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[26] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-        /******************************** the second group legs ******************************/
-        RocCorrectionPositionCaculate(4, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[27] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[28] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[29] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(5, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[21] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[22] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[23] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(6, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotForwardPwmVal[33] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[34] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotForwardPwmVal[35] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     }
 
-    /******************************** For the backward direction ************************/
-    if(Direction == 1)
+    if(g_SecndAngleError >= 15)
     {
-        g_FirstAngleError = (CurrentAngle - g_ExpectedAngle) * ROC_ROBOT_PID_CONST_P;
-        g_SecndAngleError = (g_ExpectedAngle - CurrentAngle) * ROC_ROBOT_PID_CONST_P + ROC_ROBOT_FIRST_STEP_ERROR;
-
-        if(g_FirstAngleError >= 15)
-        {
-            g_FirstAngleError = 15;
-        }
-        else
-        {
-            if(g_FirstAngleError < -15)
-            {
-                g_FirstAngleError = -15;
-            }
-        }
-
-        if(g_SecndAngleError >= 15)
-        {
-            g_SecndAngleError = 15;
-        }
-        else
-        {
-            if(g_SecndAngleError < -15)
-            {
-                g_SecndAngleError = -15;
-            }
-        }
-        /*********************************** the first group legs *************************************/
-        RocCorrectionPositionCaculate(3, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[0] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[1] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[2] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(5, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[12] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[13] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[14] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(1, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[6] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[7] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[8] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-        /********************************* the second group legs ****************************************/
-        RocCorrectionPositionCaculate(3, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[9] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[10] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[11] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-        RocCorrectionPositionCaculate(5, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[3] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[4] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[5] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(1, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[15] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[16] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[17] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-        /******************************** the first group legs *****************************************/
-        RocCorrectionPositionCaculate(6, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[18] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[19] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[20] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(2, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[30] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[31] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[32] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(4, g_SecndAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[24] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[25] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[26] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-        /******************************** the second group legs ******************************************/
-        RocCorrectionPositionCaculate(6, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[27] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[28] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[29] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(2, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[21] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[22] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[23] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
-
-        RocCorrectionPositionCaculate(4, g_FirstAngleError, &x, &y, &z);
-        RocDhAlgorithmReverse(x, y, z);
-
-        g_RobotBackwardPwmVal[33] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[34] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-        g_RobotBackwardPwmVal[35] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+        g_SecndAngleError = 15;
     }
+    else
+    {
+        if(g_SecndAngleError < -15)
+        {
+            g_SecndAngleError = -15;
+        }
+    }
+    /*********************************** the first group legs *******************************/
+    RocCorrectionPositionCaculate(1, g_FirstAngleError, &x, &y, &z);
+    RocDhAlgorithmReverse(x, y, z);
+
+    g_RobotForwardPwmVal[0] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[1] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[2] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+
+
+    RocCorrectionPositionCaculate(2, g_FirstAngleError, &x, &y, &z);
+    RocDhAlgorithmReverse(x, y, z);
+
+    g_RobotForwardPwmVal[12] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[13] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[14] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+
+
+    RocCorrectionPositionCaculate(3, g_FirstAngleError, &x, &y, &z);
+    RocDhAlgorithmReverse(x, y, z);
+
+    g_RobotForwardPwmVal[6] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[7] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[8] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+
+    /************************************* the second group legs ************************************/
+    RocCorrectionPositionCaculate(1, g_SecndAngleError, &x, &y, &z);
+    RocDhAlgorithmReverse(x, y, z);
+
+    g_RobotForwardPwmVal[9] = (uint16_t)((ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[10] = (uint16_t)((ROC_ROBOT_FRO_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[11] = (uint16_t)((ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+
+
+    RocCorrectionPositionCaculate(2, g_SecndAngleError, &x, &y, &z);
+    RocDhAlgorithmReverse(x, y, z);
+
+    g_RobotForwardPwmVal[3] = (uint16_t)((ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[4] = (uint16_t)((ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[5] = (uint16_t)((ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+
+
+    RocCorrectionPositionCaculate(3, g_SecndAngleError, &x, &y, &z);
+    RocDhAlgorithmReverse(x, y, z);
+
+    g_RobotForwardPwmVal[15] = (uint16_t)((g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[16] = (uint16_t)((ROC_ROBOT_HIN_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+    g_RobotForwardPwmVal[17] = (uint16_t)((ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
+
 }
 #endif
 
@@ -1096,5 +910,4 @@ ROC_RESULT RocRobotAlgoCtrlInit(void)
 
     return Ret;
 }
-
 
