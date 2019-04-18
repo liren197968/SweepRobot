@@ -26,6 +26,7 @@
 #include "inv_mpu_dmp_motion_driver.h"
 #include "stm32f4xx_hal.h"
 
+#include "RocLog.h"
 #include "RocMpu6050.h"
 
 #define MPU6050							//定义我们使用的传感器为MPU6050
@@ -2992,6 +2993,7 @@ uint8_t mpu_dmp_get_data(float *pitch,float *roll,float *yaw)
 	unsigned char more;
 	long quat[4]; 
 	if(dmp_read_fifo(gyro, accel, quat, &sensor_timestamp, &sensors,&more))return 1;
+
 	/* Gyro and accel data are written to the FIFO by the DMP in chip frame and hardware units.
 	 * This behavior is convenient because it keeps the gyro and accel outputs of dmp_read_fifo and mpu_read_fifo consistent.
 	**/

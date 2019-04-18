@@ -69,10 +69,11 @@ void MX_GPIO_Init(void)
     __HAL_RCC_GPIOB_CLK_ENABLE();
 
     /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(GPIOC, ROC_PCA9685_A_EN_PIN | ROC_PCA9685_B_EN_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ROC_PCA9685_A_EN_GPIO_PORT, ROC_PCA9685_A_EN_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ROC_PCA9685_B_EN_GPIO_PORT, ROC_PCA9685_B_EN_PIN, GPIO_PIN_SET);
 
     /*Configure GPIO pin Output Level */
-    HAL_GPIO_WritePin(ROC_PCA9685_LED_GPIO_PORT, ROC_PCA9685_LED_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ROC_DEBUG_LED_GPIO_PORT, ROC_DEBUG_LED_PIN, GPIO_PIN_SET);
 
     /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin(ROC_BEEPER_GPIO_PORT, ROC_BEEPER_CTRL_PIN, GPIO_PIN_RESET);
@@ -102,11 +103,11 @@ void MX_GPIO_Init(void)
     HAL_GPIO_Init(ROC_BEEPER_GPIO_PORT, &GPIO_InitStruct);
 
     /*Configure GPIO pin : PtPin */
-    GPIO_InitStruct.Pin = ROC_PCA9685_LED_PIN;
+    GPIO_InitStruct.Pin = ROC_DEBUG_LED_PIN;
     GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
     GPIO_InitStruct.Pull = GPIO_PULLDOWN;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-    HAL_GPIO_Init(ROC_PCA9685_LED_GPIO_PORT, &GPIO_InitStruct);
+    HAL_GPIO_Init(ROC_DEBUG_LED_GPIO_PORT, &GPIO_InitStruct);
 
     /*Configure GPIO pins : PB1 PB2 */
     GPIO_InitStruct.Pin = GPIO_PIN_1 | GPIO_PIN_2;

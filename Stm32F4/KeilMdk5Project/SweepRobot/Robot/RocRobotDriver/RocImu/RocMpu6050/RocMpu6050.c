@@ -1,17 +1,20 @@
+/********************************************************************************
+ * This code is used for robot control
+*********************************************************************************
+ * Author        Data            Version
+ * Liren         2019/04/15      1.0
+********************************************************************************/
+
+#include "i2c.h"
 
 #include "RocLog.h"
 #include "RocMpu6050.h"
 
-float               pitch = 0, roll = 0, yaw = 0;
 
-//初始化MPU6050
-//返回值:0,成功
-//    其他,错误代码
 uint8_t MPU_Init(void)
-{ 
+{
 	uint8_t res;
-	IIC_Init();//初始化IIC总线
-    HAL_Delay(100);
+
 	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X80);	//复位MPU6050
 	MPU_Write_Byte(MPU_PWR_MGMT1_REG,0X00);	//唤醒MPU6050 
 	MPU_Set_Gyro_Fsr(3);					//陀螺仪传感器,±2000dps
@@ -30,26 +33,17 @@ uint8_t MPU_Init(void)
  	}else return 1;
 	return 0;
 }
-//设置MPU6050陀螺仪传感器满量程范围
-//fsr:0,±250dps;1,±500dps;2,±1000dps;3,±2000dps
-//返回值:0,设置成功
-//    其他,设置失败 
+
 uint8_t MPU_Set_Gyro_Fsr(uint8_t fsr)
 {
 	return MPU_Write_Byte(MPU_GYRO_CFG_REG,fsr<<3);//设置陀螺仪满量程范围  
 }
-//设置MPU6050加速度传感器满量程范围
-//fsr:0,±2g;1,±4g;2,±8g;3,±16g
-//返回值:0,设置成功
-//    其他,设置失败 
+
 uint8_t MPU_Set_Accel_Fsr(uint8_t fsr)
 {
 	return MPU_Write_Byte(MPU_ACCEL_CFG_REG,fsr<<3);//设置加速度传感器满量程范围  
 }
-//设置MPU6050的数字低通滤波器
-//lpf:数字低通滤波频率(Hz)
-//返回值:0,设置成功
-//    其他,设置失败 
+
 uint8_t MPU_Set_LPF(uint16_t lpf)
 {
 	uint8_t data=0;
@@ -61,10 +55,7 @@ uint8_t MPU_Set_LPF(uint16_t lpf)
 	else data=6; 
 	return MPU_Write_Byte(MPU_CFG_REG,data);//设置数字低通滤波器  
 }
-//设置MPU6050的采样率(假定Fs=1KHz)
-//rate:4~1000(Hz)
-//返回值:0,设置成功
-//    其他,设置失败 
+
 uint8_t MPU_Set_Rate(uint16_t rate)
 {
 	uint8_t data;
@@ -75,8 +66,6 @@ uint8_t MPU_Set_Rate(uint16_t rate)
  	return MPU_Set_LPF(rate/2);	//自动设置LPF为采样率的一半
 }
 
-//得到温度值
-//返回值:温度值(扩大了100倍)
 short MPU_Get_Temperature(void)
 {
     uint8_t buf[2]; 
@@ -87,10 +76,7 @@ short MPU_Get_Temperature(void)
     temp=36.53+((double)raw)/340;  
     return temp*100;;
 }
-//得到陀螺仪值(原始值)
-//gx,gy,gz:陀螺仪x,y,z轴的原始读数(带符号)
-//返回值:0,成功
-//    其他,错误代码
+
 uint8_t MPU_Get_Gyroscope(short *gx,short *gy,short *gz)
 {
     uint8_t buf[6],res;  
@@ -103,10 +89,7 @@ uint8_t MPU_Get_Gyroscope(short *gx,short *gy,short *gz)
 	} 	
     return res;;
 }
-//得到加速度值(原始值)
-//gx,gy,gz:陀螺仪x,y,z轴的原始读数(带符号)
-//返回值:0,成功
-//    其他,错误代码
+
 uint8_t MPU_Get_Accelerometer(short *ax,short *ay,short *az)
 {
     uint8_t buf[6],res;  
@@ -119,132 +102,125 @@ uint8_t MPU_Get_Accelerometer(short *ax,short *ay,short *az)
 	} 	
     return res;;
 }
-//IIC连续写
-//addr:器件地址 
-//reg:寄存器地址
-//len:写入长度
-//buf:数据区
-//返回值:0,正常
-//    其他,错误代码
+
 uint8_t MPU_Write_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
 {
-	uint8_t i; 
-    IIC_Start(); 
-	IIC_Send_Byte((addr<<1)|0);//发送器件地址+写命令	
-	if(IIC_Wait_Ack())	//等待应答
-	{
-		IIC_Stop();		 
-		return 1;		
-	}
-    IIC_Send_Byte(reg);	//写寄存器地址
-    IIC_Wait_Ack();		//等待应答
-	for(i=0;i<len;i++)
-	{
-		IIC_Send_Byte(buf[i]);	//发送数据
-		if(IIC_Wait_Ack())		//等待ACK
-		{
-			IIC_Stop();	 
-			return 1;		 
-		}		
-	}    
-    IIC_Stop();	 
-	return 0;	
+    HAL_StatusTypeDef   WriteStatus = HAL_OK;
+
+    WriteStatus = HAL_I2C_Mem_Write(&hi2c2, addr << 1, reg, I2C_MEMADD_SIZE_8BIT, buf, len, 10);
+    while(HAL_OK != WriteStatus)
+    {
+        HAL_Delay(5);
+
+        ROC_LOGE("Setting PCA9685 Mode is in error, and will reset it one more time!");
+
+        HAL_I2C_DeInit(&hi2c2);     /* For the ST IIC BUSY flag hardware error */
+        HAL_I2C_Init(&hi2c2);       /* Reset the IIC */
+
+        WriteStatus = HAL_I2C_Mem_Write(&hi2c2, addr << 1, reg, I2C_MEMADD_SIZE_8BIT, buf, len, 10);
+    }
+
+    return WriteStatus;
 } 
-//IIC连续读
-//addr:器件地址
-//reg:要读取的寄存器地址
-//len:要读取的长度
-//buf:读取到的数据存储区
-//返回值:0,正常
-//    其他,错误代码
+
 uint8_t MPU_Read_Len(uint8_t addr,uint8_t reg,uint8_t len,uint8_t *buf)
-{ 
- 	IIC_Start(); 
-	IIC_Send_Byte((addr<<1)|0);//发送器件地址+写命令	
-	if(IIC_Wait_Ack())	//等待应答
-	{
-		IIC_Stop();		 
-		return 1;		
-	}
-    IIC_Send_Byte(reg);	//写寄存器地址
-    IIC_Wait_Ack();		//等待应答
-    IIC_Start();
-	IIC_Send_Byte((addr<<1)|1);//发送器件地址+读命令	
-    IIC_Wait_Ack();		//等待应答 
-	while(len)
-	{
-		if(len==1)*buf=IIC_Read_Byte(0);//读数据,发送nACK 
-		else *buf=IIC_Read_Byte(1);		//读数据,发送ACK  
-		len--;
-		buf++; 
-	}    
-    IIC_Stop();	//产生一个停止条件 
-	return 0;	
-}
-//IIC写一个字节 
-//reg:寄存器地址
-//data:数据
-//返回值:0,正常
-//    其他,错误代码
-uint8_t MPU_Write_Byte(uint8_t reg,uint8_t data) 				 
-{ 
-    IIC_Start(); 
-	IIC_Send_Byte((MPU_ADDR<<1)|0);//发送器件地址+写命令	
-	if(IIC_Wait_Ack())	//等待应答
-	{
-		IIC_Stop();		 
-		return 1;		
-	}
-    IIC_Send_Byte(reg);	//写寄存器地址
-    IIC_Wait_Ack();		//等待应答 
-	IIC_Send_Byte(data);//发送数据
-	if(IIC_Wait_Ack())	//等待ACK
-	{
-		IIC_Stop();	 
-		return 1;		 
-	}		 
-    IIC_Stop();	 
-	return 0;
-}
-//IIC读一个字节 
-//reg:寄存器地址 
-//返回值:读到的数据
-uint8_t MPU_Read_Byte(uint8_t reg)
 {
-	uint8_t res;
-    IIC_Start(); 
-	IIC_Send_Byte((MPU_ADDR<<1)|0);//发送器件地址+写命令	
-	IIC_Wait_Ack();		//等待应答 
-    IIC_Send_Byte(reg);	//写寄存器地址
-    IIC_Wait_Ack();		//等待应答
-    IIC_Start();
-	IIC_Send_Byte((MPU_ADDR<<1)|1);//发送器件地址+读命令	
-    IIC_Wait_Ack();		//等待应答 
-	res=IIC_Read_Byte(0);//读取数据,发送nACK 
-    IIC_Stop();			//产生一个停止条件 
-	return res;		
+    HAL_StatusTypeDef   ReadStatus = HAL_OK;
+
+    ReadStatus = HAL_I2C_Mem_Read(&hi2c2, addr << 1, reg, I2C_MEMADD_SIZE_8BIT, buf, len, 10);
+    if(HAL_OK != ReadStatus)
+    {
+        ROC_LOGE("IIC2 read reg is in error(%d)!", ReadStatus);
+    }
+
+    return (uint8_t)ReadStatus;
 }
 
-int8_t Mpu6050_Init(void)
+uint8_t MPU_Write_Byte(uint8_t reg,uint8_t data)
 {
-    if(MPU_Init())
+    HAL_StatusTypeDef   WriteStatus = HAL_OK;
+
+    WriteStatus = HAL_I2C_Mem_Write(&hi2c2, MPU_ADDR << 1, reg, I2C_MEMADD_SIZE_8BIT, &data, 1, 10);
+    if(HAL_OK != WriteStatus)
     {
+        ROC_LOGE("IIC2 write reg is in error(%d)!", WriteStatus);
+    }
+
+    return (uint8_t)WriteStatus;
+}
+
+uint8_t MPU_Read_Byte(uint8_t reg)
+{
+    uint8_t Dat;
+    HAL_StatusTypeDef   ReadStatus = HAL_OK;
+
+    ReadStatus = HAL_I2C_Mem_Read(&hi2c2, MPU_ADDR << 1, reg, I2C_MEMADD_SIZE_8BIT, &Dat, 1, 10);
+    if(HAL_OK != ReadStatus)
+    {
+        ROC_LOGE("IIC2 read reg is in error(%d)!", ReadStatus);
+    }
+
+    return Dat;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Get current MPU6050 euler angle
+ *
+ *  Parameter:
+ *              *Pitch: the pointer to the pitch axis angle data
+ *              *Roll:  the pointer to the roll axis angle data
+ *              *Yaw:   the pointer to the Yaw axis angle data
+ *
+ *  Return:
+ *              The PCA9685 driver init status
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.15)
+**********************************************************************************/
+ROC_RESULT RocMpu6050EulerAngleGet(float *Pitch, float *Roll, float *Yaw)
+{
+    ROC_RESULT Ret = RET_OK;
+
+    Ret = (ROC_RESULT)mpu_dmp_get_data(Pitch, Roll, Yaw);
+
+    return Ret;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              MPU6050 sensor and DMP init
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.15)
+**********************************************************************************/
+ROC_RESULT RocMpu6050Init(void)
+{
+    ROC_RESULT Ret = RET_OK;
+
+    if(Ret = MPU_Init())
+    {
+        ROC_LOGE("MPU6050 init is in error!");
         return MPU_INIT_ERROR;
     }
 
-    if(mpu_dmp_init())
+    if(Ret = mpu_dmp_init())
     {
+        ROC_LOGE("MPU6050 DMP init is in error!");
         return DMP_INIT_ERROR;
+    }
+
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("MPU6050 init is in error!");
     }
 
     return RET_OK;
 }
 
-uint8_t EulerAngle_Get(float *pitch, float *roll, float *yaw)
-{
-    uint8_t ReturnValue = 0;
-
-    ReturnValue = mpu_dmp_get_data(pitch, roll, yaw);
-
-    return ReturnValue;
-}

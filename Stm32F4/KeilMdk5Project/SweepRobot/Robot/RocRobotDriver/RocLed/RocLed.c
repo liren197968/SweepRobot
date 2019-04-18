@@ -26,7 +26,7 @@
 **********************************************************************************/
 void RocLedTurnOn(void)
 {
-    HAL_GPIO_WritePin(ROC_DEBUG_LED_PORT, ROC_DEBUG_LED_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ROC_DEBUG_LED_GPIO_PORT, ROC_DEBUG_LED_PIN, GPIO_PIN_RESET);
 }
 
 /*********************************************************************************
@@ -45,7 +45,7 @@ void RocLedTurnOn(void)
 **********************************************************************************/
 void RocLedTurnOff(void)
 {
-    HAL_GPIO_WritePin(ROC_DEBUG_LED_PORT, ROC_DEBUG_LED_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ROC_DEBUG_LED_GPIO_PORT, ROC_DEBUG_LED_PIN, GPIO_PIN_SET);
 }
 
 /*********************************************************************************
@@ -64,7 +64,7 @@ void RocLedTurnOff(void)
 **********************************************************************************/
 void RocLedToggle(void)
 {
-    HAL_GPIO_TogglePin(ROC_DEBUG_LED_PORT, ROC_DEBUG_LED_PIN);
+    HAL_GPIO_TogglePin(ROC_DEBUG_LED_GPIO_PORT, ROC_DEBUG_LED_PIN);
 }
 
 /*********************************************************************************

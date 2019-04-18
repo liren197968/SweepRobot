@@ -17,6 +17,12 @@
 #include "RocRobotMath.h"
 
 
+//#define ROC_ROBOT_GAIT_DEBUG
+
+
+#define ROC_ROBOT_CLOSED_LOOP_CONTROL
+
+
 #define ROC_ROBOT_MATH_CONST_PI                     3.1415926
 
 
@@ -51,7 +57,11 @@
 #define ROC_ROBOT_LEFT_SECND_STEP_ERROR             0
 #define ROC_ROBOT_RIGHT_FIRST_STEP_ERROR            -2
 #define ROC_ROBOT_RIGHT_SECND_STEP_ERROR            0
-#define ROC_ROBOT_PID_CONST_P                       1
+
+#define ROC_ROBOT_PID_CONST_P                       2
+
+#define ROC_ROBOT_STEP_ERROR_LOW_LIMIT              -15
+#define ROC_ROBOT_STEP_ERROR_HIGH_LIMIT             15
 
 
 #define ROC_ROBOT_LEG_WIDTH                         141.06
@@ -95,7 +105,7 @@
 #define ROC_ROBOT_LEF_FRO_LEG_CENTER                402
 #define ROC_ROBOT_LEF_FRO_FET_CENTER                310
 #define ROC_ROBOT_LEF_MID_HIP_CENTER                310
-#define ROC_ROBOT_LEF_MID_LEG_CENTER                416
+#define ROC_ROBOT_LEF_MID_LEG_CENTER                410
 #define ROC_ROBOT_LEF_MID_FET_CENTER                304
 #define ROC_ROBOT_LEF_HIN_HIP_CENTER                303
 #define ROC_ROBOT_LEF_HIN_LEG_CENTER                400
@@ -120,12 +130,21 @@
 
 typedef struct _ROC_ROBOT_COORD_s
 {
-    double              X;
-    double              Y;
-    double              Z;
-    double              A;
+    float               X;
+    float               Y;
+    float               Z;
+    float               A;
 
 }ROC_ROBOT_COORD_s;
+
+
+typedef struct _ROC_ROBOT_IMU_DATA_s
+{
+    float               Pitch;
+    float               Roll;
+    float               Yaw;
+
+}ROC_ROBOT_IMU_DATA_s;
 
 
 typedef enum _ROC_ROBOT_LEG_JOINT_e
@@ -252,8 +271,12 @@ typedef struct _ROC_PHOENIX_STATE_s
     uint8_t                     SelectLegMode;          // Single leg control mode
     uint8_t                     SelectLegIsAllDown;     // True if the robot legs are all down
 
+#ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
     //[Balance]
     uint8_t                     BalanceMode;
+    ROC_ROBOT_IMU_DATA_s        RefImuAngle;            // IMU reference control angle for robot walking
+    ROC_ROBOT_IMU_DATA_s        CurImuAngle;            // Robot current IMU angle when walking
+#endif
 
     //[TIMING]
     uint8_t                     InputTimeDelay;         // Delay that depends on the input to get the "sneaking" effect
@@ -283,11 +306,12 @@ typedef struct _ROC_ROBOT_SERVO_s
 
 typedef struct _ROC_ROBOT_CONTROL_s
 {
-    ROC_PHOENIX_GAIT_s  CurGait;                // Definition of the current gait
-    ROC_PHOENIX_STATE_s CurState;               // Definition of the current state
-    ROC_ROBOT_SERVO_s   CurServo;               // Definition of the current servo
+    ROC_PHOENIX_GAIT_s  CurGait;                        // Definition of the current gait
+    ROC_PHOENIX_STATE_s CurState;                       // Definition of the current state
+    ROC_ROBOT_SERVO_s   CurServo;                       // Definition of the current servo
 
 }ROC_ROBOT_CONTROL_s;
+
 
 
 void RocRobotGaitSeqUpdate(void);
@@ -299,6 +323,7 @@ void RocRobotSingleLegSelect(ROC_ROBOT_LEG_e SlecetLegNum);
 void RocRobotSingleLegCtrl(ROC_ROBOT_SERVO_s *pRobotServo);
 void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo);
 void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo);
+void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo);
 void RocRobotCtrlDeltaMoveCoorInput(double x, double y, double z, double a, double h);
 
 

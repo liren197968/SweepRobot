@@ -386,6 +386,8 @@ ROC_RESULT RocServoInit(int16_t *pServoInputVal)
 
     RocServoPwmDatInit(pServoInputVal);
 
+    RocPca9685PwmOutEnable();
+
     if(RET_OK != Ret)
     {
         ROC_LOGE("Servo module init is in error!");

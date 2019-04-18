@@ -6,6 +6,7 @@
 ********************************************************************************/
 #include <string.h>
 
+#include "gpio.h"
 #include "i2c.h"
 
 #include "RocLog.h"
@@ -26,10 +27,10 @@
  *  Author:
  *              ROC LiRen(2018.12.15)
 **********************************************************************************/
-void RocPca9685Enable(void)
+void RocPca9685PwmOutEnable(void)
 {
-    HAL_GPIO_WritePin(GPIOC, ROC_PCA9685_A_EN, GPIO_PIN_RESET);
-    HAL_GPIO_WritePin(GPIOC, ROC_PCA9685_B_EN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ROC_PCA9685_A_EN_GPIO_PORT, ROC_PCA9685_A_EN_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ROC_PCA9685_B_EN_GPIO_PORT, ROC_PCA9685_B_EN_PIN, GPIO_PIN_RESET);
 }
 
 /*********************************************************************************
@@ -46,10 +47,10 @@ void RocPca9685Enable(void)
  *  Author:
  *              ROC LiRen(2018.12.15)
 **********************************************************************************/
-void RocPca9685Disable(void)
+void RocPca9685PwmOutDisable(void)
 {
-    HAL_GPIO_WritePin(GPIOC, ROC_PCA9685_A_EN, GPIO_PIN_SET);
-    HAL_GPIO_WritePin(GPIOC, ROC_PCA9685_B_EN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ROC_PCA9685_A_EN_GPIO_PORT, ROC_PCA9685_A_EN_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ROC_PCA9685_B_EN_GPIO_PORT, ROC_PCA9685_B_EN_PIN, GPIO_PIN_SET);
 }
 
 /*********************************************************************************
@@ -294,7 +295,7 @@ ROC_RESULT RocPca9685Init(void)
     ROC_RESULT          Ret = RET_OK;
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
 
-    RocPca9685Enable();
+    RocPca9685PwmOutDisable();
 
     WriteStatus = RocPca9685WriteReg(PWM_ADDRESS_L, PCA9685_MODE1, &InitDat);
     while(HAL_OK != WriteStatus)

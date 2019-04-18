@@ -1,9 +1,13 @@
 #ifndef __ROC_MPU6050_H
 #define __ROC_MPU6050_H
 
-#include "RocI2c.h"
+
 #include "inv_mpu.h"
 #include "inv_mpu_dmp_motion_driver.h"
+
+#include "RocI2c.h"
+#include "RocError.h"
+
 
 #define MPU_INIT_ERROR          -1
 #define DMP_INIT_ERROR          -2
@@ -102,45 +106,9 @@ short MPU_Get_Temperature(void);
 uint8_t MPU_Get_Gyroscope(short *gx,short *gy,short *gz);
 uint8_t MPU_Get_Accelerometer(short *ax,short *ay,short *az);
 
-int8_t Mpu6050_Init(void);
-uint8_t EulerAngle_Get(float *pitch, float *roll, float *yaw);
+ROC_RESULT RocMpu6050Init(void);
+ROC_RESULT RocMpu6050EulerAngleGet(float *Pitch, float *Roll, float *Yaw);
 
-extern float                pitch, roll, yaw;
 
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

@@ -91,7 +91,7 @@ ROC_RESULT RocBeeperInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    RocBeeperBlink(2, 300);
+    //RocBeeperBlink(2, 300);
 
     if(RET_OK != Ret)
     {

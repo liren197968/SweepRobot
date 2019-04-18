@@ -37,9 +37,9 @@
 #define ROC_PCA9685_CHANNEL_MAX_NUM     16U
 
 
-void RocPca9685Enable(void);
-void RocPca9685Disable(void);
 ROC_RESULT RocPca9685Init(void);
+void RocPca9685PwmOutEnable(void);
+void RocPca9685PwmOutDisable(void);
 HAL_StatusTypeDef RocPca9685OutPwmAll(uint8_t SlaveAddr, uint16_t *pPwmData, uint16_t PwmDataNum);
 HAL_StatusTypeDef RocPca9685SetPinOutPwm(uint8_t SlaveAddr, uint8_t NumPin, uint16_t Val, uint8_t Invert);
 HAL_StatusTypeDef RocPca9685OutPwm(uint8_t SlaveAddr, uint8_t NumPin, uint16_t LedOnTime, uint16_t LedOffTime);

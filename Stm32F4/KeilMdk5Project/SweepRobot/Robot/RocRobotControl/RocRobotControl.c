@@ -24,15 +24,122 @@
 #include "RocRobotDhAlgorithm.h"
 
 
-#ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
-static double           g_ExpectedAngle = 0;
-#endif
-
 
 static ROC_ROBOT_CONTROL_s      *g_pRocRobotCtrl = NULL;
+static ROC_ROBOT_CTRL_FlAG_s    g_RocRobotCtrlFlag = {0};
 static ROC_REMOTE_CTRL_INPUT_s  g_RocRobotRemoteCtrlInput = {0};
-static ROC_ROBOT_WALK_MODE_e    g_RobotWalkModeStatus = ROC_ROBOT_WALK_MODE_HEXAPOD;
+static ROC_ROBOT_WALK_MODE_e    g_RocRobotWalkModeStatus = ROC_ROBOT_WALK_MODE_HEXAPOD;
 
+
+/*********************************************************************************
+ *  Description:
+ *              Set the robot walk mode
+ *
+ *  Parameter:
+ *              WalkMode: the expected robot walk mode
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
+static void RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_e WalkMode)
+{
+    g_RocRobotWalkModeStatus = WalkMode;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Get the robot walk mode
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              The current robot walk mode
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
+static uint32_t RocRobotWalkModeGet(void)
+{
+    return g_RocRobotWalkModeStatus;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Set the robot control flag
+ *
+ *  Parameter:
+ *              FlagNum: the control flag number to be setted
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.17)
+**********************************************************************************/
+static void RocRobotCtrlFlagSet(uint8_t FlagNum)
+{
+    uint8_t i = 0;
+
+    for(i = 0; i < ROC_ROBOT_CTRL_CMD_NUM; i++)
+    {
+        if(FlagNum == i)
+        {
+            g_RocRobotCtrlFlag.CtrlFlag[i] = ROC_TRUE;
+        }
+        else
+        {
+            g_RocRobotCtrlFlag.CtrlFlag[i] = ROC_FALSE;
+        }
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Get the robot control flag
+ *
+ *  Parameter:
+ *              FlagNum: the control flag number to be getted
+ *
+ *  Return:
+ *              The value of the control flag
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.17)
+**********************************************************************************/
+static uint8_t RocRobotCtrlFlagGet(uint8_t FlagNum)
+{
+    return g_RocRobotCtrlFlag.CtrlFlag[FlagNum];
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Get current robot IMU euler angle
+ *
+ *  Parameter:
+ *              *ImuDat: the pointer to the robot IMU data structure
+ *
+ *  Return:
+ *              The PCA9685 driver init status
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.15)
+**********************************************************************************/
+static ROC_RESULT RocRobotImuEulerAngleGet(ROC_ROBOT_IMU_DATA_s *ImuDat)
+{
+    ROC_RESULT Ret = RET_OK;
+
+    Ret = RocMpu6050EulerAngleGet(&ImuDat->Pitch, &ImuDat->Roll, &ImuDat->Yaw);
+    if(RET_OK != Ret)
+    {
+        //ROC_LOGE("Robot get the IMU angle is in error(%d)! Be careful!", Ret); /* For the FIFO overflow problem */
+    }
+
+    return Ret;
+}
 
 /*********************************************************************************
  *  Description:
@@ -57,42 +164,6 @@ static void RocRobotSensorMeasure(void)
     {
 
     }
-}
-
-/*********************************************************************************
- *  Description:
- *              Set the robot walk mode
- *
- *  Parameter:
- *              WalkMode: the expected robot walk mode
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2018.12.16)
-**********************************************************************************/
-static void RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_e WalkMode)
-{
-    g_RobotWalkModeStatus = WalkMode;
-}
-
-/*********************************************************************************
- *  Description:
- *              Get the robot walk mode
- *
- *  Parameter:
- *              None
- *
- *  Return:
- *              The current robot walk mode
- *
- *  Author:
- *              ROC LiRen(2018.12.16)
-**********************************************************************************/
-static uint32_t RocRobotWalkModeGet(void)
-{
-    return g_RobotWalkModeStatus;
 }
 
 /*********************************************************************************
@@ -127,6 +198,11 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = 0;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(0))
+                {
+                    RocRobotCtrlFlagSet(0);
+                }
             }
 
             break;
@@ -143,6 +219,13 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(1))
+                {
+                    RocRobotCtrlFlagSet(1);
+
+                    g_pRocRobotCtrl->CurState.RefImuAngle = g_pRocRobotCtrl->CurState.CurImuAngle;
+                }
             }
 
             break;
@@ -159,7 +242,14 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(2))
+                {
+                    RocRobotCtrlFlagSet(2);
+
+                }
             }
+
             break;
         }
 
@@ -174,6 +264,11 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_CIRCLING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(3))
+                {
+                    RocRobotCtrlFlagSet(3);
+                }
             }
 
             break;
@@ -190,19 +285,17 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_CIRCLING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(4))
+                {
+                    RocRobotCtrlFlagSet(4);
+                }
             }
 
             break;
         }
 
-        case ROC_ROBOT_CTRL_CMD_PARAMET:
-        {
-            RocBluetoothCtrlCmd_Set(ROC_NONE);
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_CARFORD:
+        case ROC_ROBOT_CTRL_CMD_LFRWARD:
         {
             if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
             {
@@ -213,12 +306,19 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(5))
+                {
+                    RocRobotCtrlFlagSet(5);
+
+
+                }
             }
 
             break;
         }
 
-        case ROC_ROBOT_CTRL_CMD_CARBAKD:
+        case ROC_ROBOT_CTRL_CMD_RFRWARD:
         {
             if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
             {
@@ -229,12 +329,19 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(6))
+                {
+                    RocRobotCtrlFlagSet(6);
+
+
+                }
             }
 
             break;
         }
 
-        case ROC_ROBOT_CTRL_CMD_CARMODE:
+        case ROC_ROBOT_CTRL_CMD_LBKWARD:
         {
             if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
             {
@@ -245,12 +352,19 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(7))
+                {
+                    RocRobotCtrlFlagSet(7);
+
+
+                }
             }
 
             break;
         }
 
-        case ROC_ROBOT_CTRL_CMD_ROTMODE:
+        case ROC_ROBOT_CTRL_CMD_RBKWARD:
         {
             if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotWalkModeGet())
             {
@@ -261,6 +375,13 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
                 RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(8))
+                {
+                    RocRobotCtrlFlagSet(8);
+
+
+                }
             }
 
             break;
@@ -272,6 +393,11 @@ static void RocRobotRemoteControl(void)
         }
 
         case ROC_ROBOT_CTRL_CMD_TURNRDR:
+        {
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_PARAMET:
         {
             break;
         }
@@ -390,7 +516,11 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
 
             RocRobotGaitSeqUpdate();
 
+#ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
+            RocRobotClosedLoopWalkCalculate(&pRobotCtrl->CurServo);
+#else
             RocRobotOpenLoopWalkCalculate(&pRobotCtrl->CurServo);
+#endif
 
             break;
         }
@@ -407,6 +537,11 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
 
             RocRobotOpenLoopCircleCalculate(&pRobotCtrl->CurServo);
 
+            break;
+        }
+
+        default:
+        {
             break;
         }
     }
@@ -667,7 +802,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    Ret = Mpu6050_Init();
+    Ret = RocMpu6050Init();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -763,8 +898,6 @@ static void RocRobotCtrlTaskEntry(void)
 {
     uint32_t CurrentExecutionTime = 0;
     static uint32_t LastExecutionTime = 0;
-    float       pitch, roll, yaw;
-    long temper, time;
 
     if(ROC_TRUE == g_pRocRobotCtrl->CurState.CtrlTimeIsReady)
     {
@@ -776,22 +909,31 @@ static void RocRobotCtrlTaskEntry(void)
         {
             RocRobotMoveCtrlCore(g_pRocRobotCtrl);
         }
-        
+
         RocServoControl((int16_t *)(&g_pRocRobotCtrl->CurServo));
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
-        ROC_LOGN("Exetime: %d \r\n", CurrentExecutionTime - LastExecutionTime);
+        //ROC_LOGN("Exetime: %d \r\n", CurrentExecutionTime - LastExecutionTime);
 #endif
 
         LastExecutionTime = CurrentExecutionTime;
         LastExecutionTime = LastExecutionTime;
 
         g_pRocRobotCtrl->CurState.CtrlTimeIsReady = ROC_FALSE;
+    }
+    else
+    {
+#ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
+        RocRobotImuEulerAngleGet(&g_pRocRobotCtrl->CurState.CurImuAngle);
+        HAL_Delay(10);
 
-        mpu_get_temperature(&temper, &temper);
-        EulerAngle_Get(&pitch, &roll, &yaw);
-        ROC_LOGN("Pitch: %.2f, Roll: %.2f, Yaw: %.2f", pitch, roll, yaw);
-        ROC_LOGN("Temper: %.2f", -temper/65536L);
+#ifdef ROC_ROBOT_GAIT_DEBUG
+        ROC_LOGI("Pitch: %.2f, Roll: %.2f, Yaw: %.2f",  g_pRocRobotCtrl->CurState.CurImuAngle.Pitch,
+                                                        g_pRocRobotCtrl->CurState.CurImuAngle.Roll,
+                                                        g_pRocRobotCtrl->CurState.CurImuAngle.Yaw);
+#endif
+
+#endif
     }
 }
 
