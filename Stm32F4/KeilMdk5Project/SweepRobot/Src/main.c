@@ -201,20 +201,8 @@ static void MX_NVIC_Init(void)
     HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);
     /* TIM7_DAC_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(TIM7_IRQn, 7, 0);
+    HAL_NVIC_SetPriority(TIM7_IRQn, 8, 0);
     HAL_NVIC_EnableIRQ(TIM7_IRQn);
-    /* USART2_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(USART2_IRQn, 2, 0);
-    HAL_NVIC_EnableIRQ(USART2_IRQn);
-    /* USART3_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(USART3_IRQn, 5, 0);
-    HAL_NVIC_EnableIRQ(USART3_IRQn);
-    /* DMA1_Stream1_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA1_Stream1_IRQn, 1, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Stream1_IRQn);
-    /* DMA1_Stream3_IRQn interrupt configuration */
-    HAL_NVIC_SetPriority(DMA1_Stream3_IRQn, 3, 0);
-    HAL_NVIC_EnableIRQ(DMA1_Stream3_IRQn);
 }
 
 /* USER CODE BEGIN 4 */

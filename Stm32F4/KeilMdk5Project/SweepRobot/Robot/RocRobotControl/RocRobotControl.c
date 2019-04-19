@@ -123,7 +123,7 @@ static uint8_t RocRobotCtrlFlagGet(uint8_t FlagNum)
  *              *ImuDat: the pointer to the robot IMU data structure
  *
  *  Return:
- *              The PCA9685 driver init status
+ *              The IMU sensor get status
  *
  *  Author:
  *              ROC LiRen(2019.04.15)
@@ -141,6 +141,39 @@ static ROC_RESULT RocRobotImuEulerAngleGet(ROC_ROBOT_IMU_DATA_s *ImuDat)
     return Ret;
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Transmit the robot walk information
+ *
+ *  Parameter:
+ *              *ImuDat: the pointer to the robot IMU data structure
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.15)
+**********************************************************************************/
+static void RocRemoteWaklInfoTransmit(ROC_ROBOT_IMU_DATA_s *ImuDat)
+{
+    uint8_t     i = 0;
+    uint8_t     SendBuf[ROC_REMOTE_MAX_NUM_LEN_SEND] = {ROC_NONE};
+
+    SendBuf[0] = 0x55;
+    SendBuf[1] = 0x53;
+    SendBuf[2] = (uint8_t)(ImuDat->Roll * 32768 / 180);
+    SendBuf[3] = (uint8_t)(ImuDat->Roll * 32768 / 180) >> 8;
+    SendBuf[4] = (uint8_t)(ImuDat->Pitch * 32768 / 180);
+    SendBuf[5] = (uint8_t)(ImuDat->Pitch * 32768 / 180) >> 8;
+    SendBuf[6] = (uint8_t)(ImuDat->Yaw * 32768 / 180);
+    SendBuf[7] = (uint8_t)(ImuDat->Yaw * 32768 / 180) >> 8;
+    SendBuf[8] = 0;
+    SendBuf[9] = 0;
+    SendBuf[10] = 0x55 + 0x53 + SendBuf[2] + SendBuf[3] + SendBuf[4]
+                    +SendBuf[5] + SendBuf[6] + SendBuf[7] + SendBuf[8] + SendBuf[9];
+
+    RocRemoteDataTransmit(SendBuf, ROC_REMOTE_MAX_NUM_LEN_SEND);
+}
 /*********************************************************************************
  *  Description:
  *              Start the measure of robot sensor
@@ -247,6 +280,7 @@ static void RocRobotRemoteControl(void)
                 {
                     RocRobotCtrlFlagSet(2);
 
+                    g_pRocRobotCtrl->CurState.RefImuAngle = g_pRocRobotCtrl->CurState.CurImuAngle;
                 }
             }
 
@@ -311,7 +345,7 @@ static void RocRobotRemoteControl(void)
                 {
                     RocRobotCtrlFlagSet(5);
 
-
+                    g_pRocRobotCtrl->CurState.RefImuAngle = g_pRocRobotCtrl->CurState.CurImuAngle;
                 }
             }
 
@@ -334,7 +368,7 @@ static void RocRobotRemoteControl(void)
                 {
                     RocRobotCtrlFlagSet(6);
 
-
+                    g_pRocRobotCtrl->CurState.RefImuAngle = g_pRocRobotCtrl->CurState.CurImuAngle;
                 }
             }
 
@@ -357,7 +391,7 @@ static void RocRobotRemoteControl(void)
                 {
                     RocRobotCtrlFlagSet(7);
 
-
+                    g_pRocRobotCtrl->CurState.RefImuAngle = g_pRocRobotCtrl->CurState.CurImuAngle;
                 }
             }
 
@@ -380,7 +414,7 @@ static void RocRobotRemoteControl(void)
                 {
                     RocRobotCtrlFlagSet(8);
 
-
+                    g_pRocRobotCtrl->CurState.RefImuAngle = g_pRocRobotCtrl->CurState.CurImuAngle;
                 }
             }
 
@@ -517,6 +551,7 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
             RocRobotGaitSeqUpdate();
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
+            RocRemoteWaklInfoTransmit(&g_pRocRobotCtrl->CurState.CurImuAngle);
             RocRobotClosedLoopWalkCalculate(&pRobotCtrl->CurServo);
 #else
             RocRobotOpenLoopWalkCalculate(&pRobotCtrl->CurServo);
@@ -754,14 +789,6 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocZmod4410Init();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-
-        while(1);
-    }
-
     Ret = RocMotorInit();
     if(RET_OK != Ret)
     {
@@ -770,7 +797,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocRemoteControlInit();
+    Ret = RocRemoteControlInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -896,11 +923,18 @@ static void RocBatteryCheckTaskEntry(void)
 **********************************************************************************/
 static void RocRobotCtrlTaskEntry(void)
 {
-    uint32_t CurrentExecutionTime = 0;
-    static uint32_t LastExecutionTime = 0;
-
     if(ROC_TRUE == g_pRocRobotCtrl->CurState.CtrlTimeIsReady)
     {
+
+#ifdef ROC_ROBOT_GAIT_DEBUG
+        uint32_t CurExeTime = HAL_GetTick();
+        static uint32_t LastExeTime = 0;
+
+        ROC_LOGN("robot execution time interval is %d ms", CurExeTime - LastExeTime);
+
+        LastExeTime = CurExeTime;
+#endif
+
         RocLedToggle();
 
         RocRobotRemoteControl();
@@ -912,20 +946,13 @@ static void RocRobotCtrlTaskEntry(void)
 
         RocServoControl((int16_t *)(&g_pRocRobotCtrl->CurServo));
 
-#ifdef ROC_ROBOT_GAIT_DEBUG
-        //ROC_LOGN("Exetime: %d \r\n", CurrentExecutionTime - LastExecutionTime);
-#endif
-
-        LastExecutionTime = CurrentExecutionTime;
-        LastExecutionTime = LastExecutionTime;
-
         g_pRocRobotCtrl->CurState.CtrlTimeIsReady = ROC_FALSE;
     }
     else
     {
+
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
         RocRobotImuEulerAngleGet(&g_pRocRobotCtrl->CurState.CurImuAngle);
-        HAL_Delay(10);
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
         ROC_LOGI("Pitch: %.2f, Roll: %.2f, Yaw: %.2f",  g_pRocRobotCtrl->CurState.CurImuAngle.Pitch,

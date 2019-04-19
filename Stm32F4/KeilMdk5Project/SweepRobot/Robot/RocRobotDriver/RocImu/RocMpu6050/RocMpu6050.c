@@ -204,21 +204,18 @@ ROC_RESULT RocMpu6050Init(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    if(Ret = MPU_Init())
+    Ret = (ROC_RESULT)MPU_Init();
+    if(RET_OK !=Ret)
     {
         ROC_LOGE("MPU6050 init is in error!");
         return MPU_INIT_ERROR;
     }
 
-    if(Ret = mpu_dmp_init())
+    Ret = (ROC_RESULT)mpu_dmp_init();
+    if(RET_OK !=Ret)
     {
         ROC_LOGE("MPU6050 DMP init is in error!");
         return DMP_INIT_ERROR;
-    }
-
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("MPU6050 init is in error!");
     }
 
     return RET_OK;

@@ -71,11 +71,11 @@ void HAL_UART_TxCpltCallback(UART_HandleTypeDef *Huart)
 {
     if(USART2 == Huart->Instance)
     {
-        ROC_LOGI("Remote control send data successfully.");
+        ROC_LOGI("Remote control send data successfully");
     }
     else if(USART3 == Huart->Instance)
     {
-        ROC_LOGI("Bluetooth send data successfully.");
+        ROC_LOGI("Bluetooth send data successfully");
     }
 }
 
@@ -120,7 +120,11 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *Huart)
 **********************************************************************************/
 void HAL_UART_ErrorCallback(UART_HandleTypeDef *Huart)
 {
-    if(USART3 == Huart->Instance)
+    if(USART2 == Huart->Instance)
+    {
+        ROC_LOGE("Remote control data error!");
+    }
+    else if(USART3 == Huart->Instance)
     {
         ROC_LOGE("Bluetooth data error!");
     }
@@ -180,8 +184,13 @@ void RocBluetoothReceiveCallback(UART_HandleTypeDef *Huart)
 **********************************************************************************/
 void RocBluetoothData_Send(uint8_t *Buff, uint16_t DatLen)
 {
-    if(HAL_OK != HAL_UART_Transmit_DMA(&huart3, Buff, DatLen))
+    ROC_RESULT Ret = RET_OK;
+
+    Ret= HAL_UART_Transmit_DMA(&huart3, Buff, DatLen);
+    if(HAL_OK != Ret)
     {
+        ROC_LOGE("Remote usart transmission is in error(%d)!");
+    
         Error_Handler();
     }
 
