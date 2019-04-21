@@ -10,6 +10,7 @@
 
 #include "RocLog.h"
 #include "RocRobotMath.h"
+#include "RocTftLcd.h"
 #include "RocMpu6050.h"
 #include "RocRobotDhAlgorithm.h"
 
@@ -638,10 +639,19 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     float   y = 0;
     float   z = 0;
     float   XStepError = 0;
+    static  float MaxError = 0;
 
     XStepError = (g_RobotCtrl.CurState.CurImuAngle.Yaw - g_RobotCtrl.CurState.RefImuAngle.Yaw) * ROC_ROBOT_PID_CONST_P;
 
     RocRobotStepErrorCheck(&XStepError);
+
+    if(fabs(MaxError) < fabs(XStepError))
+    {
+        MaxError = XStepError;
+
+        Gui_DrawFont_Num32(2, 200, WHITE,BLACK, (uint16_t)MaxError / 10);
+        Gui_DrawFont_Num32(32, 200, WHITE,BLACK, (uint16_t)MaxError % 10);
+    }
 
     /***********the coordinate datas of the first group legs ****************/
     x = ROC_ROBOT_FRO_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X + XStepError;

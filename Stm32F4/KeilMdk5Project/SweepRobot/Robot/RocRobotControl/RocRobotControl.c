@@ -15,6 +15,7 @@
 #include "RocServo.h"
 #include "RocMotor.h"
 #include "RocBeeper.h"
+#include "RocTftLcd.h"
 #include "RocBattery.h"
 #include "RocPca9685.h"
 #include "RocMpu6050.h"
@@ -22,7 +23,6 @@
 #include "RocRemoteControl.h"
 #include "RocRobotControl.h"
 #include "RocRobotDhAlgorithm.h"
-
 
 
 static ROC_ROBOT_CONTROL_s      *g_pRocRobotCtrl = NULL;
@@ -169,8 +169,11 @@ static void RocRemoteWaklInfoTransmit(ROC_ROBOT_IMU_DATA_s *ImuDat)
     SendBuf[7] = (uint8_t)(ImuDat->Yaw * 32768 / 180) >> 8;
     SendBuf[8] = 0;
     SendBuf[9] = 0;
-    SendBuf[10] = 0x55 + 0x53 + SendBuf[2] + SendBuf[3] + SendBuf[4]
-                    +SendBuf[5] + SendBuf[6] + SendBuf[7] + SendBuf[8] + SendBuf[9];
+
+    for(i = 0; i < ROC_REMOTE_MAX_NUM_LEN_SEND -2; i++)
+    {
+        SendBuf[ROC_REMOTE_MAX_NUM_LEN_SEND - 1] |= SendBuf[i];
+    }
 
     RocRemoteDataTransmit(SendBuf, ROC_REMOTE_MAX_NUM_LEN_SEND);
 }
@@ -522,6 +525,7 @@ static void RocRobotMoveContextSwitch(ROC_ROBOT_CONTROL_s *pRobotCtrl)
 **********************************************************************************/
 static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
 {
+    static uint16_t             DrawX = 0;
     ROC_RESULT                  ChangeStatus = ROC_NONE;
     ROC_ROBOT_MOVE_STATUS_e     MoveStatus = ROC_ROBOT_MOVE_STATUS_NUM;
 
@@ -551,7 +555,9 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
             RocRobotGaitSeqUpdate();
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
-            RocRemoteWaklInfoTransmit(&g_pRocRobotCtrl->CurState.CurImuAngle);
+            //RocRemoteWaklInfoTransmit(&g_pRocRobotCtrl->CurState.CurImuAngle);
+            RocLcdDrawPoint(DrawX, (uint16_t)g_pRocRobotCtrl->CurState.CurImuAngle.Yaw + 100, WHITE);
+            DrawX++;
             RocRobotClosedLoopWalkCalculate(&pRobotCtrl->CurServo);
 #else
             RocRobotOpenLoopWalkCalculate(&pRobotCtrl->CurServo);
@@ -814,6 +820,14 @@ void RocRobotInit(void)
     }
 
     Ret = RocRobotAlgoCtrlInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
+        while(1);
+    }
+
+    Ret = RocTftLcdInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");

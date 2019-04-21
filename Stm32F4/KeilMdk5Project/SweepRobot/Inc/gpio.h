@@ -58,6 +58,11 @@ extern "C" {
 #define ROC_ROBOT_BATTERY_ADC_PIN           GPIO_PIN_4
 #define ROC_ROBOT_BATTERY_ADC_PORT          GPIOA
 
+#define ROC_TFTLCD_DC_PIN                   GPIO_PIN_1
+#define ROC_TFTLCD_DC_PORT                  GPIOB
+#define ROC_TFTLCD_RST_PIN                  GPIO_PIN_2
+#define ROC_TFTLCD_RST_PORT                 GPIOB
+
 #define ROC_BEEPER_CTRL_PIN                 GPIO_PIN_15
 #define ROC_BEEPER_GPIO_PORT                GPIOA
 
