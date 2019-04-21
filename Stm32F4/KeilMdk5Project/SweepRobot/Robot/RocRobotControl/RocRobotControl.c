@@ -177,6 +177,33 @@ static void RocRemoteWaklInfoTransmit(ROC_ROBOT_IMU_DATA_s *ImuDat)
 
     RocRemoteDataTransmit(SendBuf, ROC_REMOTE_MAX_NUM_LEN_SEND);
 }
+
+/*********************************************************************************
+ *  Description:
+ *              Draw robot motion track on LCD on real time
+ *
+ *  Parameter:
+ *              *pRobotCurstate: the pointer to the robot current status
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocRobotMotionTrackOnLcdDraw(ROC_PHOENIX_STATE_s *pRobotCurstate)
+{
+    static uint16_t DrawXCor = 0;
+
+    if(ROC_TFT_LCD_X_MAX_PIXEL < DrawXCor)
+    {
+        RocTftLcdAllClear(ROC_TFT_LCD_COLOR_DEFAULT_BAK);
+    }
+
+    RocTftLcdDrawPoint(DrawXCor, (uint16_t)(pRobotCurstate->CurImuAngle.Yaw + 100), ROC_TFT_LCD_COLOR_DEFAULT_FOR);
+
+    DrawXCor++;
+}
 /*********************************************************************************
  *  Description:
  *              Start the measure of robot sensor
@@ -194,7 +221,7 @@ static void RocRobotSensorMeasure(void)
 {
     if(ROC_ROBOT_CTRL_MEASURE_START == RocBluetoothCtrlCmd_Get())
     {
-      
+
     }
     else if(ROC_ROBOT_CTRL_MEASURE_STOP == RocBluetoothCtrlCmd_Get())
     {
@@ -254,7 +281,7 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
-                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_FORWALKING);
 
                 if(ROC_FALSE == RocRobotCtrlFlagGet(1))
                 {
@@ -277,7 +304,7 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
-                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_BAKWALKING);
 
                 if(ROC_FALSE == RocRobotCtrlFlagGet(2))
                 {
@@ -342,7 +369,7 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
-                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_FORWALKING);
 
                 if(ROC_FALSE == RocRobotCtrlFlagGet(5))
                 {
@@ -365,7 +392,7 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
-                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_FORWALKING);
 
                 if(ROC_FALSE == RocRobotCtrlFlagGet(6))
                 {
@@ -388,7 +415,7 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
-                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_BAKWALKING);
 
                 if(ROC_FALSE == RocRobotCtrlFlagGet(7))
                 {
@@ -411,7 +438,7 @@ static void RocRobotRemoteControl(void)
                 g_RocRobotRemoteCtrlInput.A = 0;
                 g_RocRobotRemoteCtrlInput.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
 
-                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_WALKING);
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_BAKWALKING);
 
                 if(ROC_FALSE == RocRobotCtrlFlagGet(8))
                 {
@@ -525,7 +552,6 @@ static void RocRobotMoveContextSwitch(ROC_ROBOT_CONTROL_s *pRobotCtrl)
 **********************************************************************************/
 static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
 {
-    static uint16_t             DrawX = 0;
     ROC_RESULT                  ChangeStatus = ROC_NONE;
     ROC_ROBOT_MOVE_STATUS_e     MoveStatus = ROC_ROBOT_MOVE_STATUS_NUM;
 
@@ -544,7 +570,8 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
             break;
         }
 
-        case ROC_ROBOT_MOVE_STATUS_WALKING:
+        case ROC_ROBOT_MOVE_STATUS_FORWALKING:
+        case ROC_ROBOT_MOVE_STATUS_BAKWALKING:
         {
             ChangeStatus = RocRobotCtrlCmdIsChanged();
             if(ROC_TRUE == ChangeStatus)
@@ -556,8 +583,7 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_CONTROL_s *pRobotCtrl)
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
             //RocRemoteWaklInfoTransmit(&g_pRocRobotCtrl->CurState.CurImuAngle);
-            RocLcdDrawPoint(DrawX, (uint16_t)g_pRocRobotCtrl->CurState.CurImuAngle.Yaw + 100, WHITE);
-            DrawX++;
+            RocRobotMotionTrackOnLcdDraw(&pRobotCtrl->CurState);
             RocRobotClosedLoopWalkCalculate(&pRobotCtrl->CurServo);
 #else
             RocRobotOpenLoopWalkCalculate(&pRobotCtrl->CurServo);
@@ -827,14 +853,6 @@ void RocRobotInit(void)
         while(1);
     }
 
-    Ret = RocTftLcdInit();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-    
-        while(1);
-    }
-
     Ret = RocRobotControlInit();
     if(RET_OK != Ret)
     {
@@ -848,6 +866,14 @@ void RocRobotInit(void)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
 
+        while(1);
+    }
+
+    Ret = RocTftLcdInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
         while(1);
     }
 

@@ -643,15 +643,22 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
 
     XStepError = (g_RobotCtrl.CurState.CurImuAngle.Yaw - g_RobotCtrl.CurState.RefImuAngle.Yaw) * ROC_ROBOT_PID_CONST_P;
 
-    RocRobotStepErrorCheck(&XStepError);
+    if(ROC_ROBOT_MOVE_STATUS_BAKWALKING == g_RobotCtrl.CurState.MoveStatus)
+    {
+        XStepError = -XStepError;
+    }
 
     if(fabs(MaxError) < fabs(XStepError))
     {
         MaxError = XStepError;
 
-        Gui_DrawFont_Num32(2, 200, WHITE,BLACK, (uint16_t)MaxError / 10);
-        Gui_DrawFont_Num32(32, 200, WHITE,BLACK, (uint16_t)MaxError % 10);
+        ROC_LOGN("MaxError: %.2f", MaxError);
     }
+
+    RocDrawFontDigitalTubeNum(2, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, (uint16_t)(MaxError / ROC_ROBOT_PID_CONST_P / 10));
+    RocDrawFontDigitalTubeNum(32, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, ((uint16_t)MaxError / ROC_ROBOT_PID_CONST_P) % 10);
+
+    RocRobotStepErrorCheck(&XStepError);
 
     /***********the coordinate datas of the first group legs ****************/
     x = ROC_ROBOT_FRO_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X + XStepError;

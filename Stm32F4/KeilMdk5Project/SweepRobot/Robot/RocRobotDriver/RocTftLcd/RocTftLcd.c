@@ -46,259 +46,291 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     }
 }
 
-/****************************************************************************
-* 名    称：void  SPIv_WriteData(uint8_t Data)
-* 功    能：STM32_模拟SPI写一个字节数据底层函数
-* 入口参数：Data
-* 出口参数：无
-* 说    明：STM32_模拟SPI读写一个字节数据底层函数
-****************************************************************************/
-void  SPIv_WriteData(uint8_t Data)
+/*********************************************************************************
+ *  Description:
+ *              Write a byte data with SPI communication
+ *
+ *  Parameter:
+ *              Data: the data written to SPI
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void  RocSpiWriteData(uint8_t Data)
 {
     HAL_StatusTypeDef WriteStatus;
+
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
 
     WriteStatus = HAL_SPI_Transmit(&hspi1, &Data, 1, ROC_TFT_LCD_WRITE_TIME_OUT);
     if(HAL_OK != WriteStatus)
     {
         ROC_LOGE("SPI write data is in error(%d)", WriteStatus);
     }
-
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
 }
 
-/****************************************************************************
-* 名    称：u8 SPI_WriteByte(SPI_TypeDef* SPIx,uint8_t Byte)
-* 功    能：STM32_硬件SPI读写一个字节数据底层函数
-* 入口参数：SPIx,Byte
-* 出口参数：返回总线收到的数据
-* 说    明：STM32_硬件SPI读写一个字节数据底层函数
-****************************************************************************/
-uint8_t SPI_WriteByte(SPI_TypeDef* SPIx,uint8_t Byte)
+/*********************************************************************************
+ *  Description:
+ *              Set SPI speed
+ *
+ *  Parameter:
+ *              Spix: the SPI number
+ *              SpeedSet: the control speed
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+void RocSpiSpeedSet(SPI_TypeDef* Spix,uint8_t SpeedSet)
 {
-		
+    Spix->CR1 &= 0XFFC7;
+
+    if(SpeedSet == 1)
+    {
+    	Spix->CR1 |= SPI_BAUDRATEPRESCALER_2;	
+    }
+    else
+    {
+    	Spix->CR1 |= SPI_BAUDRATEPRESCALER_32;
+    }
+
+    Spix->CR1 |= 1<<6;
 }
 
-/****************************************************************************
-* 名    称：void SPI_SetSpeed(SPI_TypeDef* SPIx,uint8_t SpeedSet)
-* 功    能：设置SPI的速度
-* 入口参数：SPIx,SpeedSet
-* 出口参数：无
-* 说    明：SpeedSet:1,高速;0,低速;
-****************************************************************************/
-void SPI_SetSpeed(SPI_TypeDef* SPIx,uint8_t SpeedSet)
+/*********************************************************************************
+ *  Description:
+ *              Select register with SPI communication
+ *
+ *  Parameter:
+ *              Reg: the written LCD register
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdWriteReg(uint8_t Reg)
 {
-	SPIx->CR1&=0XFFC7;
-	if(SpeedSet==1)//高速
-	{
-		SPIx->CR1|=SPI_BAUDRATEPRESCALER_2;//Fsck=Fpclk/2	
-	}
-	else//低速
-	{
-		SPIx->CR1|=SPI_BAUDRATEPRESCALER_32; //Fsck=Fpclk/32
-	}
-	SPIx->CR1|=1<<6; //SPI设备使能
+   ROC_TFT_LCD_RS_CLR();
+
+   RocSpiWriteData(Reg);
 }
 
-/****************************************************************************
-* 名    称：Lcd_WriteIndex(uint8_t Index)
-* 功    能：向液晶屏写一个8位指令
-* 入口参数：Index   寄存器地址
-* 出口参数：无
-* 说    明：调用前需先选中控制器，内部函数
-****************************************************************************/
-void Lcd_WriteIndex(uint8_t Index)
+/*********************************************************************************
+ *  Description:
+ *              Write 8 bit data to LCD register
+ *
+ *  Parameter:
+ *              Data: the data written to LCD register
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdWriteDat(uint8_t Data)
 {
-   LCD_RS_CLR;
-#if USE_HARDWARE_SPI
-   SPI_WriteByte(SPI2,Index);
+   ROC_TFT_LCD_RS_SET();
+
+   RocSpiWriteData(Data);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Write 16 bit data to LCD register
+ *
+ *  Parameter:
+ *              Data: the data written to LCD register
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdWrite16Dat(uint16_t Data)
+{	
+    RocTftLcdWriteDat(Data>>8);
+    RocTftLcdWriteDat(Data);	
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Write command to LCD register
+ *
+ *  Parameter:
+ *              Cmd: the command written to LCD register
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdRegWriteCmd(uint8_t Reg,uint16_t Data)
+{
+    RocTftLcdWriteReg(Reg);
+    RocTftLcdWrite16Dat(Data);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Reset TFT LCD
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdReset(void)
+{
+    ROC_TFT_LCD_RST_CLR();
+    HAL_Delay(100);
+    ROC_TFT_LCD_RST_SET();
+    HAL_Delay(50);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Init TFT LCD register
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdRegInit(void)
+{	
+    RocTftLcdReset();
+
+    RocTftLcdWriteReg(0x11);
+    RocTftLcdWriteDat(0x00);
+
+    RocTftLcdWriteReg(0xCF);
+    RocTftLcdWriteDat(0X00);
+    RocTftLcdWriteDat(0XC1);
+    RocTftLcdWriteDat(0X30);
+
+    RocTftLcdWriteReg(0xED);
+    RocTftLcdWriteDat(0X64);
+    RocTftLcdWriteDat(0X03);
+    RocTftLcdWriteDat(0X12);
+    RocTftLcdWriteDat(0X81);
+
+    RocTftLcdWriteReg(0xE8);
+    RocTftLcdWriteDat(0X85);
+    RocTftLcdWriteDat(0X11);
+    RocTftLcdWriteDat(0X78);
+
+    RocTftLcdWriteReg(0xF6);
+    RocTftLcdWriteDat(0X01);
+    RocTftLcdWriteDat(0X30);
+    RocTftLcdWriteDat(0X00);
+
+    RocTftLcdWriteReg(0xCB);
+    RocTftLcdWriteDat(0X39);
+    RocTftLcdWriteDat(0X2C);
+    RocTftLcdWriteDat(0X00);
+    RocTftLcdWriteDat(0X34);
+    RocTftLcdWriteDat(0X05);
+
+    RocTftLcdWriteReg(0xF7);
+    RocTftLcdWriteDat(0X20);
+
+    RocTftLcdWriteReg(0xEA);
+    RocTftLcdWriteDat(0X00);
+    RocTftLcdWriteDat(0X00);
+
+    RocTftLcdWriteReg(0xC0);
+    RocTftLcdWriteDat(0X20);
+
+    RocTftLcdWriteReg(0xC1);
+    RocTftLcdWriteDat(0X11);
+
+    RocTftLcdWriteReg(0xC5);
+    RocTftLcdWriteDat(0X31);
+    RocTftLcdWriteDat(0X3C);
+
+    RocTftLcdWriteReg(0xC7);
+    RocTftLcdWriteDat(0XA9);
+
+    RocTftLcdWriteReg(0x3A);
+    RocTftLcdWriteDat(0X55);
+
+    RocTftLcdWriteReg(0x36);
+
+#if ROC_TFT_LCD_HORIZONTAL
+    RocTftLcdWriteDat(0xE8);
 #else
-   SPIv_WriteData(Index);
+    RocTftLcdWriteDat(0x48);
 #endif
+
+    RocTftLcdWriteReg(0xB1);
+    RocTftLcdWriteDat(0X00);
+    RocTftLcdWriteDat(0X18);
+
+    RocTftLcdWriteReg(0xB4);
+    RocTftLcdWriteDat(0X00);
+    RocTftLcdWriteDat(0X00);
+
+    RocTftLcdWriteReg(0xF2);
+    RocTftLcdWriteDat(0X00);
+
+    RocTftLcdWriteReg(0x26);
+    RocTftLcdWriteDat(0X01);
+
+    RocTftLcdWriteReg(0xE0);
+    RocTftLcdWriteDat(0X0F);
+    RocTftLcdWriteDat(0X17);
+    RocTftLcdWriteDat(0X14);
+    RocTftLcdWriteDat(0X09);
+    RocTftLcdWriteDat(0X0C);
+    RocTftLcdWriteDat(0X06);
+    RocTftLcdWriteDat(0X43);
+    RocTftLcdWriteDat(0X75);
+    RocTftLcdWriteDat(0X36);
+    RocTftLcdWriteDat(0X08);
+    RocTftLcdWriteDat(0X13);
+    RocTftLcdWriteDat(0X05);
+    RocTftLcdWriteDat(0X10);
+    RocTftLcdWriteDat(0X0B);
+    RocTftLcdWriteDat(0X08);
+
+
+    RocTftLcdWriteReg(0xE1);
+    RocTftLcdWriteDat(0X00);
+    RocTftLcdWriteDat(0X1F);
+    RocTftLcdWriteDat(0X23);
+    RocTftLcdWriteDat(0X03);
+    RocTftLcdWriteDat(0X0E);
+    RocTftLcdWriteDat(0X04);
+    RocTftLcdWriteDat(0X39);
+    RocTftLcdWriteDat(0X25);
+    RocTftLcdWriteDat(0X4D);
+    RocTftLcdWriteDat(0X06);
+    RocTftLcdWriteDat(0X0D);
+    RocTftLcdWriteDat(0X0B);
+    RocTftLcdWriteDat(0X33);
+    RocTftLcdWriteDat(0X37);
+    RocTftLcdWriteDat(0X0F);
+
+    RocTftLcdWriteReg(0x29);	
 }
-
-/****************************************************************************
-* 名    称：Lcd_WriteData(uint8_t Data)
-* 功    能：向液晶屏写一个8位数据
-* 入口参数：dat     寄存器数据
-* 出口参数：无
-* 说    明：向控制器指定地址写入数据，内部函数
-****************************************************************************/
-void Lcd_WriteData(uint8_t Data)
-{
-   LCD_RS_SET;
-#if USE_HARDWARE_SPI   
-   SPI_WriteByte(SPI2,Data);
-#else
-   SPIv_WriteData(Data);
-#endif 
-}
-
-/****************************************************************************
-* 名    称：void Lcd_WriteData_16Bit(uint16_t Data)
-* 功    能：向液晶屏写一个16位数据
-* 入口参数：Data
-* 出口参数：无
-* 说    明：向控制器指定地址写入一个16位数据
-****************************************************************************/
-void Lcd_WriteData_16Bit(uint16_t Data)
-{	
-	Lcd_WriteData(Data>>8);
-	Lcd_WriteData(Data);	
-}
-
-/****************************************************************************
-* 名    称：void LCD_WriteReg(uint8_t Index,uint16_t Data)
-* 功    能：写寄存器数据
-* 入口参数：Index,Data
-* 出口参数：无
-* 说    明：本函数为组合函数，向Index地址的寄存器写入Data值
-****************************************************************************/
-void LCD_WriteReg(uint8_t Index,uint16_t Data)
-{
-	Lcd_WriteIndex(Index);
-  	Lcd_WriteData_16Bit(Data);
-}
-
-/****************************************************************************
-* 名    称：void Lcd_Reset(void)
-* 功    能：液晶硬复位函数
-* 入口参数：无
-* 出口参数：无
-* 说    明：液晶初始化前需执行一次复位操作
-****************************************************************************/
-void Lcd_Reset(void)
-{
-	LCD_RST_CLR;
-	HAL_Delay(100);
-	LCD_RST_SET;
-	HAL_Delay(50);
-}
-/****************************************************************************
-* 名    称：void Lcd_Init(void)
-* 功    能：液晶初始化函数
-* 入口参数：无
-* 出口参数：无
-* 说    明：液晶初始化_ILI9225_176X220
-****************************************************************************/
-void Lcd_Init(void)
-{	
-	Lcd_Reset(); //Reset before LCD Init.
-
-	//2.2inch TM2.2-G2.2 Init 20171020 
-	Lcd_WriteIndex(0x11);  
-	Lcd_WriteData(0x00); 
-
-	Lcd_WriteIndex(0xCF);  
-	Lcd_WriteData(0X00); 
-	Lcd_WriteData(0XC1); 
-	Lcd_WriteData(0X30);
-
-	Lcd_WriteIndex(0xED);
-	Lcd_WriteData(0X64); 
-	Lcd_WriteData(0X03); 
-	Lcd_WriteData(0X12);
-	Lcd_WriteData(0X81);
-
-	Lcd_WriteIndex(0xE8);
-	Lcd_WriteData(0X85);
-	Lcd_WriteData(0X11);
-	Lcd_WriteData(0X78);
-
-	Lcd_WriteIndex(0xF6);  
-	Lcd_WriteData(0X01); 
-	Lcd_WriteData(0X30); 
-	Lcd_WriteData(0X00);
-
-	Lcd_WriteIndex(0xCB);  
-	Lcd_WriteData(0X39); 
-	Lcd_WriteData(0X2C); 
-	Lcd_WriteData(0X00);
-	Lcd_WriteData(0X34);
-	Lcd_WriteData(0X05);
-
-	Lcd_WriteIndex(0xF7);  
-	Lcd_WriteData(0X20); 
-
-	Lcd_WriteIndex(0xEA);  
-	Lcd_WriteData(0X00); 
-	Lcd_WriteData(0X00); 
-
-	Lcd_WriteIndex(0xC0);  
-	Lcd_WriteData(0X20); 
-
-	Lcd_WriteIndex(0xC1);  
-	Lcd_WriteData(0X11); 
-
-	Lcd_WriteIndex(0xC5);  
-	Lcd_WriteData(0X31); 
-	Lcd_WriteData(0X3C); 
-
-	Lcd_WriteIndex(0xC7);  
-	Lcd_WriteData(0XA9); 
-
-	Lcd_WriteIndex(0x3A);  
-	Lcd_WriteData(0X55); 
-	
-  Lcd_WriteIndex(0x36);  
-	#if USE_HORIZONTAL
-		 Lcd_WriteData(0xE8);//横屏参数
-	#else
-		 Lcd_WriteData(0x48);//竖屏参数 
-	#endif
-
-	Lcd_WriteIndex(0xB1);  
-	Lcd_WriteData(0X00); 
-	Lcd_WriteData(0X18); 
-
-	Lcd_WriteIndex(0xB4);  
-	Lcd_WriteData(0X00); 
-	Lcd_WriteData(0X00); 
-
-	Lcd_WriteIndex(0xF2);  
-	Lcd_WriteData(0X00); 
-
-	Lcd_WriteIndex(0x26);  
-	Lcd_WriteData(0X01); 
-
-	Lcd_WriteIndex(0xE0);  
-	Lcd_WriteData(0X0F); 
-	Lcd_WriteData(0X17); 
-	Lcd_WriteData(0X14); 
-	Lcd_WriteData(0X09); 
-	Lcd_WriteData(0X0C); 
-	Lcd_WriteData(0X06); 
-	Lcd_WriteData(0X43); 
-	Lcd_WriteData(0X75); 
-	Lcd_WriteData(0X36); 
-	Lcd_WriteData(0X08); 
-	Lcd_WriteData(0X13); 
-	Lcd_WriteData(0X05); 
-	Lcd_WriteData(0X10); 
-	Lcd_WriteData(0X0B); 
-	Lcd_WriteData(0X08); 
-
-
-	Lcd_WriteIndex(0xE1);  
-	Lcd_WriteData(0X00); 
-	Lcd_WriteData(0X1F); 
-	Lcd_WriteData(0X23); 
-	Lcd_WriteData(0X03); 
-	Lcd_WriteData(0X0E); 
-	Lcd_WriteData(0X04); 
-	Lcd_WriteData(0X39); 
-	Lcd_WriteData(0X25); 
-	Lcd_WriteData(0X4D); 
-	Lcd_WriteData(0X06); 
-	Lcd_WriteData(0X0D); 
-	Lcd_WriteData(0X0B); 
-	Lcd_WriteData(0X33); 
-	Lcd_WriteData(0X37); 
-	Lcd_WriteData(0X0F); 
-
-	Lcd_WriteIndex(0x29);  	
-}
-
-
 
 /*************************************************
 函数名：LCD_Set_XY
@@ -308,11 +340,11 @@ void Lcd_Init(void)
 *************************************************/
 void Lcd_SetXY(uint16_t Xpos, uint16_t Ypos)
 {	
-	Lcd_WriteIndex(0x2A);
-	Lcd_WriteData_16Bit(Xpos);
-	Lcd_WriteIndex(0x2B);
-	Lcd_WriteData_16Bit(Ypos);
-	Lcd_WriteIndex(0x2c);	
+	RocTftLcdWriteReg(0x2A);
+	RocTftLcdWrite16Dat(Xpos);
+	RocTftLcdWriteReg(0x2B);
+	RocTftLcdWrite16Dat(Ypos);
+	RocTftLcdWriteReg(0x2c);	
 } 
 /*************************************************
 函数名：LCD_Set_Region
@@ -323,13 +355,13 @@ void Lcd_SetXY(uint16_t Xpos, uint16_t Ypos)
 //设置显示窗口
 void Lcd_SetRegion(uint16_t xStar, uint16_t yStar,uint16_t xEnd,uint16_t yEnd)
 {
-	Lcd_WriteIndex(0x2A);
-	Lcd_WriteData_16Bit(xStar);
-	Lcd_WriteData_16Bit(xEnd);
-	Lcd_WriteIndex(0x2B);
-	Lcd_WriteData_16Bit(yStar);
-	Lcd_WriteData_16Bit(yEnd);
-	Lcd_WriteIndex(0x2c);
+	RocTftLcdWriteReg(0x2A);
+	RocTftLcdWrite16Dat(xStar);
+	RocTftLcdWrite16Dat(xEnd);
+	RocTftLcdWriteReg(0x2B);
+	RocTftLcdWrite16Dat(yStar);
+	RocTftLcdWrite16Dat(yEnd);
+	RocTftLcdWriteReg(0x2c);
 }
 
 	
@@ -339,10 +371,10 @@ void Lcd_SetRegion(uint16_t xStar, uint16_t yStar,uint16_t xEnd,uint16_t yEnd)
 入口参数：xy坐标和颜色数据
 返回值：无
 *************************************************/
-void RocLcdDrawPoint(uint16_t x, uint16_t y, uint16_t Data)
+void RocTftLcdDrawPoint(uint16_t x, uint16_t y, uint16_t Data)
 {
 	Lcd_SetXY(x,y);
-	Lcd_WriteData_16Bit(Data);
+	RocTftLcdWrite16Dat(Data);
 }
 
 /*************************************************
@@ -351,20 +383,16 @@ void RocLcdDrawPoint(uint16_t x, uint16_t y, uint16_t Data)
 入口参数：填充颜色COLOR
 返回值：无
 *************************************************/
-void Lcd_Clear(uint16_t Color)               
+void RocTftLcdAllClear(uint16_t BakColor)
 {	
    unsigned int i;
-   Lcd_SetRegion(0,0,X_MAX_PIXEL-1,Y_MAX_PIXEL-1);
-   LCD_RS_SET;	
-   for(i=0;i<X_MAX_PIXEL*Y_MAX_PIXEL;i++)
+   Lcd_SetRegion(0,0,ROC_TFT_LCD_X_MAX_PIXEL-1,ROC_TFT_LCD_Y_MAX_PIXEL-1);
+   ROC_TFT_LCD_RS_SET();	
+   for(i=0;i<ROC_TFT_LCD_X_MAX_PIXEL*ROC_TFT_LCD_Y_MAX_PIXEL;i++)
    {	
-	  	//Lcd_WriteData_16Bit(Color);
-#if USE_HARDWARE_SPI   
-		SPI_WriteByte(SPI2,Color>>8);
-		SPI_WriteByte(SPI2,Color);
-#else
-		SPIv_WriteData(Color>>8);
-		SPIv_WriteData(Color);
+	  	//RocTftLcdWrite16Dat(BakColor);
+		RocSpiWriteData(BakColor>>8);
+		RocSpiWriteData(BakColor);
 #endif 
    }   
 }
@@ -395,14 +423,14 @@ void Gui_Circle(uint16_t X,uint16_t Y,uint16_t R,uint16_t fc)
     c=3-2*R; 
     while (a<b) 
     { 
-        RocLcdDrawPoint(X+a,Y+b,fc);     //        7 
-        RocLcdDrawPoint(X-a,Y+b,fc);     //        6 
-        RocLcdDrawPoint(X+a,Y-b,fc);     //        2 
-        RocLcdDrawPoint(X-a,Y-b,fc);     //        3 
-        RocLcdDrawPoint(X+b,Y+a,fc);     //        8 
-        RocLcdDrawPoint(X-b,Y+a,fc);     //        5 
-        RocLcdDrawPoint(X+b,Y-a,fc);     //        1 
-        RocLcdDrawPoint(X-b,Y-a,fc);     //        4 
+        RocTftLcdDrawPoint(X+a,Y+b,fc);     //        7 
+        RocTftLcdDrawPoint(X-a,Y+b,fc);     //        6 
+        RocTftLcdDrawPoint(X+a,Y-b,fc);     //        2 
+        RocTftLcdDrawPoint(X-a,Y-b,fc);     //        3 
+        RocTftLcdDrawPoint(X+b,Y+a,fc);     //        8 
+        RocTftLcdDrawPoint(X-b,Y+a,fc);     //        5 
+        RocTftLcdDrawPoint(X+b,Y-a,fc);     //        1 
+        RocTftLcdDrawPoint(X-b,Y-a,fc);     //        4 
 
         if(c<0) c=c+4*a+6; 
         else 
@@ -414,14 +442,14 @@ void Gui_Circle(uint16_t X,uint16_t Y,uint16_t R,uint16_t fc)
     } 
     if (a==b) 
     { 
-        RocLcdDrawPoint(X+a,Y+b,fc); 
-        RocLcdDrawPoint(X+a,Y+b,fc); 
-        RocLcdDrawPoint(X+a,Y-b,fc); 
-        RocLcdDrawPoint(X-a,Y-b,fc); 
-        RocLcdDrawPoint(X+b,Y+a,fc); 
-        RocLcdDrawPoint(X-b,Y+a,fc); 
-        RocLcdDrawPoint(X+b,Y-a,fc); 
-        RocLcdDrawPoint(X-b,Y-a,fc); 
+        RocTftLcdDrawPoint(X+a,Y+b,fc); 
+        RocTftLcdDrawPoint(X+a,Y+b,fc); 
+        RocTftLcdDrawPoint(X+a,Y-b,fc); 
+        RocTftLcdDrawPoint(X-a,Y-b,fc); 
+        RocTftLcdDrawPoint(X+b,Y+a,fc); 
+        RocTftLcdDrawPoint(X-b,Y+a,fc); 
+        RocTftLcdDrawPoint(X+b,Y-a,fc); 
+        RocTftLcdDrawPoint(X-b,Y-a,fc); 
     } 
 	
 } 
@@ -474,7 +502,7 @@ int dx,             // difference in x's
 		for (index=0; index <= dx; index++)//要画的点数不会超过x距离
 		{
 			//画点
-			RocLcdDrawPoint(x0,y0,Color);
+			RocTftLcdDrawPoint(x0,y0,Color);
 			
 			// test if error has overflowed
 			if (error >= 0) //是否需要增加y坐标值
@@ -501,7 +529,7 @@ int dx,             // difference in x's
 		for (index=0; index <= dy; index++)
 		{
 			// set the pixel
-			RocLcdDrawPoint(x0,y0,Color);
+			RocTftLcdDrawPoint(x0,y0,Color);
 
 			// test if error overflowed
 			if (error >= 0)
@@ -561,12 +589,12 @@ void Gui_box2(uint16_t x,uint16_t y,uint16_t w,uint16_t h, uint8_t mode)
 **************************************************************************************/
 void DisplayButtonDown(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 {
-	Gui_DrawLine(x1,  y1,  x2,y1, GRAY2);  //H
-	Gui_DrawLine(x1+1,y1+1,x2,y1+1, GRAY1);  //H
-	Gui_DrawLine(x1,  y1,  x1,y2, GRAY2);  //V
-	Gui_DrawLine(x1+1,y1+1,x1+1,y2, GRAY1);  //V
-	Gui_DrawLine(x1,  y2,  x2,y2, WHITE);  //H
-	Gui_DrawLine(x2,  y1,  x2,y2, WHITE);  //V
+	Gui_DrawLine(x1,  y1,  x2,y1, ROC_TFT_LCD_COLOR_GRAY_2);  //H
+	Gui_DrawLine(x1+1,y1+1,x2,y1+1, ROC_TFT_LCD_COLOR_GRAY_1);  //H
+	Gui_DrawLine(x1,  y1,  x1,y2, ROC_TFT_LCD_COLOR_GRAY_2);  //V
+	Gui_DrawLine(x1+1,y1+1,x1+1,y2, ROC_TFT_LCD_COLOR_GRAY_1);  //V
+	Gui_DrawLine(x1,  y2,  x2,y2, ROC_TFT_LCD_COLOR_WHITE);  //H
+	Gui_DrawLine(x2,  y1,  x2,y2, ROC_TFT_LCD_COLOR_WHITE);  //V
 }
 
 /**************************************************************************************
@@ -576,13 +604,13 @@ void DisplayButtonDown(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 **************************************************************************************/
 void DisplayButtonUp(uint16_t x1,uint16_t y1,uint16_t x2,uint16_t y2)
 {
-	Gui_DrawLine(x1,  y1,  x2,y1, WHITE); //H
-	Gui_DrawLine(x1,  y1,  x1,y2, WHITE); //V
+	Gui_DrawLine(x1,  y1,  x2,y1, ROC_TFT_LCD_COLOR_WHITE); //H
+	Gui_DrawLine(x1,  y1,  x1,y2, ROC_TFT_LCD_COLOR_WHITE); //V
 	
-	Gui_DrawLine(x1+1,y2-1,x2,y2-1, GRAY1);  //H
-	Gui_DrawLine(x1,  y2,  x2,y2, GRAY2);  //H
-	Gui_DrawLine(x2-1,y1+1,x2-1,y2, GRAY1);  //V
-    Gui_DrawLine(x2  ,y1  ,x2,y2, GRAY2); //V
+	Gui_DrawLine(x1+1,y2-1,x2,y2-1, ROC_TFT_LCD_COLOR_GRAY_1);  //H
+	Gui_DrawLine(x1,  y2,  x2,y2, ROC_TFT_LCD_COLOR_GRAY_2);  //H
+	Gui_DrawLine(x2-1,y1+1,x2-1,y2, ROC_TFT_LCD_COLOR_GRAY_1);  //V
+    Gui_DrawLine(x2  ,y1  ,x2,y2, ROC_TFT_LCD_COLOR_GRAY_2); //V
 }
 
 
@@ -609,10 +637,10 @@ void Gui_DrawFont_GBK16(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_
 			    for(i=0;i<16;i++)
 				for(j=0;j<8;j++) 
 					{
-				    	if(asc16[k*16+i]&(0x80>>j))	RocLcdDrawPoint(x+j,y+i,fc);
+				    	if(asc16[k*16+i]&(0x80>>j))	RocTftLcdDrawPoint(x+j,y+i,fc);
 						else 
 						{
-							if (fc!=bc) RocLcdDrawPoint(x+j,y+i,bc);
+							if (fc!=bc) RocTftLcdDrawPoint(x+j,y+i,bc);
 						}
 					}
 				x+=8;
@@ -632,17 +660,17 @@ void Gui_DrawFont_GBK16(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_
 				    {
 						for(j=0;j<8;j++) 
 							{
-						    	if(hz16[k].Msk[i*2]&(0x80>>j))	RocLcdDrawPoint(x+j,y+i,fc);
+						    	if(hz16[k].Msk[i*2]&(0x80>>j))	RocTftLcdDrawPoint(x+j,y+i,fc);
 								else {
-									if (fc!=bc) RocLcdDrawPoint(x+j,y+i,bc);
+									if (fc!=bc) RocTftLcdDrawPoint(x+j,y+i,bc);
 								}
 							}
 						for(j=0;j<8;j++) 
 							{
-						    	if(hz16[k].Msk[i*2+1]&(0x80>>j))	RocLcdDrawPoint(x+j+8,y+i,fc);
+						    	if(hz16[k].Msk[i*2+1]&(0x80>>j))	RocTftLcdDrawPoint(x+j+8,y+i,fc);
 								else 
 								{
-									if (fc!=bc) RocLcdDrawPoint(x+j+8,y+i,bc);
+									if (fc!=bc) RocTftLcdDrawPoint(x+j+8,y+i,bc);
 								}
 							}
 				    }
@@ -670,10 +698,10 @@ void Gui_DrawFont_GBK24(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_
 			for(j=0;j<8;j++) 
 				{
 			    	if(asc16[k*16+i]&(0x80>>j))	
-					RocLcdDrawPoint(x+j,y+i,fc);
+					RocTftLcdDrawPoint(x+j,y+i,fc);
 					else 
 					{
-						if (fc!=bc) RocLcdDrawPoint(x+j,y+i,bc);
+						if (fc!=bc) RocTftLcdDrawPoint(x+j,y+i,bc);
 					}
 				}
 			s++;x+=8;
@@ -690,26 +718,26 @@ void Gui_DrawFont_GBK24(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_
 						for(j=0;j<8;j++) 
 							{
 						    	if(hz24[k].Msk[i*3]&(0x80>>j))
-								RocLcdDrawPoint(x+j,y+i,fc);
+								RocTftLcdDrawPoint(x+j,y+i,fc);
 								else 
 								{
-									if (fc!=bc) RocLcdDrawPoint(x+j,y+i,bc);
+									if (fc!=bc) RocTftLcdDrawPoint(x+j,y+i,bc);
 								}
 							}
 						for(j=0;j<8;j++) 
 							{
-						    	if(hz24[k].Msk[i*3+1]&(0x80>>j))	RocLcdDrawPoint(x+j+8,y+i,fc);
+						    	if(hz24[k].Msk[i*3+1]&(0x80>>j))	RocTftLcdDrawPoint(x+j+8,y+i,fc);
 								else {
-									if (fc!=bc) RocLcdDrawPoint(x+j+8,y+i,bc);
+									if (fc!=bc) RocTftLcdDrawPoint(x+j+8,y+i,bc);
 								}
 							}
 						for(j=0;j<8;j++) 
 							{
 						    	if(hz24[k].Msk[i*3+2]&(0x80>>j))	
-								RocLcdDrawPoint(x+j+16,y+i,fc);
+								RocTftLcdDrawPoint(x+j+16,y+i,fc);
 								else 
 								{
-									if (fc!=bc) RocLcdDrawPoint(x+j+16,y+i,bc);
+									if (fc!=bc) RocTftLcdDrawPoint(x+j+16,y+i,bc);
 								}
 							}
 				    }
@@ -719,7 +747,7 @@ void Gui_DrawFont_GBK24(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint8_
 		}
 	}
 }
-void Gui_DrawFont_Num32(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint16_t num)
+void RocDrawFontDigitalTubeNum(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint16_t num)
 {
 	unsigned char i,j,k,c;
 	//lcd_text_any(x+94+i*42,y+34,32,32,0x7E8,0x0,sz32,knum[i]);
@@ -733,9 +761,9 @@ void Gui_DrawFont_Num32(uint16_t x, uint16_t y, uint16_t fc, uint16_t bc, uint16
 			for (k=0;k<8;k++)	
 			{
 	
-		    	if(c&(0x80>>k))	RocLcdDrawPoint(x+j*8+k,y+i,fc);
+		    	if(c&(0x80>>k))	RocTftLcdDrawPoint(x+j*8+k,y+i,fc);
 				else {
-					if (fc!=bc) RocLcdDrawPoint(x+j*8+k,y+i,bc);
+					if (fc!=bc) RocTftLcdDrawPoint(x+j*8+k,y+i,bc);
 				}
 			}
 		}
@@ -749,47 +777,47 @@ unsigned char Num[10]={0,1,2,3,4,5,6,7,8,9};
 void Redraw_Mainmenu(void)
 {
 
-	Lcd_Clear(GRAY0);
+	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
 	
-	Gui_DrawFont_GBK16(16,2,BLUE,GRAY0,"全动电子技术");
-	Gui_DrawFont_GBK16(16,20,RED,GRAY0,"液晶测试程序");
+	Gui_DrawFont_GBK16(16,2,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"全动电子技术");
+	Gui_DrawFont_GBK16(16,20,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"液晶测试程序");
 
 	DisplayButtonUp(15,38,113,58); //x1,y1,x2,y2
-	Gui_DrawFont_GBK16(16,40,GREEN,GRAY0,"颜色填充测试");
+	Gui_DrawFont_GBK16(16,40,ROC_TFT_LCD_COLOR_GREEN,ROC_TFT_LCD_COLOR_GRAY_0,"颜色填充测试");
 
 	DisplayButtonUp(15,68,113,88); //x1,y1,x2,y2
-	Gui_DrawFont_GBK16(16,70,BLUE,GRAY0,"文字显示测试");
+	Gui_DrawFont_GBK16(16,70,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"文字显示测试");
 
 	DisplayButtonUp(15,98,113,118); //x1,y1,x2,y2
-	Gui_DrawFont_GBK16(16,100,RED,GRAY0,"图片显示测试");;
+	Gui_DrawFont_GBK16(16,100,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"图片显示测试");;
 
-	//Gui_DrawFont_GBK16(16,120,BLUE,GRAY0,"Welcome");
-	Gui_DrawFont_GBK16(16,140,RED,GRAY0, "Welcome");
+	//Gui_DrawFont_GBK16(16,120,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"Welcome");
+	Gui_DrawFont_GBK16(16,140,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "Welcome");
 	
-	Gui_DrawFont_Num32(100,125,RED,GRAY0,Num[5]);
+	RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,Num[5]);
 	HAL_Delay(1000);
-	Gui_DrawFont_Num32(100,125,RED,GRAY0,Num[4]);
+	RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,Num[4]);
 	HAL_Delay(1000);
-	Gui_DrawFont_Num32(100,125,RED,GRAY0,Num[3]);
+	RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,Num[3]);
 	HAL_Delay(1000);
-	Gui_DrawFont_Num32(100,125,RED,GRAY0,Num[2]);
+	RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,Num[2]);
 	HAL_Delay(1000);
-	Gui_DrawFont_Num32(100,125,RED,GRAY0,Num[1]);
+	RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,Num[1]);
 	HAL_Delay(1000);
-	Gui_DrawFont_Num32(100,125,RED,GRAY0,Num[0]);	
+	RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,Num[0]);	
 }
 //测试数码管字体
 void Num_Test(void)
 {
 	uint8_t i=0;
-	Lcd_Clear(GRAY0);
-	Gui_DrawFont_GBK16(16,20,RED,GRAY0,"Num Test");
+	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
+	Gui_DrawFont_GBK16(16,20,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"Num Test");
 	HAL_Delay(1000);
-	Lcd_Clear(GRAY0);
+	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
 
 	for(i=0;i<10;i++)
 	{
-	Gui_DrawFont_Num32((i%3)*40,32*(i/3)+30,RED,GRAY0,Num[i+1]);
+	RocDrawFontDigitalTubeNum((i%3)*40,32*(i/3)+30,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,Num[i+1]);
 	HAL_Delay(100);
 	}
 	
@@ -797,34 +825,34 @@ void Num_Test(void)
 //中英文显示测试
 void Font_Test(void)
 {
-	Lcd_Clear(GRAY0);
-	Gui_DrawFont_GBK16(16,10,BLUE,GRAY0,"文字显示测试");
+	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
+	Gui_DrawFont_GBK16(16,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"文字显示测试");
 
 	HAL_Delay(1000);
-	Lcd_Clear(GRAY0);
-	Gui_DrawFont_GBK16(16,30,RED,GRAY0,"全动电子技术");
-	Gui_DrawFont_GBK16(16,50,BLUE,GRAY0,"专注液晶批发");
-	Gui_DrawFont_GBK16(16,70,RED,GRAY0, "全程技术支持");
-	Gui_DrawFont_GBK16(0,100,BLUE,GRAY0,"Tel:15989313508");
-	Gui_DrawFont_GBK16(0,130,RED,GRAY0, "www.qdtech.net");	
+	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
+	Gui_DrawFont_GBK16(16,30,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"全动电子技术");
+	Gui_DrawFont_GBK16(16,50,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"专注液晶批发");
+	Gui_DrawFont_GBK16(16,70,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "全程技术支持");
+	Gui_DrawFont_GBK16(0,100,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"Tel:15989313508");
+	Gui_DrawFont_GBK16(0,130,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "www.qdtech.net");	
 	HAL_Delay(1500);	
 }
 //简单刷屏测试
 void Color_Test(void)
 {
 	uint8_t i=1;
-	Lcd_Clear(GRAY0);
+	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
 	
-	Gui_DrawFont_GBK16(20,10,BLUE,GRAY0,"颜色填充测试");
+	Gui_DrawFont_GBK16(20,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"颜色填充测试");
 	HAL_Delay(1200);
 
 	while(i--)
 	{
-		Lcd_Clear(WHITE); HAL_Delay(500);
-		Lcd_Clear(BLACK); HAL_Delay(500);
-		Lcd_Clear(RED);	  HAL_Delay(500);
-	  	Lcd_Clear(GREEN); HAL_Delay(500);
-	  	Lcd_Clear(BLUE);  HAL_Delay(500);
+		RocTftLcdAllClear(ROC_TFT_LCD_COLOR_WHITE); HAL_Delay(500);
+		RocTftLcdAllClear(ROC_TFT_LCD_COLOR_BLACK); HAL_Delay(500);
+		RocTftLcdAllClear(ROC_TFT_LCD_COLOR_RED);	  HAL_Delay(500);
+	  	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GREEN); HAL_Delay(500);
+	  	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_BLUE);  HAL_Delay(500);
 	}		
 }
 
@@ -842,21 +870,21 @@ void showimage(const unsigned char *p) //显示40*40 QQ图片
 {
   	int i,j,k; 
 	unsigned char picH,picL; 
-	Lcd_Clear(GRAY0);
-	Gui_DrawFont_GBK16(16,10,BLUE,GRAY0,"图片显示测试");
+	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
+	Gui_DrawFont_GBK16(16,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"图片显示测试");
 	HAL_Delay(1000);
 
-	Lcd_Clear(GRAY0);
-	for(k=0;k<Y_MAX_PIXEL/40;k++)
+	RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
+	for(k=0;k<ROC_TFT_LCD_Y_MAX_PIXEL/40;k++)
 	{
-	   	for(j=0;j<X_MAX_PIXEL/40;j++)
+	   	for(j=0;j<ROC_TFT_LCD_X_MAX_PIXEL/40;j++)
 		{	
 			Lcd_SetRegion(40*j,40*k,40*j+39,40*k+39);		//坐标设置
 		    for(i=0;i<40*40;i++)
 			 {	
 			 	picL=*(p+i*2);	//数据低位在前
 				picH=*(p+i*2+1);				
-				Lcd_WriteData_16Bit(picH<<8|picL);  						
+				RocTftLcdWrite16Dat(picH<<8|picL);  						
 			 }	
 		 }
 	}		
@@ -864,7 +892,7 @@ void showimage(const unsigned char *p) //显示40*40 QQ图片
 //综合测试函数
 static void QDTFT_Test_Demo(void)
 {
-	Lcd_Init();
+	RocTftLcdRegInit();
 	Redraw_Mainmenu();//绘制主菜单(部分内容由于分辨率超出物理值可能无法显示)
 	Color_Test();//简单纯色填充测试
 	Num_Test();//数码管字体测试
@@ -891,12 +919,12 @@ ROC_RESULT RocTftLcdInit(void)
     uint16_t i = 0;
     ROC_RESULT Ret = RET_OK;
 
-    Lcd_Init();
-    Lcd_Clear(BLACK);
+    RocTftLcdRegInit();
+    RocTftLcdAllClear(ROC_TFT_LCD_COLOR_DEFAULT_BAK);
 
     for(i = 0; i < 48; i++)
     {
-        Gui_DrawLine(0, i * 5, 320, i * 5, RED);
+        Gui_DrawLine(0, i * 5, 320, i * 5, ROC_TFT_LCD_COLOR_WHITE);
     }
 
     if(RET_OK != Ret)
