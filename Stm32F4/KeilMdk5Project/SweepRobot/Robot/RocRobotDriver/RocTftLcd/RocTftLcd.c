@@ -384,17 +384,19 @@ void RocTftLcdDrawPoint(uint16_t x, uint16_t y, uint16_t Data)
 返回值：无
 *************************************************/
 void RocTftLcdAllClear(uint16_t BakColor)
-{	
-   unsigned int i;
-   Lcd_SetRegion(0,0,ROC_TFT_LCD_X_MAX_PIXEL-1,ROC_TFT_LCD_Y_MAX_PIXEL-1);
-   ROC_TFT_LCD_RS_SET();	
-   for(i=0;i<ROC_TFT_LCD_X_MAX_PIXEL*ROC_TFT_LCD_Y_MAX_PIXEL;i++)
-   {	
-	  	//RocTftLcdWrite16Dat(BakColor);
-		RocSpiWriteData(BakColor>>8);
-		RocSpiWriteData(BakColor);
-#endif 
-   }   
+{
+    unsigned int i;
+
+    Lcd_SetRegion(0,0,ROC_TFT_LCD_X_MAX_PIXEL-1,ROC_TFT_LCD_Y_MAX_PIXEL-1);
+
+    ROC_TFT_LCD_RS_SET();
+
+    for(i=0;i<ROC_TFT_LCD_X_MAX_PIXEL*ROC_TFT_LCD_Y_MAX_PIXEL;i++)
+    {
+        //RocTftLcdWrite16Dat(BakColor);
+        RocSpiWriteData(BakColor>>8);
+        RocSpiWriteData(BakColor);
+    }
 }
 
 

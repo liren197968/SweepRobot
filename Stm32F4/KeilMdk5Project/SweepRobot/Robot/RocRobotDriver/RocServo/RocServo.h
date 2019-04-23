@@ -32,6 +32,8 @@
 #define ROC_SERVO_MAX_ROTATE_ANGLE      180
 
 
+void RocServoOutputEnable(void);
+void RocServoOutputDisable(void);
 ROC_RESULT RocServoTimerStop(void);
 ROC_RESULT RocServoTimerStart(void);
 ROC_RESULT RocServoTurnIsFinshed(void);

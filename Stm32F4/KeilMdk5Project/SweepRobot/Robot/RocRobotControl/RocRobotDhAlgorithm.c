@@ -651,12 +651,10 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     if(fabs(MaxError) < fabs(XStepError))
     {
         MaxError = XStepError;
-
-        ROC_LOGN("MaxError: %.2f", MaxError);
     }
 
-    RocDrawFontDigitalTubeNum(2, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, (uint16_t)(MaxError / ROC_ROBOT_PID_CONST_P / 10));
-    RocDrawFontDigitalTubeNum(32, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, ((uint16_t)MaxError / ROC_ROBOT_PID_CONST_P) % 10);
+    RocDrawFontDigitalTubeNum(2, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, (uint16_t)(fabs(MaxError) / ROC_ROBOT_PID_CONST_P / 10));
+    RocDrawFontDigitalTubeNum(32, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, ((uint16_t)fabs(MaxError) / ROC_ROBOT_PID_CONST_P) % 10);
 
     RocRobotStepErrorCheck(&XStepError);
 

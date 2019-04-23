@@ -195,7 +195,7 @@ static void RocRobotMotionTrackOnLcdDraw(ROC_PHOENIX_STATE_s *pRobotCurstate)
 {
     static uint16_t DrawXCor = 0;
 
-    if(ROC_TFT_LCD_X_MAX_PIXEL < DrawXCor)
+    if(0 == DrawXCor % ROC_TFT_LCD_X_MAX_PIXEL)
     {
         RocTftLcdAllClear(ROC_TFT_LCD_COLOR_DEFAULT_BAK);
     }
@@ -753,6 +753,8 @@ static ROC_RESULT RocRobotStopRun(void)
 {
     ROC_RESULT Ret = RET_OK;
 
+    RocServoOutputDisable();
+
     RocServoSpeedSet(0);
 
     Ret = RocServoTimerStop();
@@ -805,6 +807,14 @@ void RocRobotInit(void)
         while(1);
     }
 
+    Ret = RocBatteryInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+
     Ret = RocPca9685Init();
     if(RET_OK != Ret)
     {
@@ -813,11 +823,19 @@ void RocRobotInit(void)
         while(1);
     }
 
-    Ret = RocBatteryInit();
+    Ret = RocRobotAlgoCtrlInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
+        while(1);
+    }
 
+    Ret = RocRobotControlInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
         while(1);
     }
 
@@ -838,22 +856,6 @@ void RocRobotInit(void)
     }
 
     Ret = RocBeeperInit();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-    
-        while(1);
-    }
-
-    Ret = RocRobotAlgoCtrlInit();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-    
-        while(1);
-    }
-
-    Ret = RocRobotControlInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -937,6 +939,7 @@ static void RocBatteryCheckTaskEntry(void)
     if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > RocBatteryVoltageGet())
     {
         ROC_LOGN("Battery is in low electricity! Charge it!");
+
         RocRobotStopRun();
     }
 #endif

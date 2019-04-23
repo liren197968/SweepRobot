@@ -194,6 +194,42 @@ static void RocServoPwmOutput(void)
 
 /*********************************************************************************
  *  Description:
+ *              Enable servo output function
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.23)
+**********************************************************************************/
+void RocServoOutputEnable(void)
+{
+    RocPca9685PwmOutEnable();
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Disable servo output function
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.23)
+**********************************************************************************/
+void RocServoOutputDisable(void)
+{
+    RocPca9685PwmOutDisable();
+}
+
+/*********************************************************************************
+ *  Description:
  *              Check servos turns is finshed
  *
  *  Parameter:
