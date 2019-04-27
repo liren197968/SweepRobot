@@ -15,29 +15,37 @@
 #include "RocRobotDhAlgorithm.h"
 
 
-#ifdef ROC_ROBOT_GAIT_QUADMODE
+#ifdef ROC_ROBOT_GAIT_QUAD_MODE_ENABLE
 static ROC_PHOENIX_GAIT_s g_RobotGait[] =
 {
-    {ROC_ROBOT_RUN_SPEED_DEFAULT, 8, 2, 1, 2, 6, 1, 0, 0,0, 1, {7, 1, 3, 5}},   // ripple
-    {ROC_ROBOT_RUN_SPEED_DEFAULT, 12, 2, 1, 2, 10, 1, 0, 0,0, 1, {7, 1, 4, 10}},   // ripple
-    {ROC_ROBOT_RUN_SPEED_DEFAULT, 4, 2, 1, 2, 2, 1, 0, 0, 0, 1,{3, 1, 1, 3}},  // Amble
-    {ROC_ROBOT_RUN_SPEED_DEFAULT, 6, 3, 2, 2, 3, 2, 0, 0,0, 1, {1, 4, 4, 1}} }; // Smooth Amble 
+    [ROC_ROBOT_GAIT_HEXP_MODE_RIPPLE_12]    = {ROC_ROBOT_RUN_SPEED_DEFAULT, 12, 3,  2,  2,  8,  3,  0,  0,  0,  1,  {7, 11, 3,  1,  5,  9}, "Ripple 12"},   // Ripple 12
+    [ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_8]     = {ROC_ROBOT_RUN_SPEED_DEFAULT, 8,  3,  2,  2,  4,  3,  0,  0,  0,  1,  {1, 5,  1,  5,  1,  5}, "Tripod 8"},    // Tripod 8 steps
+    [ROC_ROBOT_GAIT_HEXP_MODE_TRIPLE_12]    = {ROC_ROBOT_RUN_SPEED_DEFAULT, 12, 3,  2,  2,  8,  3,  0,  0,  0,  1,  {5, 10, 3,  11, 4,  9}, "Tripple 12"},  // Triple Tripod 12 step
+    [ROC_ROBOT_GAIT_HEXP_MODE_TRIPLE_16]    = {ROC_ROBOT_RUN_SPEED_DEFAULT, 16, 5,  3,  4,  10, 1,  0,  0,  0,  1,  {6, 13, 4,  14, 5,  12},"Tripple 16"},  // Triple Tripod 16 steps, use 5 lifted positions
+    [ROC_ROBOT_GAIT_HEXP_MODE_WAVE_24]      = {ROC_ROBOT_RUN_SPEED_DEFAULT, 24, 3,  2,  2,  20, 3,  0,  0,  0,  1,  {13,17, 21, 1,  5,  9}, "Wave 24"},     // Wave 24 steps
+    [ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_6]     = {ROC_ROBOT_RUN_SPEED_DEFAULT, 6,  2,  1,  2,  4,  1,  0,  0,  0,  1,  {1, 4,  1,  4,  1,  4}, "Tripod 6"},    // Tripod 6 steps
+    [ROC_ROBOT_GAIT_HEXP_MODE_CIRCLE_6]     = {ROC_ROBOT_RUN_SPEED_DEFAULT, 6,  2,  1,  2,  4,  1,  0,  0,  0,  1,  {1, 4,  1,  4,  1,  4}, "Circle 6"},    // In-situ circle 6 steps
+
+    [ROC_ROBOT_GAIT_QUAD_MODE_RIPPLE_4]     = {ROC_ROBOT_RUN_SPEED_DEFAULT, 8,  2,  1,  2,  6,  1,  0,  0,  0,  1,  {7, 0,  1,  3,  0,  5}, "Ripple 4"},        // Ripple
+    [ROC_ROBOT_GAIT_QUAD_MODE_SM_RIPPLE_4]  = {ROC_ROBOT_RUN_SPEED_DEFAULT, 12, 2,  1,  2,  10, 1,  0,  0,  0,  1,  {7, 0,  1,  4,  0,  10},"Smooth Ripple 4"}, // Smooth Ripple
+    [ROC_ROBOT_GAIT_QUAD_MODE_AMBLE_4]      = {ROC_ROBOT_RUN_SPEED_DEFAULT, 4,  2,  1,  2,  2,  1,  0,  0,  0,  1,  {3, 0,  1,  1,  0,  3}, "Amble 4"},         // Amble
+    [ROC_ROBOT_GAIT_QUAD_MODE_SM_AMBLE_4]   = {ROC_ROBOT_RUN_SPEED_DEFAULT, 6,  3,  2,  2,  3,  2,  0,  0,  0,  1,  {1, 0,  4,  4,  0,  1}, "Smooth Amble 4"},  // Smooth Amble
 };
 #else
 static ROC_PHOENIX_GAIT_s g_RobotGait[] =
 {
-    [ROC_ROBOT_GAIT_RIPPLE_12]  =   {ROC_ROBOT_RUN_SPEED_DEFAULT,   12, 3,  2,  2,  8,  3, {7,  11, 3,  1,  5,  9}, "Ripple 12"},   // Ripple 12
-    [ROC_ROBOT_GAIT_TRIPOD_8]   =   {ROC_ROBOT_RUN_SPEED_DEFAULT,   8,  3,  2,  2,  4,  3, {1,  5,  1,  5,  1,  5}, "Tripod 8"},    // Tripod 8 steps
-    [ROC_ROBOT_GAIT_TRIPLE_12]  =   {ROC_ROBOT_RUN_SPEED_DEFAULT,   12, 3,  2,  2,  8,  3, {5,  10, 3,  11, 4,  9}, "Tripple 12"},  // Triple Tripod 12 step
-    [ROC_ROBOT_GAIT_TRIPLE_16]  =   {ROC_ROBOT_RUN_SPEED_DEFAULT,   16, 5,  3,  4,  10, 1, {6,  13, 4,  14, 5,  12},"Tripple 16"},  // Triple Tripod 16 steps, use 5 lifted positions
-    [ROC_ROBOT_GAIT_WAVE_24]    =   {ROC_ROBOT_RUN_SPEED_DEFAULT,   24, 3,  2,  2,  20, 3, {13, 17, 21, 1,  5,  9}, "Wave 24"},     // Wave 24 steps
-    [ROC_ROBOT_GAIT_TRIPOD_6]   =   {ROC_ROBOT_RUN_SPEED_DEFAULT,   6,  2,  1,  2,  4,  1, {1,  4,  1,  4,  1,  4}, "Tripod 6"},    // Tripod 6 steps
-    [ROC_ROBOT_GAIT_CIRCLE_6]   =   {ROC_ROBOT_RUN_SPEED_DEFAULT,   6,  2,  1,  2,  4,  1, {1,  4,  1,  4,  1,  4}, "Circle 6"},    // In-situ circle 6 steps
+    [ROC_ROBOT_GAIT_HEXP_MODE_RIPPLE_12]    = {ROC_ROBOT_RUN_SPEED_DEFAULT, 12, 3,  2,  2,  8,  3, {7,  11, 3,  1,  5,  9}, "Ripple 12"},   // Ripple 12
+    [ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_8]     = {ROC_ROBOT_RUN_SPEED_DEFAULT, 8,  3,  2,  2,  4,  3, {1,  5,  1,  5,  1,  5}, "Tripod 8"},    // Tripod 8 steps
+    [ROC_ROBOT_GAIT_HEXP_MODE_TRIPLE_12]    = {ROC_ROBOT_RUN_SPEED_DEFAULT, 12, 3,  2,  2,  8,  3, {5,  10, 3,  11, 4,  9}, "Tripple 12"},  // Triple Tripod 12 step
+    [ROC_ROBOT_GAIT_HEXP_MODE_TRIPLE_16]    = {ROC_ROBOT_RUN_SPEED_DEFAULT, 16, 5,  3,  4,  10, 1, {6,  13, 4,  14, 5,  12},"Tripple 16"},  // Triple Tripod 16 steps, use 5 lifted positions
+    [ROC_ROBOT_GAIT_HEXP_MODE_WAVE_24]      = {ROC_ROBOT_RUN_SPEED_DEFAULT, 24, 3,  2,  2,  20, 3, {13, 17, 21, 1,  5,  9}, "Wave 24"},     // Wave 24 steps
+    [ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_6]     = {ROC_ROBOT_RUN_SPEED_DEFAULT, 6,  2,  1,  2,  4,  1, {1,  4,  1,  4,  1,  4}, "Tripod 6"},    // Tripod 6 steps
+    [ROC_ROBOT_GAIT_HEXP_MODE_CIRCLE_6]     = {ROC_ROBOT_RUN_SPEED_DEFAULT, 6,  2,  1,  2,  4,  1, {1,  4,  1,  4,  1,  4}, "Circle 6"},    // In-situ circle 6 steps
 };
 #endif
 
 
-static double               g_DhAngleBuffer[3];
+static float                g_DhAngleBuffer[3];
 static ROC_ROBOT_CONTROL_s  g_RobotCtrl = {0};
 
 
@@ -247,6 +255,31 @@ void RocRobotGaitSeqUpdate(void)
         g_RobotCtrl.CurState.TravelRequest =    (fabs(g_RobotCtrl.CurState.TravelLength.X) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
                                              || (fabs(g_RobotCtrl.CurState.TravelLength.Z) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
                                              || (fabs(g_RobotCtrl.CurState.TravelLength.Y) > ROC_ROBOT_TRAVEL_DEAD_ZONE);
+
+        if (g_RobotCtrl.CurState.TravelRequest)
+        {
+#ifdef ROC_ROBOT_GAIT_QUAD_MODE_ENABLE
+            if (g_RobotCtrl.CurState.TravelLength.Y < 0)    // just start walking - Try to guess a good foot to start off on
+            {
+                g_RobotCtrl.CurState.GaitStep = ((g_RobotCtrl.CurState.TravelLength.X < 0) ? g_RobotCtrl.CurGait.GaitLegNr[ROC_ROBOT_LEF_HIN_LEG] : g_RobotCtrl.CurGait.GaitLegNr[ROC_ROBOT_RIG_HIN_LEG]);
+            }
+            else
+            {
+                 g_RobotCtrl.CurState.GaitStep = ((g_RobotCtrl.CurState.TravelLength.X < 0) ? g_RobotCtrl.CurGait.GaitLegNr[ROC_ROBOT_LEF_FRO_LEG] : g_RobotCtrl.CurGait.GaitLegNr[ROC_ROBOT_RIG_FRO_LEG]);
+            }
+
+            // And lets backup a few Gaitsteps before this to allow it to start the up swing
+            g_RobotCtrl.CurState.GaitStep = ((g_RobotCtrl.CurState.GaitStep > g_RobotCtrl.CurGait.FrontDownPos)
+                                            ? (g_RobotCtrl.CurState.GaitStep - g_RobotCtrl.CurGait.FrontDownPos)
+                                            : (g_RobotCtrl.CurState.GaitStep + g_RobotCtrl.CurGait.StepsInGait - g_RobotCtrl.CurGait.FrontDownPos));
+#endif
+        }
+        else
+        {
+            g_RobotCtrl.CurState.TravelLength.X = 0;        // Clear values under the cTravelDeadZone
+            g_RobotCtrl.CurState.TravelLength.Y = 0;        // Gait NOT in motion, return to home position
+            g_RobotCtrl.CurState.TravelLength.Z = 0;
+        }
     }
 
     g_RobotCtrl.CurState.TravelRequest = ROC_ENABLE;
@@ -279,19 +312,19 @@ void RocRobotGaitSeqUpdate(void)
  *  Author:
  *              ROC LiRen(2018.12.16)
 **********************************************************************************/
-static void RocDhAlgorithmReverse(double x, double y, double z)
+static void RocDhAlgorithmReverse(float x, float y, float z)
 {
-    double              a = 0;
-    double              e = 0;
-    double              f = 0;
-    double              h = 0;
-    double              j = 0;
+    double  a = 0;
+    double  e = 0;
+    double  f = 0;
+    double  h = 0;
+    double  j = 0;
 
-    g_DhAngleBuffer[0] = ATan(y / x) / ROC_ROBOT_ANGLE_TO_RADIAN;
+    g_DhAngleBuffer[0] = (float)ATan(y / x) / ROC_ROBOT_ANGLE_TO_RADIAN;
 
     a = x * Cos(g_DhAngleBuffer[0] * ROC_ROBOT_ANGLE_TO_RADIAN) + y * Sin(g_DhAngleBuffer[0] * ROC_ROBOT_ANGLE_TO_RADIAN) - ROC_ROBOT_DH_CONST_A1;
 
-    g_DhAngleBuffer[2] = ACos((a * a + (z - ROC_ROBOT_DH_CONST_D1) * (z - ROC_ROBOT_DH_CONST_D1) - ROC_ROBOT_DH_CONST_A3 * ROC_ROBOT_DH_CONST_A3
+    g_DhAngleBuffer[2] = (float)ACos((a * a + (z - ROC_ROBOT_DH_CONST_D1) * (z - ROC_ROBOT_DH_CONST_D1) - ROC_ROBOT_DH_CONST_A3 * ROC_ROBOT_DH_CONST_A3
                         - ROC_ROBOT_DH_CONST_A2 * ROC_ROBOT_DH_CONST_A2) / (2 * ROC_ROBOT_DH_CONST_A2 * ROC_ROBOT_DH_CONST_A3)) / ROC_ROBOT_ANGLE_TO_RADIAN;
 
     if((g_DhAngleBuffer[2] > 0) || (g_DhAngleBuffer[2] < -180))     // limit the anlge in the range of [0~(-180)]
@@ -300,13 +333,11 @@ static void RocDhAlgorithmReverse(double x, double y, double z)
         {
             g_DhAngleBuffer[2] = -g_DhAngleBuffer[2];
         }
-
-        if((g_DhAngleBuffer[2] > 180) && (g_DhAngleBuffer[2] <= 360))
+        else if((g_DhAngleBuffer[2] > 180) && (g_DhAngleBuffer[2] <= 360))
         {
             g_DhAngleBuffer[2] = g_DhAngleBuffer[2] - 360;
         }
-
-        if((g_DhAngleBuffer[2] < -180) && (g_DhAngleBuffer[2] >= -360))
+        else if((g_DhAngleBuffer[2] < -180) && (g_DhAngleBuffer[2] >= -360))
         {
             g_DhAngleBuffer[2] = -(g_DhAngleBuffer[2] + 360);
         }
@@ -317,7 +348,7 @@ static void RocDhAlgorithmReverse(double x, double y, double z)
     h = (e * ROC_ROBOT_DH_CONST_A3 + ROC_ROBOT_DH_CONST_A2 ) * (z - ROC_ROBOT_DH_CONST_D1) - a * f * ROC_ROBOT_DH_CONST_A3;
     j = a * (ROC_ROBOT_DH_CONST_A3 * e + ROC_ROBOT_DH_CONST_A2) + ROC_ROBOT_DH_CONST_A3 * f * (z - ROC_ROBOT_DH_CONST_D1);
 
-    g_DhAngleBuffer[1] = ATan2(h, j) / ROC_ROBOT_ANGLE_TO_RADIAN;
+    g_DhAngleBuffer[1] = (float)ATan2(h, j) / ROC_ROBOT_ANGLE_TO_RADIAN;
 }
 
 /*********************************************************************************
@@ -337,9 +368,9 @@ static void RocDhAlgorithmReverse(double x, double y, double z)
 **********************************************************************************/
 void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
 {
-    double                  x = 0;
-    double                  y = 0;
-    double                  z = 0;
+    float   x = 0;
+    float   y = 0;
+    float   z = 0;
 
     /***********the coordinate datas of the first group legs ****************/
     x = ROC_ROBOT_FRO_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X;
@@ -940,7 +971,7 @@ ROC_RESULT RocRobotAlgoCtrlInit(void)
     }
 
     g_RobotCtrl.CurState.GaitStep = 1;
-    g_RobotCtrl.CurState.GaitType = ROC_ROBOT_GAIT_TRIPOD_6;
+    g_RobotCtrl.CurState.GaitType = ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_6;
 
     Ret = RocRobotGaitSelect();
     if(RET_OK != Ret)

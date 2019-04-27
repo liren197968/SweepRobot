@@ -422,7 +422,7 @@ ROC_RESULT RocServoInit(int16_t *pServoInputVal)
 
     RocServoPwmDatInit(pServoInputVal);
 
-    RocPca9685PwmOutEnable();
+    RocServoOutputEnable();
 
     if(RET_OK != Ret)
     {

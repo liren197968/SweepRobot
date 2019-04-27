@@ -18,8 +18,7 @@
 
 
 //#define ROC_ROBOT_GAIT_DEBUG
-
-
+#define ROC_ROBOT_GAIT_QUAD_MODE_ENABLE
 #define ROC_ROBOT_CLOSED_LOOP_CONTROL
 
 
@@ -29,18 +28,18 @@
 #define ROC_ROBOT_DH_CONST_D1                       0
 #define ROC_ROBOT_DH_CONST_A1                       44
 #define ROC_ROBOT_DH_CONST_A2                       74
-#define ROC_ROBOT_DH_CONST_A3                       112.38
+#define ROC_ROBOT_DH_CONST_A3                       112.38F
 
 
 #define ROC_ROBOT_FRO_HIP_INIT_ANGLE                60
 #define ROC_ROBOT_FRO_LEG_INIT_ANGLE                0
-#define ROC_ROBOT_FRO_FET_INIT_ANGLE                78.19
+#define ROC_ROBOT_FRO_FET_INIT_ANGLE                78.19F
 #define ROC_ROBOT_MID_HIP_INIT_ANGLE                0
 #define ROC_ROBOT_MID_LEG_INIT_ANGLE                0
-#define ROC_ROBOT_MID_FET_INIT_ANGLE                78.19
+#define ROC_ROBOT_MID_FET_INIT_ANGLE                78.19F
 #define ROC_ROBOT_HIN_HIP_INIT_ANGLE                60
 #define ROC_ROBOT_HIN_LEG_INIT_ANGLE                0
-#define ROC_ROBOT_HIN_FET_INIT_ANGLE                78.19
+#define ROC_ROBOT_HIN_FET_INIT_ANGLE                78.19F
 
 
 #define ROC_ROBOT_INIT_ANGLE_THET_1                 60
@@ -64,7 +63,7 @@
 #define ROC_ROBOT_STEP_ERROR_HIGH_LIMIT             15
 
 
-#define ROC_ROBOT_LEG_WIDTH                         141.06
+#define ROC_ROBOT_LEG_WIDTH                         141.06F
 #define ROC_ROBOT_LEG_HEIGHT                        110
 #define ROC_ROBOT_FEET_WIDTH                        23
 
@@ -157,17 +156,6 @@ typedef enum _ROC_ROBOT_LEG_JOINT_e
 }ROC_ROBOT_LEG_JOINT_e;
 
 
-#ifdef ROC_ROBOT_GAIT_QUADMODE
-typedef enum _ROC_ROBOT_LEG_e
-{
-    ROC_ROBOT_RIG_FRO_LEG = 0,
-    ROC_ROBOT_RIG_HIN_LEG,
-    ROC_ROBOT_LEF_FRO_LEG,
-    ROC_ROBOT_LEF_HIN_LEG,
-
-    ROC_ROBOT_CNT_LEGS,
-}ROC_ROBOT_LEG_e;
-#else
 typedef enum _ROC_ROBOT_LEG_e
 {
     ROC_ROBOT_RIG_FRO_LEG = 0,
@@ -179,18 +167,24 @@ typedef enum _ROC_ROBOT_LEG_e
 
     ROC_ROBOT_CNT_LEGS,
 }ROC_ROBOT_LEG_e;
-#endif
 
 
 typedef enum _ROC_ROBOT_GAIT_TYPE_e
 {
-    ROC_ROBOT_GAIT_RIPPLE_12 = 0,
-    ROC_ROBOT_GAIT_TRIPOD_8,
-    ROC_ROBOT_GAIT_TRIPLE_12,
-    ROC_ROBOT_GAIT_TRIPLE_16,
-    ROC_ROBOT_GAIT_WAVE_24,
-    ROC_ROBOT_GAIT_TRIPOD_6,
-    ROC_ROBOT_GAIT_CIRCLE_6,
+    ROC_ROBOT_GAIT_HEXP_MODE_RIPPLE_12 = 0,
+    ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_8,
+    ROC_ROBOT_GAIT_HEXP_MODE_TRIPLE_12,
+    ROC_ROBOT_GAIT_HEXP_MODE_TRIPLE_16,
+    ROC_ROBOT_GAIT_HEXP_MODE_WAVE_24,
+    ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_6,
+    ROC_ROBOT_GAIT_HEXP_MODE_CIRCLE_6,
+
+#ifdef ROC_ROBOT_GAIT_QUAD_MODE_ENABLE
+    ROC_ROBOT_GAIT_QUAD_MODE_RIPPLE_4,
+    ROC_ROBOT_GAIT_QUAD_MODE_SM_RIPPLE_4,
+    ROC_ROBOT_GAIT_QUAD_MODE_AMBLE_4,
+    ROC_ROBOT_GAIT_QUAD_MODE_SM_AMBLE_4,
+#endif
 
     ROC_ROBOT_GAIT_TYPE_NUM,
 }ROC_ROBOT_GAIT_TYPE_e;
@@ -217,7 +211,7 @@ typedef struct _ROC_PHOENIX_GAIT_s
     uint8_t                     SlidDivFactor;          // Number of steps that a leg is on the floor while walking
     uint8_t                     HalfLiftHeight;         // How high to lift at halfway up.
 
-#ifdef ROC_ROBOT_GAIT_QUADMODE
+#ifdef ROC_ROBOT_GAIT_QUAD_MODE_ENABLE
     // Extra information used in the Quad balance mode
     uint32_t                    CogAngleStart;          // COG shifting starting angle
     uint32_t                    CogAngleStep;           // COG Angle Steps in degrees

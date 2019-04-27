@@ -799,6 +799,14 @@ void RocRobotInit(void)
         while(1);
     }
 
+    Ret = RocTftLcdInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
+        while(1);
+    }
+
     Ret = RocBluetoothInit();
     if(RET_OK != Ret)
     {
@@ -815,7 +823,31 @@ void RocRobotInit(void)
         while(1);
     }
 
+    Ret = RocBeeperInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+    
+        while(1);
+    }
+
     Ret = RocPca9685Init();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+
+    Ret = RocRemoteControlInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+
+    Ret = RocMpu6050Init();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -844,38 +876,6 @@ void RocRobotInit(void)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
 
-        while(1);
-    }
-
-    Ret = RocRemoteControlInit();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-
-        while(1);
-    }
-
-    Ret = RocBeeperInit();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-    
-        while(1);
-    }
-
-    Ret = RocMpu6050Init();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-
-        while(1);
-    }
-
-    Ret = RocTftLcdInit();
-    if(RET_OK != Ret)
-    {
-        ROC_LOGE("Robot hardware is in error, the system will not run!");
-    
         while(1);
     }
 
