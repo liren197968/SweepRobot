@@ -6,10 +6,13 @@
 ********************************************************************************/
 #include "stm32f4xx_hal.h"
 #include "gpio.h"
+#include "tim.h"
 
 #include "RocLog.h"
 #include "RocBeeper.h"
 
+
+static ROC_BEEPER_CTRL_s g_BeeperCtrl = {ROC_NONE};
 /*********************************************************************************
  *  Description:
  *              Turn beeper on
@@ -48,6 +51,123 @@ static void RocBeeperOff(void)
 
 /*********************************************************************************
  *  Description:
+ *              Toggle beeper
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.30)
+**********************************************************************************/
+static void RocBeeperToggle(void)
+{
+    HAL_GPIO_TogglePin(ROC_BEEPER_GPIO_PORT, ROC_BEEPER_CTRL_PIN);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Start the beeper timer
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.29)
+**********************************************************************************/
+ROC_RESULT RocBeeperTimerStart(void)
+{
+    ROC_RESULT Ret = RET_OK;
+
+    if(HAL_OK != HAL_TIM_Base_Start_IT(&htim2))
+    {
+        Ret = RET_ERROR;
+
+        Error_Handler();
+    }
+
+    return Ret;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Stop the beeper timer
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.29)
+**********************************************************************************/
+ROC_RESULT RocBeeperTimerStop(void)
+{
+    ROC_RESULT Ret = RET_OK;
+
+    if(HAL_OK != HAL_TIM_Base_Stop_IT(&htim2))
+    {
+        Ret = RET_ERROR;
+
+        Error_Handler();
+    }
+
+    return Ret;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Set the interrupt period of the beeper timer
+ *
+ *  Parameter:
+ *              Period: timer overflow period
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.29)
+**********************************************************************************/
+static void RocBeeperTimerPeriodSet(uint16_t Period)
+{
+    ROC_RESULT Ret = RET_OK;
+
+    Ret = RocBeeperTimerStop();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Beeper timer stop is in error!");
+
+        while(1);
+    }
+
+    htim2.Init.Period = Period;
+
+    htim2.Instance->CNT = 0;
+    htim2.Instance->ARR = htim2.Init.Period;
+    htim2.Instance->CR1 &= ~TIM_CR1_ARPE;
+
+    Ret = RocBeeperTimerStart();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Beeper timer start is in error!");
+
+        while(1);
+    }
+
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Beeper timer setting is in error!");
+    }
+}
+
+/*********************************************************************************
+ *  Description:
  *              Blink beeper for serval times
  *
  *  Parameter:
@@ -59,21 +179,46 @@ static void RocBeeperOff(void)
  *  Author:
  *              ROC LiRen(2019.01.06)
 **********************************************************************************/
-void RocBeeperBlink(uint16_t Times, uint16_t Time)
+void RocBeeperBlink(uint16_t PeriodTime, uint16_t BlinkTimes)
 {
-    uint16_t i = 0;
-    uint16_t LoopTime = Time / (Times * 2);
-
-    for(i = 0; i < Times; i++)
+    if(ROC_BEEPER_BLINK_FOREVER == BlinkTimes)
     {
-        RocBeeperOn();
-        HAL_Delay(LoopTime);
-
-        RocBeeperOff();
-        HAL_Delay(LoopTime);
+        g_BeeperCtrl.RunTimes = ROC_BEEPER_BLINK_FOREVER;
     }
+    else
+    {
+        g_BeeperCtrl.RunTimes = BlinkTimes * 2;
+    }
+
+    RocBeeperTimerPeriodSet(PeriodTime);
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Control beeper on and off with timer interrupt
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.29)
+**********************************************************************************/
+void RocBeeperTaskBackground(void)
+{
+    if(0 < g_BeeperCtrl.RunTimes)
+    {
+        g_BeeperCtrl.RunTimes--;
+
+        RocBeeperToggle();
+    }
+    else
+    {
+        RocBeeperOff();
+    }
+}
 /*********************************************************************************
  *  Description:
  *              Beeper driver init
@@ -91,6 +236,9 @@ ROC_RESULT RocBeeperInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
+    RocBeeperOn();
+    RocBeeperOff();
+    RocBeeperTimerStart();
     //RocBeeperBlink(2, 300);
 
     if(RET_OK != Ret)
@@ -99,7 +247,7 @@ ROC_RESULT RocBeeperInit(void)
     }
     else
     {
-        ROC_LOGI("Beeper module init is in success.");
+        ROC_LOGI("Beeper module init is in success");
     }
 
     return Ret;

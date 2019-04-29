@@ -55,7 +55,6 @@ void RocLedTurnOff(void)
  *  Parameter:
  *              None
  *
- *
  *  Return:
  *              None
  *

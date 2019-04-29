@@ -110,6 +110,7 @@ int main(void)
     MX_USART3_UART_Init();
     MX_I2C2_Init();
     MX_SPI1_Init();
+    MX_TIM2_Init();
     MX_TIM6_Init();
     MX_TIM7_Init();
     MX_USB_HOST_Init();
@@ -197,6 +198,9 @@ void SystemClock_Config(void)
   */
 static void MX_NVIC_Init(void)
 {
+    /* TIM2_IRQn interrupt configuration */
+    HAL_NVIC_SetPriority(TIM2_IRQn, 9, 0);
+    HAL_NVIC_EnableIRQ(TIM2_IRQn);
     /* TIM6_DAC_IRQn interrupt configuration */
     HAL_NVIC_SetPriority(TIM6_DAC_IRQn, 0, 0);
     HAL_NVIC_EnableIRQ(TIM6_DAC_IRQn);

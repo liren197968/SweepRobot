@@ -43,9 +43,32 @@
 /* USER CODE BEGIN 0 */
 
 /* USER CODE END 0 */
-
+TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim6;
 TIM_HandleTypeDef htim7;
+
+/* TIM2 init function */
+void MX_TIM2_Init(void)
+{
+    TIM_MasterConfigTypeDef sMasterConfig;
+
+    htim2.Instance = TIM2;
+    htim2.Init.Prescaler = 84000000 / 1000 - 1;
+    htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
+    htim2.Init.Period = 0;
+    if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+    sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+    sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+    if (HAL_TIMEx_MasterConfigSynchronization(&htim2, &sMasterConfig) != HAL_OK)
+    {
+        _Error_Handler(__FILE__, __LINE__);
+    }
+
+}
 
 /* TIM6 init function */
 void MX_TIM6_Init(void)
@@ -53,7 +76,7 @@ void MX_TIM6_Init(void)
     TIM_MasterConfigTypeDef sMasterConfig;
 
     htim6.Instance = TIM6;
-    htim6.Init.Prescaler = 84000000 / 2000 - 1;
+    htim6.Init.Prescaler = 84000000 / 10000 - 1;
     htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
     htim6.Init.Period = 0;
     if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
@@ -96,7 +119,18 @@ void MX_TIM7_Init(void)
 void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *tim_baseHandle)
 {
 
-    if(tim_baseHandle->Instance == TIM6)
+    if(tim_baseHandle->Instance == TIM2)
+    {
+        /* USER CODE BEGIN TIM2_MspInit 0 */
+
+        /* USER CODE END TIM2_MspInit 0 */
+        /* TIM2 clock enable */
+        __HAL_RCC_TIM2_CLK_ENABLE();
+        /* USER CODE BEGIN TIM2_MspInit 1 */
+
+        /* USER CODE END TIM2_MspInit 1 */
+    }
+    else if(tim_baseHandle->Instance == TIM6)
     {
         /* USER CODE BEGIN TIM6_MspInit 0 */
 
@@ -123,7 +157,21 @@ void HAL_TIM_Base_MspInit(TIM_HandleTypeDef *tim_baseHandle)
 void HAL_TIM_Base_MspDeInit(TIM_HandleTypeDef *tim_baseHandle)
 {
 
-    if(tim_baseHandle->Instance == TIM6)
+    if(tim_baseHandle->Instance == TIM2)
+    {
+        /* USER CODE BEGIN TIM2_MspDeInit 0 */
+
+        /* USER CODE END TIM2_MspDeInit 0 */
+        /* Peripheral clock disable */
+        __HAL_RCC_TIM2_CLK_DISABLE();
+
+        /* TIM2 interrupt Deinit */
+        HAL_NVIC_DisableIRQ(TIM2_IRQn);
+        /* USER CODE BEGIN TIM2_MspDeInit 1 */
+
+        /* USER CODE END TIM2_MspDeInit 1 */
+    }
+    else if(tim_baseHandle->Instance == TIM6)
     {
         /* USER CODE BEGIN TIM6_MspDeInit 0 */
 

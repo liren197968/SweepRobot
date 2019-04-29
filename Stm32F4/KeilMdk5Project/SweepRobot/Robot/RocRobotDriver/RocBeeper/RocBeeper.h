@@ -7,7 +7,30 @@
 #ifndef _ROC_BEEPER_H
 #define _ROC_BEEPER_H
 
-void RocBeeperBlink(uint16_t Times, uint16_t Time);
+
+#define ROC_BEEPER_BLINK_FOREVER    0xFFFF
+
+
+typedef enum _ROC_BEEPER_TYPE_e
+{
+    ROC_BEEPER_ACTIVE = 0,
+    ROC_BEEPER_PASSIVE,
+
+}ROC_BEEPER_TYPE_e;
+
+
+typedef struct _ROC_BEEPER_CTRL_s
+{
+    uint16_t            RunTimes;
+    uint16_t            RunFreq;
+    ROC_BEEPER_TYPE_e   Type;
+
+}ROC_BEEPER_CTRL_s;
+
+
+void RocBeeperTaskBackground(void);
+void RocBeeperBlink(uint16_t PeriodTime, uint16_t BlinkTimes);
 ROC_RESULT RocBeeperInit(void);
 
 #endif
+

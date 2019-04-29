@@ -387,15 +387,18 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_FET_CENTER + (ROC_ROBOT_FRO_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    if(ROC_ROBOT_WALK_MODE_QUAD == g_RobotCtrl.CurState.WalkMode)
+    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotCtrl.CurState.WalkMode)
     {
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X = 0;
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y = 0;
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z = ROC_ROBOT_QUAD_MODE_FEET_LIFT;
+        x = ROC_ROBOT_MID_INIT_X;
+        y = ROC_ROBOT_MID_INIT_Y;
+        z = ROC_ROBOT_MID_INIT_Z + ROC_ROBOT_QUAD_MODE_FEET_LIFT;
     }
-    x = ROC_ROBOT_MID_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X;
-    y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
-    z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotCtrl.CurState.WalkMode)
+    {
+        x = ROC_ROBOT_MID_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X;
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+    }
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -427,15 +430,18 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_FET_CENTER + (-ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    if(ROC_ROBOT_WALK_MODE_QUAD == g_RobotCtrl.CurState.WalkMode)
+    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotCtrl.CurState.WalkMode)
     {
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X = 0;
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y = 0;
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z = ROC_ROBOT_QUAD_MODE_FEET_LIFT;
+        x = ROC_ROBOT_MID_INIT_X;
+        y = ROC_ROBOT_MID_INIT_Y;
+        z = ROC_ROBOT_MID_INIT_Z + ROC_ROBOT_QUAD_MODE_FEET_LIFT;
     }
-    x = ROC_ROBOT_MID_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X;
-    y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
-    z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotCtrl.CurState.WalkMode)
+    {
+        x = ROC_ROBOT_MID_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X;
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
+    }
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -716,15 +722,18 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_FET_CENTER + (ROC_ROBOT_FRO_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    if(ROC_ROBOT_WALK_MODE_QUAD == g_RobotCtrl.CurState.WalkMode)
+    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotCtrl.CurState.WalkMode)
     {
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X = 0;
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y = 0;
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z = ROC_ROBOT_QUAD_MODE_FEET_LIFT;
+        x = ROC_ROBOT_MID_INIT_X;
+        y = ROC_ROBOT_MID_INIT_Y;
+        z = ROC_ROBOT_MID_INIT_Z + ROC_ROBOT_QUAD_MODE_FEET_LIFT;
     }
-    x = ROC_ROBOT_MID_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X - XStepError;
-    y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
-    z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotCtrl.CurState.WalkMode)
+    {
+        x = ROC_ROBOT_MID_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X;
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+    }
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -756,15 +765,18 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_FET_CENTER + (-ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    if(ROC_ROBOT_WALK_MODE_QUAD == g_RobotCtrl.CurState.WalkMode)
+    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotCtrl.CurState.WalkMode)
     {
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X = 0;
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y = 0;
-        g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z = ROC_ROBOT_QUAD_MODE_FEET_LIFT;
+        x = ROC_ROBOT_MID_INIT_X;
+        y = ROC_ROBOT_MID_INIT_Y;
+        z = ROC_ROBOT_MID_INIT_Z + ROC_ROBOT_QUAD_MODE_FEET_LIFT;
     }
-    x = ROC_ROBOT_MID_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X + XStepError;
-    y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
-    z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotCtrl.CurState.WalkMode)
+    {
+        x = ROC_ROBOT_MID_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X;
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
+    }
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -996,6 +1008,9 @@ ROC_RESULT RocRobotAlgoCtrlInit(void)
 
     g_RobotCtrl.CurState.GaitStep = 1;
     g_RobotCtrl.CurState.GaitType = ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_6;
+    g_RobotCtrl.CurState.WalkMode = ROC_ROBOT_WALK_MODE_HEXAPOD;
+    //g_RobotCtrl.CurState.GaitType = ROC_ROBOT_GAIT_QUAD_MODE_AMBLE_4;
+    //g_RobotCtrl.CurState.WalkMode = ROC_ROBOT_WALK_MODE_QUADRUPED;
 
     Ret = RocRobotGaitSelect();
     if(RET_OK != Ret)

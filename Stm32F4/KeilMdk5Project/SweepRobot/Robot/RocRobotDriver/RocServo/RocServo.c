@@ -302,7 +302,7 @@ void RocServoControl(int16_t *pServoInputVal)
  *              Set the speed of servo running
  *
  *  Parameter:
- *              None
+ *              ServoRunTimeMs: the servo run time
  *
  *  Return:
  *              None
@@ -322,7 +322,7 @@ void RocServoSpeedSet(uint16_t ServoRunTimeMs)
         while(1);
     }
 
-    htim6.Init.Period = (uint32_t)((ServoRunTimeMs + 0) * 2 / ROC_SERVO_SPEED_DIV_STP);    /* 32 is the timer error */
+    htim6.Init.Period = (uint32_t)(ServoRunTimeMs * 10 / ROC_SERVO_SPEED_DIV_STP);
 
     htim6.Instance->CNT = 0;
     htim6.Instance->ARR = htim6.Init.Period;

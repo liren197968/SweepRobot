@@ -28,7 +28,7 @@
 static ROC_ROBOT_CONTROL_s      *g_pRocRobotCtrl = NULL;
 static ROC_ROBOT_CTRL_FlAG_s    g_RocRobotCtrlFlag = {0};
 static ROC_REMOTE_CTRL_INPUT_s  g_RocRobotRemoteCtrlInput = {0};
-static ROC_ROBOT_WALK_MODE_e    g_RocRobotWalkModeStatus = ROC_ROBOT_WALK_MODE_HEXAPOD;
+static ROC_ROBOT_RUN_MODE_e     g_RocRobotRunModeStatus = ROC_ROBOT_RUN_MODE_HEXAPOD;
 
 
 /*********************************************************************************
@@ -44,9 +44,9 @@ static ROC_ROBOT_WALK_MODE_e    g_RocRobotWalkModeStatus = ROC_ROBOT_WALK_MODE_H
  *  Author:
  *              ROC LiRen(2018.12.16)
 **********************************************************************************/
-static void RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_e WalkMode)
+static void RocRobotWalkModeSet(ROC_ROBOT_RUN_MODE_e WalkMode)
 {
-    g_RocRobotWalkModeStatus = WalkMode;
+    g_RocRobotRunModeStatus = WalkMode;
 }
 
 /*********************************************************************************
@@ -64,7 +64,7 @@ static void RocRobotWalkModeSet(ROC_ROBOT_WALK_MODE_e WalkMode)
 **********************************************************************************/
 static uint32_t RocRobotWalkModeGet(void)
 {
-    return g_RocRobotWalkModeStatus;
+    return g_RocRobotRunModeStatus;
 }
 
 /*********************************************************************************
@@ -1024,7 +1024,11 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
     ROC_ROBOT_MOVE_STATUS_e     MoveStatus;
 
-    if(TIM6 == htim->Instance)
+    if(TIM2 == htim->Instance)
+    {
+        RocBeeperTaskBackground();
+    }
+    else if(TIM6 == htim->Instance)
     {
         MoveStatus = RocRobotMoveStatus_Get();
 

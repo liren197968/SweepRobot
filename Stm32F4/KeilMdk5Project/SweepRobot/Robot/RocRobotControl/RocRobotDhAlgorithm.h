@@ -128,29 +128,10 @@
 #define ROC_ROBOT_RUN_SPEED_DEFAULT                 (ROC_SERVO_PWM_CYCLE * ROC_SERVO_SPEED_DIV_STP * ROC_SERVO_SPEED_DOWN_MAG)
 
 
-typedef struct _ROC_ROBOT_COORD_s
-{
-    float               X;
-    float               Y;
-    float               Z;
-    float               A;
-
-}ROC_ROBOT_COORD_s;
-
-
-typedef struct _ROC_ROBOT_IMU_DATA_s
-{
-    float               Pitch;
-    float               Roll;
-    float               Yaw;
-
-}ROC_ROBOT_IMU_DATA_s;
-
-
 typedef enum _ROC_ROBOT_WALK_MODE_e
 {
     ROC_ROBOT_WALK_MODE_HEXAPOD = 0,
-    ROC_ROBOT_WALK_MODE_QUAD,
+    ROC_ROBOT_WALK_MODE_QUADRUPED,
 
 }ROC_ROBOT_WALK_MODE_e;
 
@@ -207,6 +188,23 @@ typedef enum _ROC_ROBOT_MOVE_STATUS_e
     ROC_ROBOT_MOVE_STATUS_NUM,
 }ROC_ROBOT_MOVE_STATUS_e;
 
+
+typedef struct _ROC_ROBOT_COORD_s
+{
+    float   X;
+    float   Y;
+    float   Z;
+    float   A;
+
+}ROC_ROBOT_COORD_s;
+
+typedef struct _ROC_ROBOT_IMU_DATA_s
+{
+    float   Pitch;
+    float   Roll;
+    float   Yaw;
+
+}ROC_ROBOT_IMU_DATA_s;
 
 typedef struct _ROC_PHOENIX_GAIT_s
 {
