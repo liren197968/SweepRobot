@@ -114,6 +114,7 @@
 #define ROC_ROBOT_DEFAULT_LEG_STEP                  40
 #define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
 #define ROC_ROBOT_DEFAULT_FEET_LIFT                 24
+#define ROC_ROBOT_QUAD_MODE_FEET_LIFT               40
 
 
 //#define ROC_ROBOT_GAIT_DEBUG
@@ -146,6 +147,13 @@ typedef struct _ROC_ROBOT_IMU_DATA_s
 }ROC_ROBOT_IMU_DATA_s;
 
 
+typedef enum _ROC_ROBOT_WALK_MODE_e
+{
+    ROC_ROBOT_WALK_MODE_HEXAPOD = 0,
+    ROC_ROBOT_WALK_MODE_QUAD,
+
+}ROC_ROBOT_WALK_MODE_e;
+
 typedef enum _ROC_ROBOT_LEG_JOINT_e
 {
     ROC_ROBOT_LEG_HIP_JOINT = 0,
@@ -154,7 +162,6 @@ typedef enum _ROC_ROBOT_LEG_JOINT_e
 
     ROC_ROBOT_LEG_JOINT_NUM,
 }ROC_ROBOT_LEG_JOINT_e;
-
 
 typedef enum _ROC_ROBOT_LEG_e
 {
@@ -272,6 +279,8 @@ typedef struct _ROC_PHOENIX_STATE_s
     ROC_ROBOT_IMU_DATA_s        RefImuAngle;            // IMU reference control angle for robot walking
     ROC_ROBOT_IMU_DATA_s        CurImuAngle;            // Robot current IMU angle when walking
 #endif
+
+    ROC_ROBOT_WALK_MODE_e       WalkMode;               // Robot current walk mode
 
     //[TIMING]
     uint8_t                     InputTimeDelay;         // Delay that depends on the input to get the "sneaking" effect
