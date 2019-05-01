@@ -29,7 +29,7 @@ typedef struct _ROC_BEEPER_CTRL_s
 
 
 void RocBeeperTaskBackground(void);
-void RocBeeperBlink(uint16_t PeriodTime, uint16_t BlinkTimes);
+void RocBeeperBlink(uint16_t BlinkTimes, uint16_t PeriodTime);
 ROC_RESULT RocBeeperInit(void);
 
 #endif

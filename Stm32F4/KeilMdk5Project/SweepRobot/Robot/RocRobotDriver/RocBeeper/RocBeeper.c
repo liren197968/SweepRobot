@@ -142,8 +142,6 @@ static void RocBeeperTimerPeriodSet(uint16_t Period)
     if(RET_OK != Ret)
     {
         ROC_LOGE("Beeper timer stop is in error!");
-
-        while(1);
     }
 
     htim2.Init.Period = Period;
@@ -179,7 +177,7 @@ static void RocBeeperTimerPeriodSet(uint16_t Period)
  *  Author:
  *              ROC LiRen(2019.01.06)
 **********************************************************************************/
-void RocBeeperBlink(uint16_t PeriodTime, uint16_t BlinkTimes)
+void RocBeeperBlink(uint16_t BlinkTimes, uint16_t PeriodTime)
 {
     if(ROC_BEEPER_BLINK_FOREVER == BlinkTimes)
     {
@@ -191,6 +189,8 @@ void RocBeeperBlink(uint16_t PeriodTime, uint16_t BlinkTimes)
     }
 
     RocBeeperTimerPeriodSet(PeriodTime);
+
+    RocBeeperOn();
 }
 
 /*********************************************************************************
@@ -236,10 +236,8 @@ ROC_RESULT RocBeeperInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    RocBeeperOn();
     RocBeeperOff();
     RocBeeperTimerStart();
-    //RocBeeperBlink(2, 300);
 
     if(RET_OK != Ret)
     {
