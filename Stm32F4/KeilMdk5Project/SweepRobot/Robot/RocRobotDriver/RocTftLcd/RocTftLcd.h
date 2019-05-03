@@ -22,6 +22,11 @@
 #define ROC_TFT_LCD_Y_SIZE              320
 
 
+#define ROC_TFT_LCD_SUPPORT_MAX_NUM     99999.999999
+#define ROC_TFT_LCD_SUPPORT_MIN_NUM     0
+#define ROC_TFT_LCD_SUPPORT_NUM_LEN     12
+
+
 #if ROC_TFT_LCD_HORIZONTAL
 #define ROC_TFT_LCD_X_MAX_PIXEL         ROC_TFT_LCD_Y_SIZE
 #define ROC_TFT_LCD_Y_MAX_PIXEL         ROC_TFT_LCD_X_SIZE
@@ -70,12 +75,18 @@ typedef enum _ROC_TFT_LCD_SPI_DAT_SPEED_e
 
 ROC_RESULT RocTftLcdInit(void);
 void RocTftLcdAllClear(uint16_t BakColor);
+void RocTftLcdShowErrorMsg(uint8_t *pStr);
 void RocTftLcdDrawPoint(uint16_t X, uint16_t Y, uint16_t Color);
-void RocDrawFontDigitalTubeNum(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint16_t Num);
+ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString);
+void RocTftLcdDrawTubeNum(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint16_t Num);
 void RocTftLcdDrawLine(uint16_t XStart, uint16_t YStart,uint16_t XEnd, uint16_t YEnd,uint16_t Color);
 void RocTftLcdDrawCircle(uint16_t X, uint16_t Y, uint16_t R, uint16_t Color);
 void RocTftLcdDrawRectangle(uint16_t X, uint16_t Y, uint16_t W, uint16_t H, uint16_t Color);
 void RocTftLcdDrawRectangle2(uint16_t X, uint16_t Y, uint16_t W, uint16_t H, uint8_t Mode);
+void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint8_t *pStr);
+void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint8_t *pStr);
+void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, double Num);
+void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, double Num);
 
 
 #endif

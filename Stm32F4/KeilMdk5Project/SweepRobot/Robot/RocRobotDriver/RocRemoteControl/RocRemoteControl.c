@@ -13,6 +13,7 @@
 #include "usbh_hid_parser.h"
 
 #include "RocLog.h"
+#include "RocTftLcd.h"
 #include "RocRemoteControl.h"
 
 
@@ -23,114 +24,6 @@ static uint8_t g_RemoteRxBuffer[ROC_REMOTE_MAX_NUM_LEN_SEND] = {ROC_NONE};
 
 
 #ifdef ROC_REMOTE_USB_CONTROL
-/*********************************************************************************
- *  Description:
- *              Double data to string data
- *
- *  Parameter:
- *              DoublueData: the double data
- *              pString:     the pointer to the string memory
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2019.04.20)
-**********************************************************************************/
-static ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
-{
-    uint8_t         i = 0;
-    double          DecimalData;
-    int32_t         IntegerData;
-
-    IntegerData = (int32_t)DoubleData;
-    DecimalData = DoubleData - IntegerData;
-
-    if(IntegerData >= 100)
-    {
-        pString[i] = 48 + IntegerData / 100;
-        IntegerData = IntegerData % 100;
-        i++;
-    }
-    else if(IntegerData < 100 && i != 0)
-    {
-        pString[i] = 0 + 48;
-        i++;
-    }
-
-    if(IntegerData >= 10)
-    {
-        pString[i] = 48 + IntegerData / 10;
-        IntegerData = IntegerData % 10;
-        i++;
-    }
-    else if(IntegerData < 10 && i != 0)
-    {
-        pString[i] = 48;
-        i++;
-    }
-
-    pString[i] = 48 + IntegerData;
-
-    if(DecimalData >= 0.000001)
-    {
-        i++;
-
-        pString[i]='.';
-
-        i++;
-
-        IntegerData = (int)(DecimalData * 1000000);
-        pString[i] = 48 + IntegerData / 100000;
-        IntegerData = IntegerData % 100000;
-
-        if(IntegerData > 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData / 10000;
-            IntegerData = IntegerData % 10;
-        }
-
-        if(IntegerData > 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData / 1000;
-            IntegerData = IntegerData % 10;
-        }
-
-        if(IntegerData > 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData / 100;
-            IntegerData = IntegerData % 10;
-        }
-
-        if(IntegerData > 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData / 10;
-            IntegerData = IntegerData % 10;
-        }
-
-        if(IntegerData >= 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData;
-        }
-    }
-
-    i++;
-
-    pString[i]='\0';
-
-    return RET_OK;
-}
-
 /*********************************************************************************
  *  Description:
  *              Send duoble data to PC serial

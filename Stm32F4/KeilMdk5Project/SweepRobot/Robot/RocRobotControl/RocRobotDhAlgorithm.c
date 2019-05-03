@@ -702,9 +702,9 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
         MaxError = XStepError;
     }
 
-    RocDrawFontDigitalTubeNum(2, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, (uint16_t)(fabs(MaxError) / ROC_ROBOT_PID_CONST_P / 10));
-    RocDrawFontDigitalTubeNum(32, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, ((uint16_t)fabs(MaxError) / ROC_ROBOT_PID_CONST_P) % 10);
-    RocTftLcdDrawGbk24Number(120, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, fabs(MaxError));
+    RocTftLcdDrawTubeNum(2, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, (uint16_t)(fabs(MaxError) / ROC_ROBOT_PID_CONST_P / 10));
+    RocTftLcdDrawTubeNum(32, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, ((uint16_t)fabs(MaxError) / ROC_ROBOT_PID_CONST_P) % 10);
+    RocTftLcdDrawGbk24Num(120, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, fabs(MaxError));
 
     RocRobotStepErrorCheck(&XStepError);
 

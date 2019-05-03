@@ -453,7 +453,36 @@ void RocTftLcdAllClear(uint16_t BakColor)
 
     ROC_TFT_LCD_RS_SET();
 
-    for(i = 0; i<ROC_TFT_LCD_X_MAX_PIXEL * ROC_TFT_LCD_Y_MAX_PIXEL; i++)
+    for(i = 0; i < ROC_TFT_LCD_X_MAX_PIXEL * ROC_TFT_LCD_Y_MAX_PIXEL; i++)
+    {
+        //RocTftLcdWrite16Dat(BakColor);
+        RocSpiWriteData(BakColor>>8);
+        RocSpiWriteData(BakColor);
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Clear the TFT LCD selected region with background colour
+ *
+ *  Parameter:
+ *              BakColor: the background colour of TFT LCD
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdRegionClear(uint16_t XStart, uint16_t YStart, uint16_t XEnd, uint16_t YEnd, uint16_t BakColor)
+{
+    unsigned int i;
+
+    RocTftLcdSetRegion(XStart, YStart, XEnd, YEnd);
+
+    ROC_TFT_LCD_RS_SET();
+
+    for(i = 0; i < (XEnd - XStart) * (YEnd - YStart); i++)
     {
         //RocTftLcdWrite16Dat(BakColor);
         RocSpiWriteData(BakColor>>8);
@@ -788,7 +817,7 @@ static void RocTftLcdDisplayButtonUp(uint16_t XStart,uint16_t YStart,uint16_t XE
 
 /*********************************************************************************
  *  Description:
- *              Draw a button on TFT LCD
+ *              Show a string on TFT LCD
  *
  *  Parameter:
  *              X:    X position
@@ -803,7 +832,7 @@ static void RocTftLcdDisplayButtonUp(uint16_t XStart,uint16_t YStart,uint16_t XE
  *  Author:
  *              ROC LiRen(2019.04.21)
 **********************************************************************************/
-static void RocTftLcdDrawGbk16Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint8_t *pStr)
+void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint8_t *pStr)
 {
     uint16_t i = 0;
     uint16_t j = 0;
@@ -838,7 +867,7 @@ static void RocTftLcdDrawGbk16Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
                 {
                     for(j = 0; j < 8; j++)
                     {
-                        if(asc16[k * 16 + i] & (0x80 >> j))
+                        if(g_Ascii16[k * 16 + i] & (0x80 >> j))
                         {
                             RocTftLcdDrawPoint(X + j, Y + i, Fc);
                         }
@@ -859,15 +888,15 @@ static void RocTftLcdDrawGbk16Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
         }
         else
         {
-            for(k = 0; k < hz16_num; k++)
+            for(k = 0; k < ROC_TFT_LCD_HZ16_NUM; k++)
             {
-                if((hz16[k].Index[0] == *(pStr)) && (hz16[k].Index[1] == *(pStr + 1)))
+                if((g_Hz16[k].Index[0] == *(pStr)) && (g_Hz16[k].Index[1] == *(pStr + 1)))
                 {
                     for(i = 0; i < 16; i++)
                     {
                         for(j = 0; j < 8; j++)
                         {
-                            if(hz16[k].Msk[i * 2] & (0x80 >> j))
+                            if(g_Hz16[k].Msk[i * 2] & (0x80 >> j))
                             {
                                 RocTftLcdDrawPoint(X + j, Y + i, Fc);
                             }
@@ -882,7 +911,7 @@ static void RocTftLcdDrawGbk16Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
 
                         for(j = 0; j < 8; j++)
                         {
-                            if(hz16[k].Msk[i * 2 + 1] & (0x80 >> j))
+                            if(g_Hz16[k].Msk[i * 2 + 1] & (0x80 >> j))
                             {
                                 RocTftLcdDrawPoint(X + j + 8, Y + i, Fc);
                             }
@@ -906,7 +935,7 @@ static void RocTftLcdDrawGbk16Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
 
 /*********************************************************************************
  *  Description:
- *              Draw a button on TFT LCD
+ *              Show a string on TFT LCD
  *
  *  Parameter:
  *              X:    X position
@@ -921,7 +950,7 @@ static void RocTftLcdDrawGbk16Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
  *  Author:
  *              ROC LiRen(2019.04.21)
 **********************************************************************************/
-static void RocTftLcdDrawGbk24Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint8_t *pStr)
+void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint8_t *pStr)
 {
     uint16_t i = 0;
     uint16_t j = 0;
@@ -946,7 +975,7 @@ static void RocTftLcdDrawGbk24Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
             {
                 for(j = 0; j < 8; j++)
                 {
-                    if(asc16[k * 16 + i] & (0x80 >> j))
+                    if(g_Ascii16[k * 16 + i] & (0x80 >> j))
                     {
                         RocTftLcdDrawPoint(X + j, Y + i, Fc);
                     }
@@ -965,15 +994,15 @@ static void RocTftLcdDrawGbk24Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
         }
         else
         {
-            for(k = 0; k < hz24_num; k++)
+            for(k = 0; k < ROC_TFT_LCD_HZ24_NUM; k++)
             {
-                if((hz24[k].Index[0] == *(pStr)) && (hz24[k].Index[1] == *(pStr + 1)))
+                if((g_Hz24[k].Index[0] == *(pStr)) && (g_Hz24[k].Index[1] == *(pStr + 1)))
                 {
                     for(i = 0; i < 24; i++)
                     {
                         for(j = 0; j < 8; j++)
                         {
-                            if(hz24[k].Msk[i*3] & (0x80 >> j))
+                            if(g_Hz24[k].Msk[i*3] & (0x80 >> j))
                             {
                                 RocTftLcdDrawPoint(X + j, Y + i, Fc);
                             }
@@ -988,7 +1017,7 @@ static void RocTftLcdDrawGbk24Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
 
                         for(j = 0; j < 8; j++)
                         {
-                            if(hz24[k].Msk[i * 3 + 1] & (0x80 >> j))
+                            if(g_Hz24[k].Msk[i * 3 + 1] & (0x80 >> j))
                             {
                                 RocTftLcdDrawPoint(X + j + 8, Y + i, Fc);
                             }
@@ -1003,7 +1032,7 @@ static void RocTftLcdDrawGbk24Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
 
                         for(j=0;j<8;j++)
                         {
-                            if(hz24[k].Msk[i * 3 + 2] & (0x80 >> j))
+                            if(g_Hz24[k].Msk[i * 3 + 2] & (0x80 >> j))
                             {
                                 RocTftLcdDrawPoint(X + j + 16, Y + i, Fc);
                             }
@@ -1027,6 +1056,244 @@ static void RocTftLcdDrawGbk24Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
 
 /*********************************************************************************
  *  Description:
+ *              Double data to string data
+ *
+ *  Parameter:
+ *              DoubleData: the double data
+ *              pString:    the pointer to the string memory
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.20)
+**********************************************************************************/
+ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
+{
+    uint8_t     i = 0;
+    double      DecimalData;
+    int32_t     IntegerData;
+
+    if(DoubleData >= 100000)
+    {
+        return RET_ERROR;
+    }
+
+    IntegerData = (int32_t)DoubleData;
+    DecimalData = DoubleData - IntegerData;
+
+    if(IntegerData >= 10000)
+    {
+        pString[i] = 48 + IntegerData / 10000;
+        IntegerData = IntegerData % 10000;
+        i++;
+    }
+
+    if(IntegerData >= 1000)
+    {
+        pString[i] = 48 + IntegerData / 1000;
+        IntegerData = IntegerData % 1000;
+        i++;
+    }
+    else if(IntegerData < 1000 && i != 0)
+    {
+        pString[i] = 0 + 48;
+        i++;
+    }
+
+    if(IntegerData >= 100)
+    {
+        pString[i] = 48 + IntegerData / 100;
+        IntegerData = IntegerData % 100;
+        i++;
+    }
+    else if(IntegerData < 100 && i != 0)
+    {
+        pString[i] = 0 + 48;
+        i++;
+    }
+
+    if(IntegerData >= 10)
+    {
+        pString[i] = 48 + IntegerData / 10;
+        IntegerData = IntegerData % 10;
+        i++;
+    }
+    else if(IntegerData < 10 && i != 0)
+    {
+        pString[i] = 48;
+        i++;
+    }
+
+    pString[i] = 48 + IntegerData;
+
+    if(DecimalData >= 0.000001)
+    {
+        i++;
+
+        pString[i]='.';
+
+        i++;
+
+        IntegerData = (int)(DecimalData * 1000000);
+        pString[i] = 48 + IntegerData / 100000;
+        IntegerData = IntegerData % 100000;
+
+        if(IntegerData > 0)
+        {
+            i++;
+
+            pString[i] = 48 + IntegerData / 10000;
+            IntegerData = IntegerData % 10;
+        }
+
+        if(IntegerData > 0)
+        {
+            i++;
+
+            pString[i] = 48 + IntegerData / 1000;
+            IntegerData = IntegerData % 10;
+        }
+
+        if(IntegerData > 0)
+        {
+            i++;
+
+            pString[i] = 48 + IntegerData / 100;
+            IntegerData = IntegerData % 10;
+        }
+
+        if(IntegerData > 0)
+        {
+            i++;
+
+            pString[i] = 48 + IntegerData / 10;
+            IntegerData = IntegerData % 10;
+        }
+
+        if(IntegerData >= 0)
+        {
+            i++;
+
+            pString[i] = 48 + IntegerData;
+        }
+    }
+
+    i++;
+
+    pString[i]='\0';
+
+    return RET_OK;
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Show a error massage on TFT LCD
+ *
+ *  Parameter:
+ *              pStr: the pointer to errot massage string
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+void RocTftLcdShowErrorMsg(uint8_t *pStr)
+{
+    RocTftLcdDrawGbk24Str(120, 210, ROC_TFT_LCD_COLOR_RED, ROC_TFT_LCD_COLOR_YELLOW, pStr);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Show a double number on TFT LCD
+ *
+ *  Parameter:
+ *              X:    X position
+ *              Y:    Y position
+ *              Fc:   font colour
+ *              Bc:   background colour
+ *              Num:  the display double number
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, double Num)
+{
+    ROC_RESULT Ret = RET_OK;
+    uint8_t NumStr[ROC_TFT_LCD_SUPPORT_NUM_LEN + 1];
+
+    if(ROC_TFT_LCD_SUPPORT_MAX_NUM < Num
+    || ROC_TFT_LCD_SUPPORT_MIN_NUM > Num)
+    {
+        ROC_LOGE("Input data is out of the TFT LCD show range(%lf)", Num);
+        RocTftLcdShowErrorMsg("DATA ERROR!");
+    }
+    else
+    {
+        Ret = RocDoubleDatToStringDat(Num, NumStr);
+        if(RET_OK == Ret)
+        {
+            RocTftLcdRegionClear(X, Y, X + ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16, Y + ROC_TFT_LCD_HEIGHT_GBK_16, Bc);
+            RocTftLcdDrawGbk16Str(X, Y, Fc, Bc, NumStr);
+        }
+        else
+        {
+            ROC_LOGE("Double to string convertion is in error!");
+            RocTftLcdShowErrorMsg("CONVERT ERROR!");
+        }
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Show a double number on TFT LCD
+ *
+ *  Parameter:
+ *              X:    X position
+ *              Y:    Y position
+ *              Fc:   font colour
+ *              Bc:   background colour
+ *              Num:  the display double number
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, double Num)
+{
+    ROC_RESULT Ret = RET_OK;
+    uint8_t NumStr[ROC_TFT_LCD_SUPPORT_NUM_LEN + 1];
+
+    if(ROC_TFT_LCD_SUPPORT_MAX_NUM < Num
+    || ROC_TFT_LCD_SUPPORT_MIN_NUM > Num)
+    {
+        ROC_LOGE("Input data is out of the TFT LCD show range(%lf)", Num);
+        RocTftLcdShowErrorMsg("DATA ERROR!");
+    }
+    else
+    {
+        Ret = RocDoubleDatToStringDat(Num, NumStr);
+        if(RET_OK == Ret)
+        {
+            RocTftLcdRegionClear(X, Y, X + ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_24, Y + ROC_TFT_LCD_HEIGHT_GBK_24, Bc);
+            RocTftLcdDrawGbk24Str(X, Y, Fc, Bc, NumStr);
+        }
+        else
+        {
+            ROC_LOGE("Double to string convertion is in error!");
+            RocTftLcdShowErrorMsg("CONVERT ERROR!");
+        }
+    }
+}
+
+/*********************************************************************************
+ *  Description:
  *              Draw a button on TFT LCD
  *
  *  Parameter:
@@ -1042,7 +1309,7 @@ static void RocTftLcdDrawGbk24Font(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t
  *  Author:
  *              ROC LiRen(2019.04.21)
 **********************************************************************************/
-void RocDrawFontDigitalTubeNum(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint16_t Num)
+void RocTftLcdDrawTubeNum(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint16_t Num)
 {
     uint16_t i = 0;
     uint16_t j = 0;
@@ -1053,7 +1320,7 @@ void RocDrawFontDigitalTubeNum(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc,
     {
         for(j = 0; j < 4; j++)
         {
-            c = *(sz32 + Num * 32 * 4 + i * 4 + j);
+            c = *(g_Sz32 + Num * 32 * 4 + i * 4 + j);
 
             for(k = 0; k < 8; k++)
             {
@@ -1090,36 +1357,36 @@ static void RocTftLcdMainMenuTest(void)
 {
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
 
-    RocTftLcdDrawGbk16Font(16,2,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"全动电子技术");
-    RocTftLcdDrawGbk16Font(16,20,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"液晶测试程序");
+    RocTftLcdDrawGbk16Str(16,2,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"全动电子技术");
+    RocTftLcdDrawGbk16Str(16,20,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"液晶测试程序");
 
     RocTftLcdBgr2Rgb(0);
     RocTftLcdDisplayButtonDown(0,0,0,0);
-    RocTftLcdDrawGbk24Font(0,0,0,0,0);
+    RocTftLcdDrawGbk24Str(0,0,0,0,0);
 
     RocTftLcdDisplayButtonUp(15,38,113,58); //XStart,YStart,XEnd,YEnd
-    RocTftLcdDrawGbk16Font(16,40,ROC_TFT_LCD_COLOR_GREEN,ROC_TFT_LCD_COLOR_GRAY_0,"颜色填充测试");
+    RocTftLcdDrawGbk16Str(16,40,ROC_TFT_LCD_COLOR_GREEN,ROC_TFT_LCD_COLOR_GRAY_0,"颜色填充测试");
 
     RocTftLcdDisplayButtonUp(15,68,113,88); //XStart,YStart,XEnd,YEnd
-    RocTftLcdDrawGbk16Font(16,70,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"文字显示测试");
+    RocTftLcdDrawGbk16Str(16,70,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"文字显示测试");
 
     RocTftLcdDisplayButtonUp(15,98,113,118); //XStart,YStart,XEnd,YEnd
-    RocTftLcdDrawGbk16Font(16,100,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"图片显示测试");;
+    RocTftLcdDrawGbk16Str(16,100,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"图片显示测试");;
 
-    //RocTftLcdDrawGbk16Font(16,120,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"Welcome");
-    RocTftLcdDrawGbk16Font(16,140,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "Welcome");
+    //RocTftLcdDrawGbk16Str(16,120,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"Welcome");
+    RocTftLcdDrawGbk16Str(16,140,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "Welcome");
 
-    RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[5]);
+    RocTftLcdDrawTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[5]);
     HAL_Delay(1000);
-    RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[4]);
+    RocTftLcdDrawTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[4]);
     HAL_Delay(1000);
-    RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[3]);
+    RocTftLcdDrawTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[3]);
     HAL_Delay(1000);
-    RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[2]);
+    RocTftLcdDrawTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[2]);
     HAL_Delay(1000);
-    RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[1]);
+    RocTftLcdDrawTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[1]);
     HAL_Delay(1000);
-    RocDrawFontDigitalTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[0]);	
+    RocTftLcdDrawTubeNum(100,125,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,g_DisplayNum[0]);	
 }
 
 /*********************************************************************************
@@ -1140,13 +1407,13 @@ static void RocTftLcdNumTest(void)
     uint8_t i=0;
 
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
-    RocTftLcdDrawGbk16Font(16,20,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"Num Test");
+    RocTftLcdDrawGbk16Str(16,20,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"Num Test");
     HAL_Delay(1000);
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
 
     for(i = 0; i < 10; i++)
     {
-        RocDrawFontDigitalTubeNum((i % 3) * 40, 32 * (i / 3) + 30, ROC_TFT_LCD_COLOR_RED, ROC_TFT_LCD_COLOR_GRAY_0, g_DisplayNum[i + 1]);
+        RocTftLcdDrawTubeNum((i % 3) * 40, 32 * (i / 3) + 30, ROC_TFT_LCD_COLOR_RED, ROC_TFT_LCD_COLOR_GRAY_0, g_DisplayNum[i + 1]);
         HAL_Delay(100);
     }
 }
@@ -1166,15 +1433,15 @@ static void RocTftLcdNumTest(void)
 static void RocTftLcdFontTest(void)
 {
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
-    RocTftLcdDrawGbk16Font(16,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"文字显示测试");
+    RocTftLcdDrawGbk16Str(16,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"文字显示测试");
 
     HAL_Delay(1000);
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
-    RocTftLcdDrawGbk16Font(16,30,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"全动电子技术");
-    RocTftLcdDrawGbk16Font(16,50,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"专注液晶批发");
-    RocTftLcdDrawGbk16Font(16,70,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "全程技术支持");
-    RocTftLcdDrawGbk16Font(0,100,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"Tel:15989313508");
-    RocTftLcdDrawGbk16Font(0,130,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "www.qdtech.net");	
+    RocTftLcdDrawGbk16Str(16,30,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"全动电子技术");
+    RocTftLcdDrawGbk16Str(16,50,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"专注液晶批发");
+    RocTftLcdDrawGbk16Str(16,70,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "全程技术支持");
+    RocTftLcdDrawGbk16Str(0,100,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"Tel:15989313508");
+    RocTftLcdDrawGbk16Str(0,130,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "www.qdtech.net");	
     HAL_Delay(1500);
 }
 
@@ -1197,7 +1464,7 @@ static void RocTftLcdColorTest(void)
 
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
 
-    RocTftLcdDrawGbk16Font(20,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"颜色填充测试");
+    RocTftLcdDrawGbk16Str(20,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"颜色填充测试");
     HAL_Delay(1200);
 
     while(i--)
@@ -1229,7 +1496,7 @@ static void RocTftLcdShowImage(const unsigned char *pStr)
     uint16_t picH,picL;
 
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
-    RocTftLcdDrawGbk16Font(16,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0, "图片显示测试");
+    RocTftLcdDrawGbk16Str(16,10,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0, "图片显示测试");
     HAL_Delay(1000);
 
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
@@ -1271,7 +1538,7 @@ static void RocTftLcdTestDemo(void)
     RocTftLcdColorTest();
     RocTftLcdNumTest();
     RocTftLcdFontTest();
-    RocTftLcdShowImage(gImage_qq);
+    RocTftLcdShowImage(g_ImageQQ);
     HAL_Delay(1500);
 }
 
