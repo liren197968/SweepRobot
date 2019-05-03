@@ -335,7 +335,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F405xx,ARM_MATH_CM4,__CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\Robot\RocRobotControl;..\Robot\RocRobotDriver\RocPca9685;..\Robot\RocRobotDriver\RocEeprom;..\Robot\RocRobotDriver\RocServo;..\Robot\RocRobotDriver\RocBluetooth;..\Robot\RocRobotDriver\RocLog;..\Robot\RocRobotDriver\RocError;..\Robot\RocRobotDriver\RocLed;..\Robot\RocRobotDriver\RocOled;..\Robot\RocRobotDriver\RocImu;..\Robot\RocRobotDriver\RocLcd;..\Robot\RocRobotDriver\RocZmod4410;..\Robot\RocRobotDriver\RocBeeper;..\Robot\RocRobotDriver\RocMotor;..\Robot\RocRobotDriver\RocBattery;..\Robot\RocRobotDriver\RocRemoteControl;..\Zmod4410\Inc;..\Zmod4410\Lib;..\Zmod4410\Src;..\USB\USBHost;..\Middlewares\ST\STM32_USB_Host_Library\Core\Inc;..\Middlewares\ST\STM32_USB_Host_Library\Core\Src;..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Inc;..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Src;..\Robot\RocRobotDriver\RocI2c;..\Robot\RocRobotDriver\RocImu\RocMpu6050;..\Robot\RocRobotDriver\RocImu\RocMpu6050\eMPL;..\Robot\RocRobotDriver\RocTftLcd</IncludePath>
+              <IncludePath>../Inc;../Drivers/STM32F4xx_HAL_Driver/Inc;../Drivers/STM32F4xx_HAL_Driver/Inc/Legacy;../Drivers/CMSIS/Device/ST/STM32F4xx/Include;../Drivers/CMSIS/Include;..\Robot\RocRobotControl;..\Robot\RocRobotDriver\RocPca9685;..\Robot\RocRobotDriver\RocEeprom;..\Robot\RocRobotDriver\RocServo;..\Robot\RocRobotDriver\RocBluetooth;..\Robot\RocRobotDriver\RocLog;..\Robot\RocRobotDriver\RocError;..\Robot\RocRobotDriver\RocLed;..\Robot\RocRobotDriver\RocOled;..\Robot\RocRobotDriver\RocImu;..\Robot\RocRobotDriver\RocLcd;..\Robot\RocRobotDriver\RocZmod4410;..\Robot\RocRobotDriver\RocBeeper;..\Robot\RocRobotDriver\RocMotor;..\Robot\RocRobotDriver\RocBattery;..\Robot\RocRobotDriver\RocRemoteControl;..\Zmod4410\Inc;..\Zmod4410\Lib;..\Zmod4410\Src;..\USB\USBHost;..\Middlewares\ST\STM32_USB_Host_Library\Core\Inc;..\Middlewares\ST\STM32_USB_Host_Library\Core\Src;..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Inc;..\Middlewares\ST\STM32_USB_Host_Library\Class\HID\Src;..\Robot\RocRobotDriver\RocI2c;..\Robot\RocRobotDriver\RocImu\RocMpu6050;..\Robot\RocRobotDriver\RocImu\RocMpu6050\eMPL;..\Robot\RocRobotDriver\RocTftLcd;..\Robot\RocRobotDriver\RocOled</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -673,6 +673,11 @@
               <FileName>RocTftLcd.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\Robot\RocRobotDriver\RocTftLcd\RocTftLcd.c</FilePath>
+            </File>
+            <File>
+              <FileName>RocOled.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Robot\RocRobotDriver\RocOled\RocOled.c</FilePath>
             </File>
           </Files>
         </Group>
