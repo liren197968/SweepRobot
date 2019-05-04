@@ -29,7 +29,7 @@ void RocSimulatedI2cInit(void)
     ROC_SIMULATED_I2C_SCL(1);
     ROC_SIMULATED_I2C_SDA(1);
 }
-
+#if 0
 /*********************************************************************************
  *  Description:
  *              Send a IIC start signal
@@ -120,7 +120,7 @@ static uint8_t RocSimulatedI2cInitWaitAck(void)
 
     return 0;
 }
-
+#endif
 /*********************************************************************************
  *  Description:
  *              Send a IIC acknowledge signal

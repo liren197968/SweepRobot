@@ -209,7 +209,7 @@ ROC_RESULT RocMotorInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    RocMotorRotateDirectionSet(ROC_MOTOR_STOPPED_ROTATE);
+    //RocMotorRotateDirectionSet(ROC_MOTOR_STOPPED_ROTATE);
 
     if(RET_OK != Ret)
     {

@@ -36,7 +36,7 @@ uint8_t RocMpu6050WriteLen(uint8_t Addr,uint8_t Reg,uint8_t Len,uint8_t *Buf)
     {
         HAL_Delay(5);
 
-        ROC_LOGE("Setting PCA9685 Mode is in error, and will reset it one more time!");
+        ROC_LOGE("Write MPU6050 is in busy, and will reset it one more time!");
 
         HAL_I2C_DeInit(&hi2c2);     /* For the ST IIC BUSY flag hardware error */
         HAL_I2C_Init(&hi2c2);       /* Reset the IIC */
@@ -95,9 +95,16 @@ uint8_t RocMpu6050WriteByte(uint8_t Reg,uint8_t Dat)
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
 
     WriteStatus = HAL_I2C_Mem_Write(&hi2c2, ROC_MPU6050_ADDRESS << 1, Reg, I2C_MEMADD_SIZE_8BIT, &Dat, 1, 10);
-    if(HAL_OK != WriteStatus)
+    while(HAL_OK != WriteStatus)
     {
-        ROC_LOGE("IIC2 write reg is in error(%d)!", WriteStatus);
+        HAL_Delay(5);
+
+        ROC_LOGE("Write MPU6050 is in busy, and will reset it one more time!");
+
+        HAL_I2C_DeInit(&hi2c2);     /* For the ST IIC BUSY flag hardware error */
+        HAL_I2C_Init(&hi2c2);       /* Reset the IIC */
+
+        WriteStatus = HAL_I2C_Mem_Write(&hi2c2, ROC_MPU6050_ADDRESS << 1, Reg, I2C_MEMADD_SIZE_8BIT, &Dat, 1, 10);
     }
 
     return (uint8_t)WriteStatus;

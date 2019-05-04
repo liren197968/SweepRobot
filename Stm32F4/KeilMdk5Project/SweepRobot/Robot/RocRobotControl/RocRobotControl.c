@@ -252,7 +252,7 @@ static void RocRobotRemoteControl(void)
     {
         case ROC_ROBOT_CTRL_CMD_MOSTAND:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = 0;
@@ -273,7 +273,7 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_FORWARD:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
@@ -296,7 +296,7 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_BAKWARD:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
@@ -319,7 +319,7 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_LFCLOCK:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = 0;
@@ -340,7 +340,7 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_RGCLOCK:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = 0;
                 g_RocRobotRemoteCtrlInput.Y = 0;
@@ -361,7 +361,7 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_LFRWARD:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
                 g_RocRobotRemoteCtrlInput.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
@@ -384,7 +384,7 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_RFRWARD:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = ROC_ROBOT_DEFAULT_LEG_STEP;
                 g_RocRobotRemoteCtrlInput.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
@@ -407,7 +407,7 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_LBKWARD:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
                 g_RocRobotRemoteCtrlInput.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
@@ -430,7 +430,7 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_RBKWARD:
         {
-            if(ROC_ROBOT_WALK_MODE_HEXAPOD == RocRobotRunModeGet())
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RocRobotRemoteCtrlInput.X = ROC_ROBOT_DEFAULT_LEG_STEP;
                 g_RocRobotRemoteCtrlInput.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
@@ -819,7 +819,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    Ret = RocBeeperInit();
+    //Ret = RocBeeperInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -875,17 +875,17 @@ void RocRobotInit(void)
         while(1);
     }
 
-    RocBeeperBlink(2, 200);
+    //RocBeeperBlink(2, 200);
 
     ROC_LOGI("Robot hardware init is in success, and the system start running.");
-
-    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
 
     Ret = RocRobotStartRun();
     if(RET_OK == Ret)
     {
         ROC_LOGW("############# Robot is running! Be careful! #############");
     }
+
+    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
 }
 
 /*********************************************************************************
@@ -996,12 +996,9 @@ static void RocRobotCtrlTaskEntry(void)
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
         RocRobotImuEulerAngleGet(&g_pRocRobotCtrl->CurState.CurImuAngle);
 
-#ifdef ROC_ROBOT_GAIT_DEBUG
-        ROC_LOGI("Pitch: %.2f, Roll: %.2f, Yaw: %.2f",  g_pRocRobotCtrl->CurState.CurImuAngle.Pitch,
-                                                        g_pRocRobotCtrl->CurState.CurImuAngle.Roll,
-                                                        g_pRocRobotCtrl->CurState.CurImuAngle.Yaw);
-#endif
-
+        //RocTftLcdDrawGbk16Num(10, 10, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Pitch);
+        //RocTftLcdDrawGbk16Num(30, 10, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Roll);
+        //RocTftLcdDrawGbk16Num(50, 10, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Yaw);
 #endif
     }
 }

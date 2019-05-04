@@ -47,7 +47,7 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
         ROC_LOGI("SPI data send is in error");
     }
 }
-
+#if 0
 /*********************************************************************************
  *  Description:
  *              Set the TFT LCD SPI data transmission format
@@ -106,10 +106,10 @@ static void RocTftLcdSpiSpeedSet(ROC_TFT_LCD_SPI_DAT_SPEED_e Speed)
 
 /*********************************************************************************
  *  Description:
- *              Write a byte data with SPI communication
+ *              Write command to LCD register
  *
  *  Parameter:
- *              Data: the data written to SPI
+ *              Cmd: the command written to LCD register
  *
  *  Return:
  *              None
@@ -117,13 +117,62 @@ static void RocTftLcdSpiSpeedSet(ROC_TFT_LCD_SPI_DAT_SPEED_e Speed)
  *  Author:
  *              ROC LiRen(2019.04.21)
 **********************************************************************************/
-static void  RocSpiWriteData(uint8_t Data)
+static void RocTftLcdRegWriteCmd(uint8_t Reg,uint16_t Data)
+{
+    RocTftLcdWriteReg(Reg);
+    RocTftLcdWrite16Dat(Data);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Write a byte data with SPI DMA communication
+ *
+ *  Parameter:
+ *              Dat:    the data written to SPI
+ *              DatLen: the data length
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void  RocSpiDmaWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
     while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
 
-    WriteStatus = HAL_SPI_Transmit(&hspi1, &Data, 1, ROC_TFT_LCD_WRITE_TIME_OUT);
+    WriteStatus = HAL_SPI_Transmit_DMA(&hspi1, Dat, DatLen);
+    if(HAL_OK != WriteStatus)
+    {
+        ROC_LOGE("SPI write data is in error(%d)", WriteStatus);
+    }
+
+    while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY_TX);
+}
+
+#endif
+/*********************************************************************************
+ *  Description:
+ *              Write a byte data with SPI communication
+ *
+ *  Parameter:
+ *              Dat: the data written to SPI
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void  RocSpiWriteData(uint8_t Dat)
+{
+    HAL_StatusTypeDef WriteStatus;
+
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+
+    WriteStatus = HAL_SPI_Transmit(&hspi1, &Dat, 1, ROC_TFT_LCD_WRITE_TIME_OUT);
     if(HAL_OK != WriteStatus)
     {
         ROC_LOGE("SPI write data is in error(%d)", WriteStatus);
@@ -167,7 +216,7 @@ static void RocTftLcdWriteDat(uint8_t Data)
 {
     ROC_TFT_LCD_RS_SET();
 
-    RocTftLcdSpiDataFormatSet(ROC_TFT_LCD_SPI_DAT_8_BIT);
+    //RocTftLcdSpiDataFormatSet(ROC_TFT_LCD_SPI_DAT_8_BIT);
     RocSpiWriteData(Data);
 }
 
@@ -186,28 +235,11 @@ static void RocTftLcdWriteDat(uint8_t Data)
 **********************************************************************************/
 static void RocTftLcdWrite16Dat(uint16_t Data)
 {
-    RocTftLcdWriteDat(Data >> 8);
-    RocTftLcdWriteDat(Data);
-}
+    ROC_TFT_LCD_RS_SET();
 
-/*********************************************************************************
- *  Description:
- *              Write command to LCD register
- *
- *  Parameter:
- *              Cmd: the command written to LCD register
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2019.04.21)
-**********************************************************************************/
-//static void RocTftLcdRegWriteCmd(uint8_t Reg,uint16_t Data)
-//{
-//    RocTftLcdWriteReg(Reg);
-//    RocTftLcdWrite16Dat(Data);
-//}
+    RocSpiWriteData(Data >> 8);
+    RocSpiWriteData(Data);
+}
 
 /*********************************************************************************
  *  Description:
@@ -447,17 +479,20 @@ void RocTftLcdDrawPoint(uint16_t X, uint16_t Y, uint16_t Color)
 **********************************************************************************/
 void RocTftLcdAllClear(uint16_t BakColor)
 {
-    unsigned int i;
+    uint32_t i;
+
 
     RocTftLcdSetRegion(0, 0, ROC_TFT_LCD_X_MAX_PIXEL - 1, ROC_TFT_LCD_Y_MAX_PIXEL - 1);
 
     ROC_TFT_LCD_RS_SET();
 
+    //RocSpiDmaWriteData(ColorBuff, ROC_TFT_LCD_X_MAX_PIXEL * ROC_TFT_LCD_Y_MAX_PIXEL * 2);
+
     for(i = 0; i < ROC_TFT_LCD_X_MAX_PIXEL * ROC_TFT_LCD_Y_MAX_PIXEL; i++)
     {
-        //RocTftLcdWrite16Dat(BakColor);
-        RocSpiWriteData(BakColor>>8);
-        RocSpiWriteData(BakColor);
+        RocTftLcdWrite16Dat(BakColor);
+        //RocSpiWriteData(BakColor>>8);
+        //RocSpiWriteData(BakColor);
     }
 }
 
@@ -484,9 +519,9 @@ static void RocTftLcdRegionClear(uint16_t XStart, uint16_t YStart, uint16_t XEnd
 
     for(i = 0; i < (XEnd - XStart) * (YEnd - YStart); i++)
     {
-        //RocTftLcdWrite16Dat(BakColor);
-        RocSpiWriteData(BakColor>>8);
-        RocSpiWriteData(BakColor);
+        RocTftLcdWrite16Dat(BakColor);
+        //RocSpiWriteData(BakColor>>8);
+        //RocSpiWriteData(BakColor);
     }
 }
 
@@ -1557,12 +1592,10 @@ static void RocTftLcdTestDemo(void)
 **********************************************************************************/
 ROC_RESULT RocTftLcdInit(void)
 {
-    uint16_t i = 0;
     ROC_RESULT Ret = RET_OK;
 
-    RocTftLcdSpiSpeedSet(ROC_TFT_LCD_SPI_DAT_HIGH_SPEED);
-
     RocTftLcdRegInit();
+
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_DEFAULT_BAK);
 
     if(RET_OK != Ret)
@@ -1570,14 +1603,15 @@ ROC_RESULT RocTftLcdInit(void)
         RocTftLcdTestDemo();
     }
 
-    for(i = 0; i < 48; i++)
-    {
-        RocTftLcdDrawLine(0, i * 5, 320, i * 5, ROC_TFT_LCD_COLOR_WHITE);
-    }
+    RocTftLcdDrawGbk24Num(120, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, 1.1);
 
     if(RET_OK != Ret)
     {
-        ROC_LOGE("Remote usart init is in error!");
+        ROC_LOGE("TFT LCD init is in error!");
+    }
+    else
+    {
+        ROC_LOGI("TFT LCD init is in success");
     }
 
     return Ret;
