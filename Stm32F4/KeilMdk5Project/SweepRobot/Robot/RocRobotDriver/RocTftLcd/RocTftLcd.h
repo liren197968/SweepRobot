@@ -20,6 +20,14 @@
 
 #define ROC_TFT_LCD_X_SIZE              240
 #define ROC_TFT_LCD_Y_SIZE              320
+#define ROC_TFT_LCD_DATA_SIZE           16
+#define ROC_TFT_LCD_PIXEL_SIZE          (ROC_TFT_LCD_X_SIZE * ROC_TFT_LCD_Y_SIZE)
+#define ROC_TFT_LCD_ONE_PIXEL_BYTE      (ROC_TFT_LCD_DATA_SIZE / 8)
+#define ROC_TFT_LCD_PIXEL_DATA_SIZE     (ROC_TFT_LCD_PIXEL_SIZE * ROC_TFT_LCD_ONE_PIXEL_BYTE)
+
+
+#define ROC_TFT_LCD_BUFF_SIZE           (ROC_TFT_LCD_PIXEL_SIZE / 2)    /* allocate some RAM to enhance the LCD filling speed */
+#define ROC_TFT_LCD_BUFF_STORAGE_PIXEL  (ROC_TFT_LCD_BUFF_SIZE / ROC_TFT_LCD_ONE_PIXEL_BYTE)
 
 
 #define ROC_TFT_LCD_SUPPORT_MAX_NUM     99999.999999

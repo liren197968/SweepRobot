@@ -17,6 +17,7 @@
 
 
 uint8_t g_DisplayNum[10]={0,1,2,3,4,5,6,7,8,9};
+uint8_t g_TftLcdBuff[ROC_TFT_LCD_BUFF_SIZE] = {0};
 
 /**
   * @brief  TxRx Transfer completed callback.
@@ -48,32 +49,6 @@ void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
     }
 }
 #if 0
-/*********************************************************************************
- *  Description:
- *              Set the TFT LCD SPI data transmission format
- *
- *  Parameter:
- *              DatFat: the control data format
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2019.04.21)
-**********************************************************************************/
-static void RocTftLcdSpiDataFormatSet(ROC_TFT_LCD_SPI_DAT_FORMAT_e DatFot)
-{
-    hspi1.Instance->CR1 &= ~SPI_DATASIZE_16BIT;
-
-    if(ROC_TFT_LCD_SPI_DAT_8_BIT == DatFot)
-    {
-        hspi1.Instance->CR1 |= SPI_DATASIZE_8BIT;
-    }
-    else if(ROC_TFT_LCD_SPI_DAT_16_BIT == DatFot)
-    {
-        hspi1.Instance->CR1 |= SPI_DATASIZE_16BIT;
-    }
-}
 
 /*********************************************************************************
  *  Description:
@@ -106,6 +81,33 @@ static void RocTftLcdSpiSpeedSet(ROC_TFT_LCD_SPI_DAT_SPEED_e Speed)
 
 /*********************************************************************************
  *  Description:
+ *              Set the TFT LCD SPI data transmission format
+ *
+ *  Parameter:
+ *              DatFat: the control data format
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdSpiDataFormatSet(ROC_TFT_LCD_SPI_DAT_FORMAT_e DatFot)
+{
+    hspi1.Instance->CR1 &= ~SPI_DATASIZE_16BIT;
+
+    if(ROC_TFT_LCD_SPI_DAT_8_BIT == DatFot)
+    {
+        hspi1.Instance->CR1 |= SPI_DATASIZE_8BIT;
+    }
+    else if(ROC_TFT_LCD_SPI_DAT_16_BIT == DatFot)
+    {
+        hspi1.Instance->CR1 |= SPI_DATASIZE_16BIT;
+    }
+}
+
+/*********************************************************************************
+ *  Description:
  *              Write command to LCD register
  *
  *  Parameter:
@@ -122,11 +124,38 @@ static void RocTftLcdRegWriteCmd(uint8_t Reg,uint16_t Data)
     RocTftLcdWriteReg(Reg);
     RocTftLcdWrite16Dat(Data);
 }
+#endif
+
+/*********************************************************************************
+ *  Description:
+ *              Write a byte data with SPI communication
+ *
+ *  Parameter:
+ *              Dat: the data written to SPI
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void  RocSpiWriteData(uint8_t *Dat, uint16_t DatLen)
+{
+    HAL_StatusTypeDef WriteStatus;
+
+    while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY_TX);
+
+    WriteStatus = HAL_SPI_Transmit(&hspi1, Dat, DatLen, ROC_TFT_LCD_WRITE_TIME_OUT);
+    if(HAL_OK != WriteStatus)
+    {
+        ROC_LOGE("SPI write data is in error(%d)", WriteStatus);
+    }
+}
 
 /*********************************************************************************
  *  Description:
  *              Write a byte data with SPI DMA communication
- *
+ *00211.
  *  Parameter:
  *              Dat:    the data written to SPI
  *              DatLen: the data length
@@ -141,38 +170,9 @@ static void  RocSpiDmaWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+    while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY_TX);
 
     WriteStatus = HAL_SPI_Transmit_DMA(&hspi1, Dat, DatLen);
-    if(HAL_OK != WriteStatus)
-    {
-        ROC_LOGE("SPI write data is in error(%d)", WriteStatus);
-    }
-
-    while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY_TX);
-}
-
-#endif
-/*********************************************************************************
- *  Description:
- *              Write a byte data with SPI communication
- *
- *  Parameter:
- *              Dat: the data written to SPI
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2019.04.21)
-**********************************************************************************/
-static void  RocSpiWriteData(uint8_t Dat)
-{
-    HAL_StatusTypeDef WriteStatus;
-
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
-
-    WriteStatus = HAL_SPI_Transmit(&hspi1, &Dat, 1, ROC_TFT_LCD_WRITE_TIME_OUT);
     if(HAL_OK != WriteStatus)
     {
         ROC_LOGE("SPI write data is in error(%d)", WriteStatus);
@@ -194,9 +194,9 @@ static void  RocSpiWriteData(uint8_t Dat)
 **********************************************************************************/
 static void RocTftLcdWriteReg(uint8_t Reg)
 {
-   ROC_TFT_LCD_RS_CLR();
+    ROC_TFT_LCD_RS_CLR();
 
-   RocSpiWriteData(Reg);
+    RocSpiWriteData(&Reg, 1);
 }
 
 /*********************************************************************************
@@ -216,8 +216,7 @@ static void RocTftLcdWriteDat(uint8_t Data)
 {
     ROC_TFT_LCD_RS_SET();
 
-    //RocTftLcdSpiDataFormatSet(ROC_TFT_LCD_SPI_DAT_8_BIT);
-    RocSpiWriteData(Data);
+    RocSpiWriteData(&Data, 1);
 }
 
 /*********************************************************************************
@@ -235,10 +234,15 @@ static void RocTftLcdWriteDat(uint8_t Data)
 **********************************************************************************/
 static void RocTftLcdWrite16Dat(uint16_t Data)
 {
+    uint8_t Buff[2] = {0};
+
+    Buff[0] = Data >> 8;
+    Buff[1] = Data;
+
     ROC_TFT_LCD_RS_SET();
 
-    RocSpiWriteData(Data >> 8);
-    RocSpiWriteData(Data);
+    RocSpiWriteData(Buff, 2);
+    //RocSpiDmaWriteData(Buff, 2);
 }
 
 /*********************************************************************************
@@ -475,24 +479,25 @@ void RocTftLcdDrawPoint(uint16_t X, uint16_t Y, uint16_t Color)
  *              None
  *
  *  Author:
- *              ROC LiRen(2019.04.21)
+ *              ROC LiRen(2019.05.05)
 **********************************************************************************/
 void RocTftLcdAllClear(uint16_t BakColor)
 {
-    uint32_t i;
-
+    uint32_t i = 0;
 
     RocTftLcdSetRegion(0, 0, ROC_TFT_LCD_X_MAX_PIXEL - 1, ROC_TFT_LCD_Y_MAX_PIXEL - 1);
 
     ROC_TFT_LCD_RS_SET();
 
-    //RocSpiDmaWriteData(ColorBuff, ROC_TFT_LCD_X_MAX_PIXEL * ROC_TFT_LCD_Y_MAX_PIXEL * 2);
-
-    for(i = 0; i < ROC_TFT_LCD_X_MAX_PIXEL * ROC_TFT_LCD_Y_MAX_PIXEL; i++)
+    for(i = 0; i < ROC_TFT_LCD_BUFF_STORAGE_PIXEL; i++)
     {
-        RocTftLcdWrite16Dat(BakColor);
-        //RocSpiWriteData(BakColor>>8);
-        //RocSpiWriteData(BakColor);
+        g_TftLcdBuff[i * 2] = BakColor >> 8;
+        g_TftLcdBuff[i * 2 + 1] = BakColor;
+    }
+
+    for(i = 0; i < ROC_TFT_LCD_PIXEL_SIZE / ROC_TFT_LCD_BUFF_STORAGE_PIXEL; i++)
+    {
+        RocSpiDmaWriteData(g_TftLcdBuff, ROC_TFT_LCD_BUFF_SIZE);
     }
 }
 
@@ -507,21 +512,41 @@ void RocTftLcdAllClear(uint16_t BakColor)
  *              None
  *
  *  Author:
- *              ROC LiRen(2019.04.21)
+ *              ROC LiRen(2019.05.05)
 **********************************************************************************/
 static void RocTftLcdRegionClear(uint16_t XStart, uint16_t YStart, uint16_t XEnd, uint16_t YEnd, uint16_t BakColor)
 {
-    unsigned int i;
+    uint32_t i = 0;
+    uint32_t RegionPixel = 0;
+
+    RegionPixel = (XEnd - XStart) * (YEnd - YStart);
 
     RocTftLcdSetRegion(XStart, YStart, XEnd, YEnd);
 
     ROC_TFT_LCD_RS_SET();
 
-    for(i = 0; i < (XEnd - XStart) * (YEnd - YStart); i++)
+    if(ROC_TFT_LCD_BUFF_STORAGE_PIXEL < RegionPixel)
     {
-        RocTftLcdWrite16Dat(BakColor);
-        //RocSpiWriteData(BakColor>>8);
-        //RocSpiWriteData(BakColor);
+        for(i = 0; i < ROC_TFT_LCD_BUFF_STORAGE_PIXEL; i++)
+        {
+            g_TftLcdBuff[i * 2] = BakColor >> 8;
+            g_TftLcdBuff[i * 2 + 1] = BakColor;
+        }
+
+        for(i = 0; i < RegionPixel / ROC_TFT_LCD_BUFF_STORAGE_PIXEL; i++)
+        {
+            RocSpiDmaWriteData(g_TftLcdBuff, ROC_TFT_LCD_BUFF_SIZE);
+        }
+    }
+    else
+    {
+        for(i = 0; i < RegionPixel; i++)
+        {
+            g_TftLcdBuff[i * 2] = BakColor >> 8;
+            g_TftLcdBuff[i * 2 + 1] = BakColor;
+        }
+
+        RocSpiDmaWriteData(g_TftLcdBuff, RegionPixel * ROC_TFT_LCD_ONE_PIXEL_BYTE);
     }
 }
 
@@ -1065,7 +1090,7 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                             }
                         }
 
-                        for(j=0;j<8;j++)
+                        for(j = 0; j < 8; j++)
                         {
                             if(g_Hz24[k].Msk[i * 3 + 2] & (0x80 >> j))
                             {
@@ -1313,10 +1338,18 @@ void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, dou
     }
     else
     {
+        ROC_LOGN("11");
+
         Ret = RocDoubleDatToStringDat(Num, NumStr);
+        ROC_LOGN("12");
+
         if(RET_OK == Ret)
         {
+            ROC_LOGN("13");
+
             RocTftLcdRegionClear(X, Y, X + ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_24, Y + ROC_TFT_LCD_HEIGHT_GBK_24, Bc);
+            ROC_LOGN("14");
+
             RocTftLcdDrawGbk24Str(X, Y, Fc, Bc, NumStr);
         }
         else
@@ -1406,7 +1439,7 @@ static void RocTftLcdMainMenuTest(void)
     RocTftLcdDrawGbk16Str(16,70,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"文字显示测试");
 
     RocTftLcdDisplayButtonUp(15,98,113,118); //XStart,YStart,XEnd,YEnd
-    RocTftLcdDrawGbk16Str(16,100,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"图片显示测试");;
+    RocTftLcdDrawGbk16Str(16,100,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0,"图片显示测试");
 
     //RocTftLcdDrawGbk16Str(16,120,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"Welcome");
     RocTftLcdDrawGbk16Str(16,140,ROC_TFT_LCD_COLOR_RED,ROC_TFT_LCD_COLOR_GRAY_0, "Welcome");
@@ -1603,7 +1636,11 @@ ROC_RESULT RocTftLcdInit(void)
         RocTftLcdTestDemo();
     }
 
+    ROC_LOGN("1");
     RocTftLcdDrawGbk24Num(120, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, 1.1);
+    ROC_LOGN("2");
+
+    while(1);
 
     if(RET_OK != Ret)
     {

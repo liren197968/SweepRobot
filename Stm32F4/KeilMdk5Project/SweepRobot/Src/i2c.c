@@ -109,7 +109,7 @@ void HAL_I2C_MspInit(I2C_HandleTypeDef *i2cHandle)
         HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
         HAL_GPIO_WritePin(GPIOB, 6, GPIO_PIN_SET);
-        HAL_GPIO_WritePin(GPIOB, 7, GPIO_PIN_SET); 
+        HAL_GPIO_WritePin(GPIOB, 7, GPIO_PIN_SET);
 
         i2cHandle->Instance->CR1 = I2C_CR1_SWRST;
         i2cHandle->Instance->CR1 = 0;
