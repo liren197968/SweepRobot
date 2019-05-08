@@ -235,9 +235,6 @@ typedef struct _ROC_PHOENIX_GAIT_s
 
 typedef struct _ROC_PHOENIX_STATE_s
 {
-    uint8_t                     CtrlTimeIsReady;        // check if the control time is ready
-    uint8_t                     BatTimeIsReady;         // check if the battery time is ready
-
     ROC_ROBOT_MOVE_STATUS_e     MoveStatus;             // True if the robot are walking
     uint8_t                     RobotOn;                // Switch to turn on Phoenix
     uint8_t                     PrevRobotOn;            // Previous loop state

@@ -6,8 +6,10 @@
 ********************************************************************************/
 #include <string.h>
 
+#include "stm32f4xx_hal.h"
 #include "gpio.h"
 #include "spi.h"
+#include "dma.h"
 
 #include "RocFont.h"
 #include "RocPicture.h"
@@ -16,8 +18,11 @@
 #include "RocTftLcd.h"
 
 
-uint8_t g_DisplayNum[10]={0,1,2,3,4,5,6,7,8,9};
-uint8_t g_TftLcdBuff[ROC_TFT_LCD_BUFF_SIZE] = {0};
+extern DMA_HandleTypeDef hdma_spi1_tx;
+
+
+static uint8_t g_DisplayNum[10]={0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
+static uint8_t g_TftLcdBuff[ROC_TFT_LCD_BUFF_SIZE] = {0};
 
 /**
   * @brief  TxRx Transfer completed callback.
@@ -26,11 +31,11 @@ uint8_t g_TftLcdBuff[ROC_TFT_LCD_BUFF_SIZE] = {0};
   *         you can add your own implementation. 
   * @retval None
   */
-void HAL_SPI_TxRxCpltCallback(SPI_HandleTypeDef *hspi)
+void HAL_SPI_TxCpltCallback(SPI_HandleTypeDef *hspi)
 {
     if(SPI1 == hspi->Instance)
     {
-        ROC_LOGI("SPI data send is in success");
+
     }
 }
 
@@ -143,8 +148,6 @@ static void  RocSpiWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
-    while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY_TX);
-
     WriteStatus = HAL_SPI_Transmit(&hspi1, Dat, DatLen, ROC_TFT_LCD_WRITE_TIME_OUT);
     if(HAL_OK != WriteStatus)
     {
@@ -170,7 +173,7 @@ static void  RocSpiDmaWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
-    while(HAL_SPI_GetState(&hspi1) == HAL_SPI_STATE_BUSY_TX);
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
 
     WriteStatus = HAL_SPI_Transmit_DMA(&hspi1, Dat, DatLen);
     if(HAL_OK != WriteStatus)
@@ -194,6 +197,8 @@ static void  RocSpiDmaWriteData(uint8_t *Dat, uint16_t DatLen)
 **********************************************************************************/
 static void RocTftLcdWriteReg(uint8_t Reg)
 {
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+
     ROC_TFT_LCD_RS_CLR();
 
     RocSpiWriteData(&Reg, 1);
@@ -214,6 +219,8 @@ static void RocTftLcdWriteReg(uint8_t Reg)
 **********************************************************************************/
 static void RocTftLcdWriteDat(uint8_t Data)
 {
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+
     ROC_TFT_LCD_RS_SET();
 
     RocSpiWriteData(&Data, 1);
@@ -238,6 +245,8 @@ static void RocTftLcdWrite16Dat(uint16_t Data)
 
     Buff[0] = Data >> 8;
     Buff[1] = Data;
+
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
 
     ROC_TFT_LCD_RS_SET();
 
@@ -545,7 +554,6 @@ static void RocTftLcdRegionClear(uint16_t XStart, uint16_t YStart, uint16_t XEnd
             g_TftLcdBuff[i * 2] = BakColor >> 8;
             g_TftLcdBuff[i * 2 + 1] = BakColor;
         }
-
         RocSpiDmaWriteData(g_TftLcdBuff, RegionPixel * ROC_TFT_LCD_ONE_PIXEL_BYTE);
     }
 }
@@ -1043,7 +1051,7 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                     {
                         if(Fc != Bc)
                         {
-                            RocTftLcdDrawPoint(X + j, Y + i, Bc);
+                            //RocTftLcdDrawPoint(X + j, Y + i, Bc);
                         }
                     }
                 }
@@ -1116,10 +1124,10 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
 
 /*********************************************************************************
  *  Description:
- *              Double data to string data
+ *              Float data to string data
  *
  *  Parameter:
- *              DoubleData: the double data
+ *              FloatData:  the double data
  *              pString:    the pointer to the string memory
  *
  *  Return:
@@ -1128,19 +1136,30 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
  *  Author:
  *              ROC LiRen(2019.04.20)
 **********************************************************************************/
-ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
+ROC_RESULT RocDoubleDatToStringDat(float FloatData, uint8_t *pString)
 {
     uint8_t     i = 0;
-    double      DecimalData;
+    float       DecimalData;
     int32_t     IntegerData;
 
-    if(DoubleData >= 100000)
+    if(FloatData >= 100000)
     {
+        ROC_LOGE("Input data is in error(%f)", FloatData);
         return RET_ERROR;
     }
+    else if(FloatData < 0)
+    {
+        pString[i] = '-';
+        i++;
 
-    IntegerData = (int32_t)DoubleData;
-    DecimalData = DoubleData - IntegerData;
+        IntegerData = (int32_t)(-FloatData);
+        DecimalData = -FloatData - IntegerData;
+    }
+    else
+    {
+        IntegerData = (int32_t)FloatData;
+        DecimalData = FloatData - IntegerData;
+    }
 
     if(IntegerData >= 10000)
     {
@@ -1155,7 +1174,7 @@ ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
         IntegerData = IntegerData % 1000;
         i++;
     }
-    else if(IntegerData < 1000 && i != 0)
+    else if(IntegerData < 1000 && i != 0 && FloatData > 0)
     {
         pString[i] = 0 + 48;
         i++;
@@ -1167,7 +1186,7 @@ ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
         IntegerData = IntegerData % 100;
         i++;
     }
-    else if(IntegerData < 100 && i != 0)
+    else if(IntegerData < 100 && i != 0 && FloatData > 0)
     {
         pString[i] = 0 + 48;
         i++;
@@ -1179,7 +1198,7 @@ ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
         IntegerData = IntegerData % 10;
         i++;
     }
-    else if(IntegerData < 10 && i != 0)
+    else if(IntegerData < 10 && i != 0 && FloatData > 0)
     {
         pString[i] = 48;
         i++;
@@ -1187,7 +1206,7 @@ ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
 
     pString[i] = 48 + IntegerData;
 
-    if(DecimalData >= 0.000001)
+    if(DecimalData >= 0.01F)
     {
         i++;
 
@@ -1195,41 +1214,9 @@ ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
 
         i++;
 
-        IntegerData = (int)(DecimalData * 1000000);
-        pString[i] = 48 + IntegerData / 100000;
-        IntegerData = IntegerData % 100000;
-
-        if(IntegerData > 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData / 10000;
-            IntegerData = IntegerData % 10;
-        }
-
-        if(IntegerData > 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData / 1000;
-            IntegerData = IntegerData % 10;
-        }
-
-        if(IntegerData > 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData / 100;
-            IntegerData = IntegerData % 10;
-        }
-
-        if(IntegerData > 0)
-        {
-            i++;
-
-            pString[i] = 48 + IntegerData / 10;
-            IntegerData = IntegerData % 10;
-        }
+        IntegerData = (int32_t)(DecimalData * 100);
+        pString[i] = 48 + IntegerData / 10;
+        IntegerData = IntegerData % 10;
 
         if(IntegerData >= 0)
         {
@@ -1261,7 +1248,7 @@ ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString)
 **********************************************************************************/
 void RocTftLcdShowErrorMsg(uint8_t *pStr)
 {
-    RocTftLcdDrawGbk24Str(120, 210, ROC_TFT_LCD_COLOR_RED, ROC_TFT_LCD_COLOR_YELLOW, pStr);
+    RocTftLcdDrawGbk24Str(100, 215, ROC_TFT_LCD_COLOR_RED, ROC_TFT_LCD_COLOR_YELLOW, pStr);
 }
 
 /*********************************************************************************
@@ -1281,7 +1268,7 @@ void RocTftLcdShowErrorMsg(uint8_t *pStr)
  *  Author:
  *              ROC LiRen(2019.04.21)
 **********************************************************************************/
-void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, double Num)
+void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, float Num)
 {
     ROC_RESULT Ret = RET_OK;
     uint8_t NumStr[ROC_TFT_LCD_SUPPORT_NUM_LEN + 1];
@@ -1324,8 +1311,9 @@ void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, dou
  *
  *  Author:
  *              ROC LiRen(2019.04.21)
+
 **********************************************************************************/
-void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, double Num)
+void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, float Num)
 {
     ROC_RESULT Ret = RET_OK;
     uint8_t NumStr[ROC_TFT_LCD_SUPPORT_NUM_LEN + 1];
@@ -1338,18 +1326,11 @@ void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, dou
     }
     else
     {
-        ROC_LOGN("11");
-
         Ret = RocDoubleDatToStringDat(Num, NumStr);
-        ROC_LOGN("12");
 
         if(RET_OK == Ret)
         {
-            ROC_LOGN("13");
-
             RocTftLcdRegionClear(X, Y, X + ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_24, Y + ROC_TFT_LCD_HEIGHT_GBK_24, Bc);
-            ROC_LOGN("14");
-
             RocTftLcdDrawGbk24Str(X, Y, Fc, Bc, NumStr);
         }
         else
@@ -1635,12 +1616,6 @@ ROC_RESULT RocTftLcdInit(void)
     {
         RocTftLcdTestDemo();
     }
-
-    ROC_LOGN("1");
-    RocTftLcdDrawGbk24Num(120, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, 1.1);
-    ROC_LOGN("2");
-
-    while(1);
 
     if(RET_OK != Ret)
     {

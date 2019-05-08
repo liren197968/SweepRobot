@@ -27,6 +27,7 @@
 
 static ROC_ROBOT_CONTROL_s      *g_pRocRobotCtrl = NULL;
 static ROC_ROBOT_CTRL_FlAG_s    g_RocRobotCtrlFlag = {0};
+static ROC_ROBOT_CTRL_TIME_s    g_RocRobotCtrlTime = {0};
 static ROC_REMOTE_CTRL_INPUT_s  g_RocRobotRemoteCtrlInput = {0};
 static ROC_ROBOT_RUN_MODE_e     g_RocRobotRunModeStatus = ROC_ROBOT_RUN_MODE_HEXAPOD;
 
@@ -195,8 +196,10 @@ static void RocRobotMotionTrackOnLcdDraw(ROC_PHOENIX_STATE_s *pRobotCurstate)
 {
     static uint16_t DrawXCor = 0;
 
-    if(0 == DrawXCor % ROC_TFT_LCD_X_MAX_PIXEL)
+    if(DrawXCor == (ROC_TFT_LCD_X_MAX_PIXEL - 1))
     {
+        DrawXCor = 0;
+
         RocTftLcdAllClear(ROC_TFT_LCD_COLOR_DEFAULT_BAK);
     }
 
@@ -926,14 +929,14 @@ static void RocRobotPowerOnTaskEntry(void)
 **********************************************************************************/
 static void RocBatteryCheckTaskEntry(void)
 {
-    if(ROC_TRUE == g_pRocRobotCtrl->CurState.BatTimeIsReady)
+    if(ROC_TRUE == g_RocRobotCtrlTime.BatTimeIsReady)
     {
-        g_pRocRobotCtrl->CurState.BatTimeIsReady = ROC_FALSE;
+        g_RocRobotCtrlTime.BatTimeIsReady = ROC_FALSE;
 
         RocBatteryVoltageAdcSample();
     }
 
-#ifndef ROC_ROBOT_GAIT_DEBUG
+#ifndef ROC_ROBOT_CONTROL_DEBUG
     if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > RocBatteryVoltageGet())
     {
         ROC_LOGN("Battery is in low electricity! Charge it!");
@@ -952,6 +955,29 @@ static void RocBatteryCheckTaskEntry(void)
 
 /*********************************************************************************
  *  Description:
+ *              Robot LCD display information task entry
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.10)
+**********************************************************************************/
+static void RocRobotLcdShowInfoEntry(void)
+{
+    if(ROC_TRUE == g_RocRobotCtrlTime.LcdTimeIsReady)
+    {
+        RocTftLcdDrawGbk16Num(10, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Pitch);
+        RocTftLcdDrawGbk16Num(130, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Roll);
+        RocTftLcdDrawGbk16Num(250, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Yaw);
+    }
+}
+
+/*********************************************************************************
+ *  Description:
  *              Robot control task entry
  *
  *  Parameter:
@@ -965,7 +991,7 @@ static void RocBatteryCheckTaskEntry(void)
 **********************************************************************************/
 static void RocRobotCtrlTaskEntry(void)
 {
-    if(ROC_TRUE == g_pRocRobotCtrl->CurState.CtrlTimeIsReady)
+    if(ROC_TRUE == g_RocRobotCtrlTime.CtrlTimeIsReady)
     {
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
@@ -988,17 +1014,13 @@ static void RocRobotCtrlTaskEntry(void)
 
         RocServoControl((int16_t *)(&g_pRocRobotCtrl->CurServo));
 
-        g_pRocRobotCtrl->CurState.CtrlTimeIsReady = ROC_FALSE;
+        g_RocRobotCtrlTime.CtrlTimeIsReady = ROC_FALSE;
     }
     else
     {
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
         RocRobotImuEulerAngleGet(&g_pRocRobotCtrl->CurState.CurImuAngle);
-
-        //RocTftLcdDrawGbk16Num(10, 10, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Pitch);
-        //RocTftLcdDrawGbk16Num(30, 10, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Roll);
-        //RocTftLcdDrawGbk16Num(50, 10, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Yaw);
 #endif
     }
 }
@@ -1018,14 +1040,14 @@ static void RocRobotCtrlTaskEntry(void)
 **********************************************************************************/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
-    ROC_ROBOT_MOVE_STATUS_e     MoveStatus;
-
     if(TIM2 == htim->Instance)
     {
         RocBeeperTaskBackground();
     }
     else if(TIM6 == htim->Instance)
     {
+        ROC_ROBOT_MOVE_STATUS_e     MoveStatus;
+
         MoveStatus = RocRobotMoveStatus_Get();
 
         if(ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus)
@@ -1034,12 +1056,27 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
         }
         else
         {
-            g_pRocRobotCtrl->CurState.CtrlTimeIsReady = ROC_TRUE;
+            g_RocRobotCtrlTime.CtrlTimeIsReady = ROC_TRUE;
         }
     }
     else if(TIM7 == htim->Instance)
     {
-        g_pRocRobotCtrl->CurState.BatTimeIsReady = ROC_TRUE;
+        static uint8_t TimeTick = 0;
+
+        TimeTick++;
+
+        g_RocRobotCtrlTime.BatTimeIsReady = ROC_TRUE;
+
+        if(ROC_ROBOT_CTRL_TIME_LCD_TICK == TimeTick)
+        {
+            TimeTick = 0;
+
+            g_RocRobotCtrlTime.LcdTimeIsReady = ROC_TRUE;
+        }
+        else
+        {
+            g_RocRobotCtrlTime.LcdTimeIsReady = ROC_FALSE;
+        }
     }
 }
 
@@ -1061,6 +1098,8 @@ void RocRobotMain(void)
     RocRobotCtrlTaskEntry();
 
     RocBatteryCheckTaskEntry();
+
+    RocRobotLcdShowInfoEntry();
 
     RocBluetoothRecvIsFinshed();
 }

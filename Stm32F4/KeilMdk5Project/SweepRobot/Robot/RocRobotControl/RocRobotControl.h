@@ -8,6 +8,12 @@
 #define __ROC_ROBOTCONTROL_H
 
 
+#define ROC_ROBOT_CONTROL_DEBUG
+
+
+#define ROC_ROBOT_CTRL_TIME_LCD_TICK    50
+
+
 typedef enum _ROC_ROBOT_RUN_MODE_e
 {
     ROC_ROBOT_RUN_MODE_CAR = 0,
@@ -37,12 +43,20 @@ typedef enum _ROC_ROBOT_CTRL_CMD_e
     ROC_ROBOT_CTRL_CMD_NUM = 13,
 }ROC_ROBOT_CTRL_CMD_e;
 
+
 typedef struct _ROC_ROBOT_CTRL_FlAG_s
 {
     uint8_t CtrlFlag[ROC_ROBOT_CTRL_CMD_NUM];
 
 }ROC_ROBOT_CTRL_FlAG_s;
 
+typedef struct _ROC_ROBOT_CTRL_TIME_s
+{
+    uint8_t     CtrlTimeIsReady;        // check if the robot control time is ready
+    uint8_t     BatTimeIsReady;         // check if the battery checkt time is ready
+    uint8_t     LcdTimeIsReady;         // check if the lcd show time is ready
+
+}ROC_ROBOT_CTRL_TIME_s;
 
 void RocRobotInit(void);
 void RocRobotMain(void);

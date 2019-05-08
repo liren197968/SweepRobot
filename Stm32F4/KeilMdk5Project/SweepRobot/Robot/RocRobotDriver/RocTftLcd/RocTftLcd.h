@@ -12,7 +12,7 @@
 #include "gpio.h"
 
 
-#define ROC_TFT_LCD_WRITE_TIME_OUT      10  /* ms */
+#define ROC_TFT_LCD_WRITE_TIME_OUT      100 /* ms */
 
 
 #define ROC_TFT_LCD_HORIZONTAL          ROC_ENABLE
@@ -26,12 +26,12 @@
 #define ROC_TFT_LCD_PIXEL_DATA_SIZE     (ROC_TFT_LCD_PIXEL_SIZE * ROC_TFT_LCD_ONE_PIXEL_BYTE)
 
 
-#define ROC_TFT_LCD_BUFF_SIZE           (ROC_TFT_LCD_PIXEL_SIZE / 2)    /* allocate some RAM to enhance the LCD filling speed */
+#define ROC_TFT_LCD_BUFF_SIZE           (ROC_TFT_LCD_PIXEL_DATA_SIZE / 3)    /* allocate some RAM to enhance the LCD filling speed */
 #define ROC_TFT_LCD_BUFF_STORAGE_PIXEL  (ROC_TFT_LCD_BUFF_SIZE / ROC_TFT_LCD_ONE_PIXEL_BYTE)
 
 
-#define ROC_TFT_LCD_SUPPORT_MAX_NUM     99999.999999
-#define ROC_TFT_LCD_SUPPORT_MIN_NUM     0
+#define ROC_TFT_LCD_SUPPORT_MAX_NUM     99999.99F
+#define ROC_TFT_LCD_SUPPORT_MIN_NUM     -9999.99F
 #define ROC_TFT_LCD_SUPPORT_NUM_LEN     12
 
 
@@ -85,7 +85,7 @@ ROC_RESULT RocTftLcdInit(void);
 void RocTftLcdAllClear(uint16_t BakColor);
 void RocTftLcdShowErrorMsg(uint8_t *pStr);
 void RocTftLcdDrawPoint(uint16_t X, uint16_t Y, uint16_t Color);
-ROC_RESULT RocDoubleDatToStringDat(double DoubleData, uint8_t *pString);
+ROC_RESULT RocDoubleDatToStringDat(float FloatData, uint8_t *pString);
 void RocTftLcdDrawTubeNum(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint16_t Num);
 void RocTftLcdDrawLine(uint16_t XStart, uint16_t YStart,uint16_t XEnd, uint16_t YEnd,uint16_t Color);
 void RocTftLcdDrawCircle(uint16_t X, uint16_t Y, uint16_t R, uint16_t Color);
@@ -93,8 +93,8 @@ void RocTftLcdDrawRectangle(uint16_t X, uint16_t Y, uint16_t W, uint16_t H, uint
 void RocTftLcdDrawRectangle2(uint16_t X, uint16_t Y, uint16_t W, uint16_t H, uint8_t Mode);
 void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint8_t *pStr);
 void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint8_t *pStr);
-void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, double Num);
-void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, double Num);
+void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, float Num);
+void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, float Num);
 
 
 #endif

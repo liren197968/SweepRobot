@@ -27,16 +27,18 @@
  *  Author:
  *              ROC LiRen(2019.04.15)
 **********************************************************************************/
-uint8_t RocMpu6050WriteLen(uint8_t Addr,uint8_t Reg,uint8_t Len,uint8_t *Buf)
+uint8_t RocMpu6050WriteLen(uint8_t Addr, uint8_t Reg, uint8_t Len, uint8_t *Buf)
 {
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
+
+    while(HAL_I2C_GetState(&hi2c2) == HAL_I2C_STATE_BUSY_TX);
 
     WriteStatus = HAL_I2C_Mem_Write(&hi2c2, Addr << 1, Reg, I2C_MEMADD_SIZE_8BIT, Buf, Len, 10);
     while(HAL_OK != WriteStatus)
     {
         HAL_Delay(5);
 
-        ROC_LOGE("Write MPU6050 is in busy, and will reset it one more time!");
+        ROC_LOGE("Write MPU6050 is in busy, and will reset it one more time(%d)!", WriteStatus);
 
         HAL_I2C_DeInit(&hi2c2);     /* For the ST IIC BUSY flag hardware error */
         HAL_I2C_Init(&hi2c2);       /* Reset the IIC */
@@ -63,7 +65,7 @@ uint8_t RocMpu6050WriteLen(uint8_t Addr,uint8_t Reg,uint8_t Len,uint8_t *Buf)
  *  Author:
  *              ROC LiRen(2019.04.15)
 **********************************************************************************/
-uint8_t RocMpu6050ReadLen(uint8_t Addr,uint8_t Reg,uint8_t Len,uint8_t *Buf)
+uint8_t RocMpu6050ReadLen(uint8_t Addr, uint8_t Reg, uint8_t Len, uint8_t *Buf)
 {
     HAL_StatusTypeDef   ReadStatus = HAL_OK;
 
@@ -90,7 +92,7 @@ uint8_t RocMpu6050ReadLen(uint8_t Addr,uint8_t Reg,uint8_t Len,uint8_t *Buf)
  *  Author:
  *              ROC LiRen(2019.04.15)
 **********************************************************************************/
-uint8_t RocMpu6050WriteByte(uint8_t Reg,uint8_t Dat)
+uint8_t RocMpu6050WriteByte(uint8_t Reg, uint8_t Dat)
 {
     HAL_StatusTypeDef   WriteStatus = HAL_OK;
 
@@ -99,7 +101,7 @@ uint8_t RocMpu6050WriteByte(uint8_t Reg,uint8_t Dat)
     {
         HAL_Delay(5);
 
-        ROC_LOGE("Write MPU6050 is in busy, and will reset it one more time!");
+        ROC_LOGE("Write MPU6050 is in busy, and will reset it one more time(%d)!", WriteStatus);
 
         HAL_I2C_DeInit(&hi2c2);     /* For the ST IIC BUSY flag hardware error */
         HAL_I2C_Init(&hi2c2);       /* Reset the IIC */
@@ -397,8 +399,12 @@ ROC_RESULT RocMpu6050Init(void)
     Ret = (ROC_RESULT)RocMpu6050RegInit();
     if(RET_OK !=Ret)
     {
-        ROC_LOGE("MPU6050 init is in error!");
+        ROC_LOGE("MPU6050 register init is in error!");
         return ROC_MPU6050_INIT_ERROR;
+    }
+    else
+    {
+        ROC_LOGI("MPU6050 register init is in success");
     }
 
     Ret = (ROC_RESULT)mpu_dmp_init();
@@ -407,6 +413,12 @@ ROC_RESULT RocMpu6050Init(void)
         ROC_LOGE("MPU6050 DMP init is in error!");
         return ROC_MPU6050_DMP_INIT_ERROR;
     }
+    else
+    {
+        ROC_LOGI("MPU6050 DMP init is in success");
+    }
+
+    ROC_LOGI("MPU6050 init is in success");
 
     return RET_OK;
 }
