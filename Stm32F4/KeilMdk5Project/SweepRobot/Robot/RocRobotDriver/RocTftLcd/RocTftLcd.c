@@ -23,7 +23,7 @@ extern DMA_HandleTypeDef hdma_spi1_tx;
 
 static uint8_t g_DisplayNum[10]={0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 static uint8_t g_TftLcdBuff[ROC_TFT_LCD_BUFF_SIZE] = {0};
-
+static uint8_t g_TftLcdStrBuff[ROC_TFT_LCD_STR_BUFF_SIZE] = {0};
 /**
   * @brief  TxRx Transfer completed callback.
   * @param  hspi: SPI handle.
@@ -906,6 +906,7 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
     uint16_t j = 0;
     uint16_t k = 0;
     uint16_t x0 = 0;
+    uint16_t l = 0;
 
     x0 = X;
 
@@ -937,19 +938,25 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                     {
                         if(g_Ascii16[k * 16 + i] & (0x80 >> j))
                         {
-                            RocTftLcdDrawPoint(X + j, Y + i, Fc);
+                            //RocTftLcdDrawPoint(X + j, Y + i, Fc);
+
+                            g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Fc >> 8;
+                            g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Fc;
                         }
                         else
                         {
                             if(Fc != Bc)
                             {
-                                RocTftLcdDrawPoint(X + j, Y + i, Bc);
+                                //RocTftLcdDrawPoint(X + j, Y + i, Bc);
+
+                                g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Bc >> 8;
+                                g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Bc;
                             }
                         }
                     }
                 }
 
-                X += 8;
+                l += ROC_TFT_LCD_WIDTH_GBK_16;
             }
 
             pStr++;
@@ -999,6 +1006,12 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
             }
         }
     }
+
+    RocTftLcdSetRegion(X, Y, X + ROC_TFT_LCD_STR_PIXEL_SIZE / ROC_TFT_LCD_HEIGHT_GBK_16 - 1, Y + ROC_TFT_LCD_HEIGHT_GBK_16 - 1);
+
+    ROC_TFT_LCD_RS_SET();
+
+    RocSpiDmaWriteData(g_TftLcdStrBuff, ROC_TFT_LCD_STR_BUFF_SIZE);
 }
 
 /*********************************************************************************
@@ -1023,6 +1036,7 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
     uint16_t i = 0;
     uint16_t j = 0;
     uint16_t k = 0;
+    uint16_t l = 0;
 
     while(*pStr)
     {
@@ -1045,20 +1059,26 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                 {
                     if(g_Ascii16[k * 16 + i] & (0x80 >> j))
                     {
-                        RocTftLcdDrawPoint(X + j, Y + i, Fc);
+                        //RocTftLcdDrawPoint(X + j, Y + i, Fc);
+
+                        g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Fc >> 8;
+                        g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Fc;
                     }
                     else
                     {
                         if(Fc != Bc)
                         {
                             //RocTftLcdDrawPoint(X + j, Y + i, Bc);
+
+                            g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Bc >> 8;
+                            g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Bc;
                         }
                     }
                 }
             }
 
             pStr++;
-            X += 8;
+            l += ROC_TFT_LCD_WIDTH_GBK_16;
         }
         else
         {
@@ -1076,7 +1096,7 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                             }
                             else
                             {
-                                if(Fc!= Bc)
+                                if(Fc != Bc)
                                 {
                                     RocTftLcdDrawPoint(X + j, Y + i, Bc);
                                 }
@@ -1120,6 +1140,12 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
             X += 24;
         }
     }
+
+    RocTftLcdSetRegion(X, Y, X + ROC_TFT_LCD_STR_PIXEL_SIZE / ROC_TFT_LCD_HEIGHT_GBK_16 - 1, Y + ROC_TFT_LCD_HEIGHT_GBK_16 - 1);
+
+    ROC_TFT_LCD_RS_SET();
+
+    RocSpiDmaWriteData(g_TftLcdStrBuff, ROC_TFT_LCD_STR_BUFF_SIZE);
 }
 
 /*********************************************************************************
@@ -1270,8 +1296,9 @@ void RocTftLcdShowErrorMsg(uint8_t *pStr)
 **********************************************************************************/
 void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, float Num)
 {
-    ROC_RESULT Ret = RET_OK;
-    uint8_t NumStr[ROC_TFT_LCD_SUPPORT_NUM_LEN + 1];
+    uint16_t    i = 0;
+    ROC_RESULT  Ret = RET_OK;
+    uint8_t     NumStr[ROC_TFT_LCD_SUPPORT_NUM_LEN + 1];
 
     if(ROC_TFT_LCD_SUPPORT_MAX_NUM < Num
     || ROC_TFT_LCD_SUPPORT_MIN_NUM > Num)
@@ -1284,7 +1311,14 @@ void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, flo
         Ret = RocDoubleDatToStringDat(Num, NumStr);
         if(RET_OK == Ret)
         {
-            RocTftLcdRegionClear(X, Y, X + ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16, Y + ROC_TFT_LCD_HEIGHT_GBK_16, Bc);
+            while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);     /* To wait the string buffer write done */
+
+            for(i = 0; i < ROC_TFT_LCD_STR_PIXEL_SIZE; i++)
+            {
+                g_TftLcdStrBuff[i * 2] = ROC_TFT_LCD_COLOR_DEFAULT_BAK >> 8;
+                g_TftLcdStrBuff[i * 2 + 1] = ROC_TFT_LCD_COLOR_DEFAULT_BAK;
+            }
+
             RocTftLcdDrawGbk16Str(X, Y, Fc, Bc, NumStr);
         }
         else
@@ -1315,8 +1349,9 @@ void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, flo
 **********************************************************************************/
 void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, float Num)
 {
-    ROC_RESULT Ret = RET_OK;
-    uint8_t NumStr[ROC_TFT_LCD_SUPPORT_NUM_LEN + 1];
+    uint16_t    i = 0;
+    ROC_RESULT  Ret = RET_OK;
+    uint8_t     NumStr[ROC_TFT_LCD_SUPPORT_NUM_LEN + 1] = {0};
 
     if(ROC_TFT_LCD_SUPPORT_MAX_NUM < Num
     || ROC_TFT_LCD_SUPPORT_MIN_NUM > Num)
@@ -1330,7 +1365,14 @@ void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, flo
 
         if(RET_OK == Ret)
         {
-            RocTftLcdRegionClear(X, Y, X + ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_24, Y + ROC_TFT_LCD_HEIGHT_GBK_24, Bc);
+            while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);     /* To wait the string buffer write done */
+
+            for(i = 0; i < ROC_TFT_LCD_STR_PIXEL_SIZE; i++)
+            {
+                g_TftLcdStrBuff[i * 2] = ROC_TFT_LCD_COLOR_DEFAULT_BAK >> 8;
+                g_TftLcdStrBuff[i * 2 + 1] = ROC_TFT_LCD_COLOR_DEFAULT_BAK;
+            }
+
             RocTftLcdDrawGbk24Str(X, Y, Fc, Bc, NumStr);
         }
         else
@@ -1404,6 +1446,7 @@ void RocTftLcdDrawTubeNum(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uint
 **********************************************************************************/
 static void RocTftLcdMainMenuTest(void)
 {
+    RocTftLcdRegionClear(10, 10, 20, 20, ROC_TFT_LCD_COLOR_DEFAULT_BAK);
     RocTftLcdAllClear(ROC_TFT_LCD_COLOR_GRAY_0);
 
     RocTftLcdDrawGbk16Str(16,2,ROC_TFT_LCD_COLOR_BLUE,ROC_TFT_LCD_COLOR_GRAY_0,"全动电子技术");

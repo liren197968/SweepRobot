@@ -970,9 +970,9 @@ static void RocRobotLcdShowInfoEntry(void)
 {
     if(ROC_TRUE == g_RocRobotCtrlTime.LcdTimeIsReady)
     {
-        RocTftLcdDrawGbk16Num(10, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Pitch);
+        RocTftLcdDrawGbk16Num(50, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Pitch);
         RocTftLcdDrawGbk16Num(130, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Roll);
-        RocTftLcdDrawGbk16Num(250, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Yaw);
+        RocTftLcdDrawGbk16Num(210, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_pRocRobotCtrl->CurState.CurImuAngle.Yaw);
     }
 }
 
