@@ -303,19 +303,19 @@ typedef struct _ROC_ROBOT_SERVO_s
 }ROC_ROBOT_SERVO_s;
 
 
-typedef struct _ROC_ROBOT_CONTROL_s
+typedef struct _ROC_ROBOT_MOVE_CTRL_s
 {
     ROC_PHOENIX_GAIT_s  CurGait;                        // Definition of the current gait
     ROC_PHOENIX_STATE_s CurState;                       // Definition of the current state
     ROC_ROBOT_SERVO_s   CurServo;                       // Definition of the current servo
 
-}ROC_ROBOT_CONTROL_s;
+}ROC_ROBOT_MOVE_CTRL_s;
 
 
 
 void RocRobotGaitSeqUpdate(void);
 ROC_RESULT RocRobotAlgoCtrlInit(void);
-ROC_ROBOT_CONTROL_s *RocRobotCtrlInfoGet(void);
+ROC_ROBOT_MOVE_CTRL_s *RocRobotCtrlInfoGet(void);
 ROC_ROBOT_MOVE_STATUS_e RocRobotMoveStatus_Get(void);
 void RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_e MoveStatus);
 void RocRobotSingleLegSelect(ROC_ROBOT_LEG_e SlecetLegNum);

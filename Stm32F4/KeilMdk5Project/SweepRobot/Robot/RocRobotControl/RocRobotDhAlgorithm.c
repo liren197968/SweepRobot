@@ -45,8 +45,8 @@ static ROC_PHOENIX_GAIT_s g_RobotGait[] =
 #endif
 
 
-static float                g_DhAngleBuffer[3];
-static ROC_ROBOT_CONTROL_s  g_RobotCtrl = {0};
+static float                    g_DhAngleBuffer[3];
+static ROC_ROBOT_MOVE_CTRL_s    g_RobotMoveCtrl = {0};
 
 
 /*********************************************************************************
@@ -64,7 +64,7 @@ static ROC_ROBOT_CONTROL_s  g_RobotCtrl = {0};
 **********************************************************************************/
 static ROC_RESULT RocRobotGaitSelect(void)
 {
-    g_RobotCtrl.CurGait = g_RobotGait[g_RobotCtrl.CurState.GaitType];
+    g_RobotMoveCtrl.CurGait = g_RobotGait[g_RobotMoveCtrl.CurState.GaitType];
 
     return RET_OK;
 }
@@ -84,128 +84,128 @@ static ROC_RESULT RocRobotGaitSelect(void)
 **********************************************************************************/
 static void RocRobotGaitPosUpdate(uint8_t CurLegNum)
 {
-    // Try to reduce the number of time we look at g_RobotCtrl.CurGait.GaitLegNr and g_RobotCtrl.CurState.GaitStep
-    int16_t LegStep = g_RobotCtrl.CurState.GaitStep - g_RobotCtrl.CurGait.GaitLegNr[CurLegNum];
+    // Try to reduce the number of time we look at g_RobotMoveCtrl.CurGait.GaitLegNr and g_RobotMoveCtrl.CurState.GaitStep
+    int16_t LegStep = g_RobotMoveCtrl.CurState.GaitStep - g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum];
     uint8_t GaitPos = 0;
 
 #if 0
     //Gait in motion
-    if ((g_RobotCtrl.CurState.TravelRequest
-            && (g_RobotCtrl.CurGait.NrLiftedPos == 1
-            || g_RobotCtrl.CurGait.NrLiftedPos == 3
-            || g_RobotCtrl.CurGait.NrLiftedPos == 5)
-            && g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum])
-            || (!g_RobotCtrl.CurState.TravelRequest
-            && g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum]
-            && ((fabs(g_RobotCtrl.CurState.LegCurPos[CurLegNum].X) > 2)
-            || (fabs(g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y) > 2)
-            || (fabs(g_RobotCtrl.CurState.GaitRot[CurLegNum]) > 2))))
+    if ((g_RobotMoveCtrl.CurState.TravelRequest
+            && (g_RobotMoveCtrl.CurGait.NrLiftedPos == 1
+            || g_RobotMoveCtrl.CurGait.NrLiftedPos == 3
+            || g_RobotMoveCtrl.CurGait.NrLiftedPos == 5)
+            && g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum])
+            || (!g_RobotMoveCtrl.CurState.TravelRequest
+            && g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum]
+            && ((fabs(g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X) > 2)
+            || (fabs(g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y) > 2)
+            || (fabs(g_RobotMoveCtrl.CurState.GaitRot[CurLegNum]) > 2))))
     {
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = 0;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotCtrl.CurState.LegLiftHeight;
-        g_RobotCtrl.CurState.GaitRot[CurLegNum] = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotMoveCtrl.CurState.LegLiftHeight;
+        g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = 0;
 
         GaitPos = 1;
     }
-    else if (((g_RobotCtrl.CurGait.NrLiftedPos == 2
-            && g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum])
-            || (g_RobotCtrl.CurGait.NrLiftedPos >= 3
-            && (g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] - 1
-            || g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] + (g_RobotCtrl.CurGait.StepsInGait - 1))))
-            && g_RobotCtrl.CurState.TravelRequest)
+    else if (((g_RobotMoveCtrl.CurGait.NrLiftedPos == 2
+            && g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum])
+            || (g_RobotMoveCtrl.CurGait.NrLiftedPos >= 3
+            && (g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] - 1
+            || g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] + (g_RobotMoveCtrl.CurGait.StepsInGait - 1))))
+            && g_RobotMoveCtrl.CurState.TravelRequest)
     {    //Optional Half heigth Rear (2, 3, 5 lifted positions)
-        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotMoveCtrl.CurState.MoveStatus)
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotCtrl.CurState.LegLiftHeight / (3 + g_RobotCtrl.CurGait.HalfLiftHeight);     //Easier to shift between div factor: /1 (3/3), /2 (3/6) and 3/4
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = -g_RobotCtrl.CurState.TravelLength.Z / g_RobotCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotMoveCtrl.CurState.TravelLength.X / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotMoveCtrl.CurState.LegLiftHeight / (3 + g_RobotMoveCtrl.CurGait.HalfLiftHeight);     //Easier to shift between div factor: /1 (3/3), /2 (3/6) and 3/4
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = -g_RobotMoveCtrl.CurState.TravelLength.Z / g_RobotMoveCtrl.CurGait.LiftDivFactor;
         }
         else
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotCtrl.CurState.LegLiftHeight / (3 + g_RobotCtrl.CurGait.HalfLiftHeight);
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].A = -g_RobotCtrl.CurState.TravelLength.A / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = -g_RobotCtrl.CurState.TravelLength.Z / g_RobotCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotMoveCtrl.CurState.LegLiftHeight / (3 + g_RobotMoveCtrl.CurGait.HalfLiftHeight);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A = -g_RobotMoveCtrl.CurState.TravelLength.A / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = -g_RobotMoveCtrl.CurState.TravelLength.Z / g_RobotMoveCtrl.CurGait.LiftDivFactor;
         }
 
         GaitPos = 2;
     }
-    else if ((g_RobotCtrl.CurGait.NrLiftedPos >= 2)
-            && (g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] + 1
-            || g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] - (g_RobotCtrl.CurGait.StepsInGait-1))
-            && g_RobotCtrl.CurState.TravelRequest)
+    else if ((g_RobotMoveCtrl.CurGait.NrLiftedPos >= 2)
+            && (g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] + 1
+            || g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] - (g_RobotMoveCtrl.CurGait.StepsInGait-1))
+            && g_RobotMoveCtrl.CurState.TravelRequest)
     {    // Optional Half heigth front (2, 3, 5 lifted positions)
-        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotMoveCtrl.CurState.MoveStatus)
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotCtrl.CurState.LegLiftHeight / (3 + g_RobotCtrl.CurGait.HalfLiftHeight); // Easier to shift between div factor: /1 (3/3), /2 (3/6) and 3/4
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.TravelLength.Z / g_RobotCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotMoveCtrl.CurState.TravelLength.X / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotMoveCtrl.CurState.LegLiftHeight / (3 + g_RobotMoveCtrl.CurGait.HalfLiftHeight); // Easier to shift between div factor: /1 (3/3), /2 (3/6) and 3/4
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.TravelLength.Z / g_RobotMoveCtrl.CurGait.LiftDivFactor;
         }
         else
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotCtrl.CurState.LegLiftHeight / (3 + g_RobotCtrl.CurGait.HalfLiftHeight);
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].A = g_RobotCtrl.CurState.TravelLength.A / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = -g_RobotCtrl.CurState.TravelLength.Z / g_RobotCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotMoveCtrl.CurState.LegLiftHeight / (3 + g_RobotMoveCtrl.CurGait.HalfLiftHeight);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A = g_RobotMoveCtrl.CurState.TravelLength.A / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = -g_RobotMoveCtrl.CurState.TravelLength.Z / g_RobotMoveCtrl.CurGait.LiftDivFactor;
         }
 
         GaitPos = 3;
     }
-    else if (((g_RobotCtrl.CurGait.NrLiftedPos == 5
-            && (g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] - 2)))
-            && g_RobotCtrl.CurState.TravelRequest)
+    else if (((g_RobotMoveCtrl.CurGait.NrLiftedPos == 5
+            && (g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] - 2)))
+            && g_RobotMoveCtrl.CurState.TravelRequest)
     {    //Optional Half heigth Rear 5 LiftedPos (5 lifted positions)
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotCtrl.CurState.TravelLength.X / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotCtrl.CurState.TravelLength.Y / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotCtrl.CurState.LegLiftHeight / 2;
-        g_RobotCtrl.CurState.GaitRot[CurLegNum] = -g_RobotCtrl.CurState.TravelLength.Z / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotMoveCtrl.CurState.TravelLength.X / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotMoveCtrl.CurState.TravelLength.Y / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotMoveCtrl.CurState.LegLiftHeight / 2;
+        g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = -g_RobotMoveCtrl.CurState.TravelLength.Z / 2;
 
         GaitPos = 4;
     }
-    else if ((g_RobotCtrl.CurGait.NrLiftedPos == 5)
-            && (g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] + 2
-            || g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] - (g_RobotCtrl.CurGait.StepsInGait-2))
-            && g_RobotCtrl.CurState.TravelRequest)
+    else if ((g_RobotMoveCtrl.CurGait.NrLiftedPos == 5)
+            && (g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] + 2
+            || g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] - (g_RobotMoveCtrl.CurGait.StepsInGait-2))
+            && g_RobotMoveCtrl.CurState.TravelRequest)
     {   //Optional Half heigth Front 5 LiftedPos(5 lifted positions)
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.TravelLength.X / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.TravelLength.Y / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotCtrl.CurState.LegLiftHeight / 2;
-        g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.TravelLength.Z / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotMoveCtrl.CurState.TravelLength.X / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotMoveCtrl.CurState.TravelLength.Y / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotMoveCtrl.CurState.LegLiftHeight / 2;
+        g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.TravelLength.Z / 2;
 
         GaitPos = 5;
     }
-    else if((g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] + g_RobotCtrl.CurGait.FrontDownPos
-            || g_RobotCtrl.CurState.GaitStep == g_RobotCtrl.CurGait.GaitLegNr[CurLegNum] - (g_RobotCtrl.CurGait.StepsInGait - g_RobotCtrl.CurGait.FrontDownPos))
-            && g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y < 0)
+    else if((g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] + g_RobotMoveCtrl.CurGait.FrontDownPos
+            || g_RobotMoveCtrl.CurState.GaitStep == g_RobotMoveCtrl.CurGait.GaitLegNr[CurLegNum] - (g_RobotMoveCtrl.CurGait.StepsInGait - g_RobotMoveCtrl.CurGait.FrontDownPos))
+            && g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y < 0)
     {   //Leg front down position
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.TravelLength.X / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.TravelLength.Y / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
-        g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.TravelLength.Z / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotMoveCtrl.CurState.TravelLength.X / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotMoveCtrl.CurState.TravelLength.Y / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
+        g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.TravelLength.Z / 2;
 
         GaitPos = 6;
     }
     else
     {   //Move body forward
-        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotMoveCtrl.CurState.MoveStatus)
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.LegCurPos[CurLegNum].X - (g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.SlidDivFactor);
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y - (g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.SlidDivFactor);
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.GaitRot[CurLegNum] - (g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X - (g_RobotMoveCtrl.CurState.TravelLength.X / g_RobotMoveCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y - (g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] - (g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.SlidDivFactor);
         }
         else
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].A =  g_RobotCtrl.CurState.LegCurPos[CurLegNum].A - (g_RobotCtrl.CurState.TravelLength.A / g_RobotCtrl.CurGait.SlidDivFactor);
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.GaitRot[CurLegNum] - (g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A =  g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A - (g_RobotMoveCtrl.CurState.TravelLength.A / g_RobotMoveCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] - (g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.SlidDivFactor);
         }
 
         GaitPos = 7;
@@ -213,123 +213,123 @@ static void RocRobotGaitPosUpdate(uint8_t CurLegNum)
 
     if((ROC_ROBOT_CNT_LEGS - 1) == CurLegNum)
     {
-        g_RobotCtrl.CurState.GaitStep++;                                    //Advance to the next step
+        g_RobotMoveCtrl.CurState.GaitStep++;                                    //Advance to the next step
 
-        if (g_RobotCtrl.CurState.GaitStep > g_RobotCtrl.CurGait.StepsInGait) //The last leg in this step
+        if (g_RobotMoveCtrl.CurState.GaitStep > g_RobotMoveCtrl.CurGait.StepsInGait) //The last leg in this step
         {
-            g_RobotCtrl.CurState.GaitStep = 1;
+            g_RobotMoveCtrl.CurState.GaitStep = 1;
         }
     }
 #endif
 
     //Gait in motion
-    if ((g_RobotCtrl.CurState.TravelRequest
-        && (g_RobotCtrl.CurGait.NrLiftedPos == 1) && (LegStep == 0))
-        || (!g_RobotCtrl.CurState.TravelRequest && (LegStep == 0)
-        && ((fabs(g_RobotCtrl.CurState.LegCurPos[CurLegNum].X) > 2)
-        || (fabs(g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y) > 2)
-        || (fabs(g_RobotCtrl.CurState.GaitRot[CurLegNum]) > 2))))
+    if ((g_RobotMoveCtrl.CurState.TravelRequest
+        && (g_RobotMoveCtrl.CurGait.NrLiftedPos == 1) && (LegStep == 0))
+        || (!g_RobotMoveCtrl.CurState.TravelRequest && (LegStep == 0)
+        && ((fabs(g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X) > 2)
+        || (fabs(g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y) > 2)
+        || (fabs(g_RobotMoveCtrl.CurState.GaitRot[CurLegNum]) > 2))))
     {
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = 0;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotCtrl.CurState.LegLiftHeight;
-        g_RobotCtrl.CurState.GaitRot[CurLegNum] = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotMoveCtrl.CurState.LegLiftHeight;
+        g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = 0;
 
         GaitPos = 1;
     }
-    else if ((((g_RobotCtrl.CurGait.NrLiftedPos == 2)&& (LegStep == 0))
-        || ((g_RobotCtrl.CurGait.NrLiftedPos >= 3)
-        && ((LegStep == -1) || (LegStep == g_RobotCtrl.CurGait.StepsInGait - 1))))
-        && g_RobotCtrl.CurState.TravelRequest)
+    else if ((((g_RobotMoveCtrl.CurGait.NrLiftedPos == 2)&& (LegStep == 0))
+        || ((g_RobotMoveCtrl.CurGait.NrLiftedPos >= 3)
+        && ((LegStep == -1) || (LegStep == g_RobotMoveCtrl.CurGait.StepsInGait - 1))))
+        && g_RobotMoveCtrl.CurState.TravelRequest)
     {    //Optional Half heigth Rear (2, 3, 5 lifted positions)
-        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotMoveCtrl.CurState.MoveStatus)
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotCtrl.CurState.LegLiftHeight / (3 + g_RobotCtrl.CurGait.HalfLiftHeight);     //Easier to shift between div factor: /1 (3/3), /2 (3/6) and 3/4
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = -g_RobotCtrl.CurState.TravelLength.Z / g_RobotCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotMoveCtrl.CurState.TravelLength.X / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotMoveCtrl.CurState.LegLiftHeight / (3 + g_RobotMoveCtrl.CurGait.HalfLiftHeight);     //Easier to shift between div factor: /1 (3/3), /2 (3/6) and 3/4
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = -g_RobotMoveCtrl.CurState.TravelLength.Z / g_RobotMoveCtrl.CurGait.LiftDivFactor;
         }
         else
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotCtrl.CurState.LegLiftHeight / (3 + g_RobotCtrl.CurGait.HalfLiftHeight);
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].A = -g_RobotCtrl.CurState.TravelLength.A / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = -g_RobotCtrl.CurState.TravelLength.Z / g_RobotCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotMoveCtrl.CurState.LegLiftHeight / (3 + g_RobotMoveCtrl.CurGait.HalfLiftHeight);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A = -g_RobotMoveCtrl.CurState.TravelLength.A / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = -g_RobotMoveCtrl.CurState.TravelLength.Z / g_RobotMoveCtrl.CurGait.LiftDivFactor;
         }
 
         GaitPos = 2;
     }
-    else if ((g_RobotCtrl.CurGait.NrLiftedPos >= 2)
-        && ((LegStep == 1) || LegStep == - (g_RobotCtrl.CurGait.StepsInGait-1))
-        && g_RobotCtrl.CurState.TravelRequest)
+    else if ((g_RobotMoveCtrl.CurGait.NrLiftedPos >= 2)
+        && ((LegStep == 1) || LegStep == - (g_RobotMoveCtrl.CurGait.StepsInGait-1))
+        && g_RobotMoveCtrl.CurState.TravelRequest)
     {    // Optional Half heigth front (2, 3, 5 lifted positions)
-        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotMoveCtrl.CurState.MoveStatus)
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotCtrl.CurState.LegLiftHeight / (3 + g_RobotCtrl.CurGait.HalfLiftHeight); // Easier to shift between div factor: /1 (3/3), /2 (3/6) and 3/4
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.TravelLength.Z / g_RobotCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotMoveCtrl.CurState.TravelLength.X / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotMoveCtrl.CurState.LegLiftHeight / (3 + g_RobotMoveCtrl.CurGait.HalfLiftHeight); // Easier to shift between div factor: /1 (3/3), /2 (3/6) and 3/4
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.TravelLength.Z / g_RobotMoveCtrl.CurGait.LiftDivFactor;
         }
         else
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotCtrl.CurState.LegLiftHeight / (3 + g_RobotCtrl.CurGait.HalfLiftHeight);
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].A = g_RobotCtrl.CurState.TravelLength.A / g_RobotCtrl.CurGait.LiftDivFactor;
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = -g_RobotCtrl.CurState.TravelLength.Z / g_RobotCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 3 * g_RobotMoveCtrl.CurState.LegLiftHeight / (3 + g_RobotMoveCtrl.CurGait.HalfLiftHeight);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A = g_RobotMoveCtrl.CurState.TravelLength.A / g_RobotMoveCtrl.CurGait.LiftDivFactor;
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = -g_RobotMoveCtrl.CurState.TravelLength.Z / g_RobotMoveCtrl.CurGait.LiftDivFactor;
         }
 
         GaitPos = 3;
     }
-    else if (((g_RobotCtrl.CurGait.NrLiftedPos == 5) && (LegStep == -2))
-        && g_RobotCtrl.CurState.TravelRequest)
+    else if (((g_RobotMoveCtrl.CurGait.NrLiftedPos == 5) && (LegStep == -2))
+        && g_RobotMoveCtrl.CurState.TravelRequest)
     {    //Optional Half heigth Rear 5 LiftedPos (5 lifted positions)
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotCtrl.CurState.TravelLength.X / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotCtrl.CurState.TravelLength.Y / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotCtrl.CurState.LegLiftHeight / 2;
-        g_RobotCtrl.CurState.GaitRot[CurLegNum] = -g_RobotCtrl.CurState.TravelLength.Z / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = -g_RobotMoveCtrl.CurState.TravelLength.X / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = -g_RobotMoveCtrl.CurState.TravelLength.Y / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotMoveCtrl.CurState.LegLiftHeight / 2;
+        g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = -g_RobotMoveCtrl.CurState.TravelLength.Z / 2;
 
         GaitPos = 4;
     }
-    else if ((g_RobotCtrl.CurGait.NrLiftedPos == 5)
-        && ((LegStep == 2) || (LegStep == -(g_RobotCtrl.CurGait.StepsInGait - 2)))
-        && g_RobotCtrl.CurState.TravelRequest)
+    else if ((g_RobotMoveCtrl.CurGait.NrLiftedPos == 5)
+        && ((LegStep == 2) || (LegStep == -(g_RobotMoveCtrl.CurGait.StepsInGait - 2)))
+        && g_RobotMoveCtrl.CurState.TravelRequest)
     {   //Optional Half heigth Front 5 LiftedPos(5 lifted positions)
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.TravelLength.X / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.TravelLength.Y / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotCtrl.CurState.LegLiftHeight / 2;
-        g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.TravelLength.Z / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotMoveCtrl.CurState.TravelLength.X / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotMoveCtrl.CurState.TravelLength.Y / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = g_RobotMoveCtrl.CurState.LegLiftHeight / 2;
+        g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.TravelLength.Z / 2;
 
         GaitPos = 5;
     }
-    else if(((LegStep == g_RobotCtrl.CurGait.FrontDownPos)
-        || (LegStep == -(g_RobotCtrl.CurGait.StepsInGait - g_RobotCtrl.CurGait.FrontDownPos)))
-        && g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y < 0)
+    else if(((LegStep == g_RobotMoveCtrl.CurGait.FrontDownPos)
+        || (LegStep == -(g_RobotMoveCtrl.CurGait.StepsInGait - g_RobotMoveCtrl.CurGait.FrontDownPos)))
+        && g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y < 0)
     {   //Leg front down position
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.TravelLength.X / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.TravelLength.Y / 2;
-        g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
-        g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.TravelLength.Z / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotMoveCtrl.CurState.TravelLength.X / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotMoveCtrl.CurState.TravelLength.Y / 2;
+        g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
+        g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.TravelLength.Z / 2;
 
         GaitPos = 6;
     }
     else
     {   //Move body forward
-        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotCtrl.CurState.MoveStatus)
+        if(ROC_ROBOT_MOVE_STATUS_CIRCLING != g_RobotMoveCtrl.CurState.MoveStatus)
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotCtrl.CurState.LegCurPos[CurLegNum].X - (g_RobotCtrl.CurState.TravelLength.X / g_RobotCtrl.CurGait.SlidDivFactor);
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y - (g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.SlidDivFactor);
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.GaitRot[CurLegNum] - (g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X - (g_RobotMoveCtrl.CurState.TravelLength.X / g_RobotMoveCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y - (g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] - (g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.SlidDivFactor);
         }
         else
         {
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].X = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
-            g_RobotCtrl.CurState.LegCurPos[CurLegNum].A =  g_RobotCtrl.CurState.LegCurPos[CurLegNum].A - (g_RobotCtrl.CurState.TravelLength.A / g_RobotCtrl.CurGait.SlidDivFactor);
-            g_RobotCtrl.CurState.GaitRot[CurLegNum] = g_RobotCtrl.CurState.GaitRot[CurLegNum] - (g_RobotCtrl.CurState.TravelLength.Y / g_RobotCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A =  g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A - (g_RobotMoveCtrl.CurState.TravelLength.A / g_RobotMoveCtrl.CurGait.SlidDivFactor);
+            g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] = g_RobotMoveCtrl.CurState.GaitRot[CurLegNum] - (g_RobotMoveCtrl.CurState.TravelLength.Y / g_RobotMoveCtrl.CurGait.SlidDivFactor);
         }
 
         GaitPos = 7;
@@ -338,8 +338,8 @@ static void RocRobotGaitPosUpdate(uint8_t CurLegNum)
     GaitPos = GaitPos;
 #ifdef ROC_ROBOT_GAIT_DEBUG
     ROC_LOGI("LegNum: %d, LegStep: %d, GaitPos: %d", CurLegNum, LegStep, GaitPos);
-    ROC_LOGI("x:%.2f, y:%.2f, z:%.2f, a: %.2f", g_RobotCtrl.CurState.LegCurPos[CurLegNum].X, g_RobotCtrl.CurState.LegCurPos[CurLegNum].Y,
-                                                g_RobotCtrl.CurState.LegCurPos[CurLegNum].Z, g_RobotCtrl.CurState.LegCurPos[CurLegNum].A);
+    ROC_LOGI("x:%.2f, y:%.2f, z:%.2f, a: %.2f", g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X, g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y,
+                                                g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z, g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A);
 #endif
 }  
 
@@ -361,59 +361,59 @@ void RocRobotGaitSeqUpdate(void)
     uint8_t            LegIndex = 0;    //Index used for leg Index Number
 
     //Check if the Gait is in motion
-    if(g_RobotCtrl.CurState.ForceGaitStepCnt != 0)
+    if(g_RobotMoveCtrl.CurState.ForceGaitStepCnt != 0)
     {
-        g_RobotCtrl.CurState.TravelRequest = ROC_ENABLE;
+        g_RobotMoveCtrl.CurState.TravelRequest = ROC_ENABLE;
     }
     else
     {
-        g_RobotCtrl.CurState.TravelRequest =    (fabs(g_RobotCtrl.CurState.TravelLength.X) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
-                                             || (fabs(g_RobotCtrl.CurState.TravelLength.Z) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
-                                             || (fabs(g_RobotCtrl.CurState.TravelLength.Y) > ROC_ROBOT_TRAVEL_DEAD_ZONE);
+        g_RobotMoveCtrl.CurState.TravelRequest =    (fabs(g_RobotMoveCtrl.CurState.TravelLength.X) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
+                                             || (fabs(g_RobotMoveCtrl.CurState.TravelLength.Z) > ROC_ROBOT_TRAVEL_DEAD_ZONE)
+                                             || (fabs(g_RobotMoveCtrl.CurState.TravelLength.Y) > ROC_ROBOT_TRAVEL_DEAD_ZONE);
 
-        if (g_RobotCtrl.CurState.TravelRequest)
+        if (g_RobotMoveCtrl.CurState.TravelRequest)
         {
 #if 0
-            if (g_RobotCtrl.CurState.TravelLength.Y < 0)    // just start walking - Try to guess a good foot to start off on
+            if (g_RobotMoveCtrl.CurState.TravelLength.Y < 0)    // just start walking - Try to guess a good foot to start off on
             {
-                g_RobotCtrl.CurState.GaitStep = ((g_RobotCtrl.CurState.TravelLength.X < 0) ? g_RobotCtrl.CurGait.GaitLegNr[ROC_ROBOT_LEF_HIN_LEG] : g_RobotCtrl.CurGait.GaitLegNr[ROC_ROBOT_RIG_HIN_LEG]);
+                g_RobotMoveCtrl.CurState.GaitStep = ((g_RobotMoveCtrl.CurState.TravelLength.X < 0) ? g_RobotMoveCtrl.CurGait.GaitLegNr[ROC_ROBOT_LEF_HIN_LEG] : g_RobotMoveCtrl.CurGait.GaitLegNr[ROC_ROBOT_RIG_HIN_LEG]);
             }
             else
             {
-                 g_RobotCtrl.CurState.GaitStep = ((g_RobotCtrl.CurState.TravelLength.X < 0) ? g_RobotCtrl.CurGait.GaitLegNr[ROC_ROBOT_LEF_FRO_LEG] : g_RobotCtrl.CurGait.GaitLegNr[ROC_ROBOT_RIG_FRO_LEG]);
+                 g_RobotMoveCtrl.CurState.GaitStep = ((g_RobotMoveCtrl.CurState.TravelLength.X < 0) ? g_RobotMoveCtrl.CurGait.GaitLegNr[ROC_ROBOT_LEF_FRO_LEG] : g_RobotMoveCtrl.CurGait.GaitLegNr[ROC_ROBOT_RIG_FRO_LEG]);
             }
 
             // And lets backup a few Gaitsteps before this to allow it to start the up swing
-            g_RobotCtrl.CurState.GaitStep = ((g_RobotCtrl.CurState.GaitStep > g_RobotCtrl.CurGait.FrontDownPos)
-                                            ? (g_RobotCtrl.CurState.GaitStep - g_RobotCtrl.CurGait.FrontDownPos)
-                                            : (g_RobotCtrl.CurState.GaitStep + g_RobotCtrl.CurGait.StepsInGait - g_RobotCtrl.CurGait.FrontDownPos));
+            g_RobotMoveCtrl.CurState.GaitStep = ((g_RobotMoveCtrl.CurState.GaitStep > g_RobotMoveCtrl.CurGait.FrontDownPos)
+                                            ? (g_RobotMoveCtrl.CurState.GaitStep - g_RobotMoveCtrl.CurGait.FrontDownPos)
+                                            : (g_RobotMoveCtrl.CurState.GaitStep + g_RobotMoveCtrl.CurGait.StepsInGait - g_RobotMoveCtrl.CurGait.FrontDownPos));
 #endif
         }
         else
         {
-            g_RobotCtrl.CurState.TravelLength.X = 0;        // Clear values under the cTravelDeadZone
-            g_RobotCtrl.CurState.TravelLength.Y = 0;        // Gait NOT in motion, return to home position
-            g_RobotCtrl.CurState.TravelLength.Z = 0;
+            g_RobotMoveCtrl.CurState.TravelLength.X = 0;        // Clear values under the cTravelDeadZone
+            g_RobotMoveCtrl.CurState.TravelLength.Y = 0;        // Gait NOT in motion, return to home position
+            g_RobotMoveCtrl.CurState.TravelLength.Z = 0;
         }
     }
 
-    g_RobotCtrl.CurState.TravelRequest = ROC_ENABLE;
+    g_RobotMoveCtrl.CurState.TravelRequest = ROC_ENABLE;
 
     for(LegIndex = 0; LegIndex < ROC_ROBOT_CNT_LEGS; LegIndex++)
     {
         RocRobotGaitPosUpdate(LegIndex);
     }
 
-    g_RobotCtrl.CurState.GaitStep++;
-    if (g_RobotCtrl.CurState.GaitStep > g_RobotCtrl.CurGait.StepsInGait)
+    g_RobotMoveCtrl.CurState.GaitStep++;
+    if (g_RobotMoveCtrl.CurState.GaitStep > g_RobotMoveCtrl.CurGait.StepsInGait)
     {
-      g_RobotCtrl.CurState.GaitStep = 1;
+      g_RobotMoveCtrl.CurState.GaitStep = 1;
     }
 
     // If we have a force count decrement it now
-    if (g_RobotCtrl.CurState.ForceGaitStepCnt)
+    if (g_RobotMoveCtrl.CurState.ForceGaitStepCnt)
     {
-        g_RobotCtrl.CurState.ForceGaitStepCnt--;
+        g_RobotMoveCtrl.CurState.ForceGaitStepCnt--;
     }
 }
 
@@ -494,9 +494,9 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     float   z = 0;
 
     /***********the coordinate datas of the first group legs ****************/
-    x = ROC_ROBOT_FRO_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X;
-    y = ROC_ROBOT_FRO_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Y;
-    z = ROC_ROBOT_FRO_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Z;
+    x = ROC_ROBOT_FRO_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X;
+    y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Y;
+    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Z;
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
     ROC_LOGW("x:%.2f, y:%.2f, z:%.2f", x, y, z);
@@ -508,17 +508,17 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_FET_CENTER + (ROC_ROBOT_FRO_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotCtrl.CurState.WalkMode)
+    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotMoveCtrl.CurState.WalkMode)
     {
         x = ROC_ROBOT_MID_INIT_X;
         y = ROC_ROBOT_MID_INIT_Y;
         z = ROC_ROBOT_MID_INIT_Z + ROC_ROBOT_QUAD_MODE_FEET_LIFT;
     }
-    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotCtrl.CurState.WalkMode)
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotMoveCtrl.CurState.WalkMode)
     {
-        x = ROC_ROBOT_MID_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X;
-        y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
-        z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+        x = ROC_ROBOT_MID_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X;
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
     }
 
     RocDhAlgorithmReverse(x, y, z);
@@ -528,9 +528,9 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_FET_CENTER + (-ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_HIN_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].X;
-    y = ROC_ROBOT_HIN_INIT_Y - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Y;
-    z = ROC_ROBOT_HIN_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
+    x = ROC_ROBOT_HIN_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].X;
+    y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Y;
+    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -540,9 +540,9 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
 
 
     /***********the coordinate datas of the second group legs ***************/
-    x = ROC_ROBOT_FRO_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].X;
-    y = ROC_ROBOT_FRO_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Y;
-    z = ROC_ROBOT_FRO_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
+    x = ROC_ROBOT_FRO_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].X;
+    y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Y;
+    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -551,17 +551,17 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_FET_CENTER + (-ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotCtrl.CurState.WalkMode)
+    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotMoveCtrl.CurState.WalkMode)
     {
         x = ROC_ROBOT_MID_INIT_X;
         y = ROC_ROBOT_MID_INIT_Y;
         z = ROC_ROBOT_MID_INIT_Z + ROC_ROBOT_QUAD_MODE_FEET_LIFT;
     }
-    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotCtrl.CurState.WalkMode)
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotMoveCtrl.CurState.WalkMode)
     {
-        x = ROC_ROBOT_MID_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X;
-        y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
-        z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
+        x = ROC_ROBOT_MID_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X;
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
     }
 
     RocDhAlgorithmReverse(x, y, z);
@@ -571,9 +571,9 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_FET_CENTER + (ROC_ROBOT_MID_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_HIN_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].X;
-    y = ROC_ROBOT_HIN_INIT_Y - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Y;
-    z = ROC_ROBOT_HIN_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
+    x = ROC_ROBOT_HIN_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].X;
+    y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Y;
+    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -604,9 +604,9 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     float   z = 0;
 
     /***********the coordinate datas of the first group legs ****************/
-    x = ROC_ROBOT_WIDTH * Cos((ROC_ROBOT_FRO_HIP_INIT_ANGLE + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    y = ROC_ROBOT_WIDTH * Sin((ROC_ROBOT_FRO_HIP_INIT_ANGLE + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    z = ROC_ROBOT_FRO_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+    x = ROC_ROBOT_WIDTH * Cos((ROC_ROBOT_FRO_HIP_INIT_ANGLE + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    y = ROC_ROBOT_WIDTH * Sin((ROC_ROBOT_FRO_HIP_INIT_ANGLE + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
     ROC_LOGW("x:%.2f, y:%.2f, z:%.2f", x, y, z);
@@ -618,9 +618,9 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_FET_CENTER + (ROC_ROBOT_FRO_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_MID_HIP_INIT_ANGLE - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_MID_HIP_INIT_ANGLE - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_MID_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_MID_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -629,9 +629,9 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_FET_CENTER + (-ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_HIN_HIP_INIT_ANGLE - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_HIN_HIP_INIT_ANGLE - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    z = ROC_ROBOT_HIN_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
+    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_HIN_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_HIN_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -641,9 +641,9 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
 
 
     /***********the coordinate datas of the second group legs ***************/
-    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    z = ROC_ROBOT_FRO_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
+    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -652,9 +652,9 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_FET_CENTER + (-ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_MID_HIP_INIT_ANGLE + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_MID_HIP_INIT_ANGLE + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
+    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_MID_HIP_INIT_ANGLE + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_MID_HIP_INIT_ANGLE + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -663,9 +663,9 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_FET_CENTER + (ROC_ROBOT_MID_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_HIN_HIP_INIT_ANGLE + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_HIN_HIP_INIT_ANGLE + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
-    z = ROC_ROBOT_HIN_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
+    x = ROC_ROBOT_WIDTH * Cos( (ROC_ROBOT_HIN_HIP_INIT_ANGLE + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_HIN_HIP_INIT_ANGLE + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
+    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -811,9 +811,9 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     float   XStepError = 0;
     static  float MaxError = 0;
 
-    XStepError = (g_RobotCtrl.CurState.CurImuAngle.Yaw - g_RobotCtrl.CurState.RefImuAngle.Yaw) * ROC_ROBOT_PID_CONST_P;
+    XStepError = (g_RobotMoveCtrl.CurState.CurImuAngle.Yaw - g_RobotMoveCtrl.CurState.RefImuAngle.Yaw) * ROC_ROBOT_PID_CONST_P;
 
-    if(ROC_ROBOT_MOVE_STATUS_BAKWALKING == g_RobotCtrl.CurState.MoveStatus)
+    if(ROC_ROBOT_MOVE_STATUS_BAKWALKING == g_RobotMoveCtrl.CurState.MoveStatus)
     {
         XStepError = -XStepError;
     }
@@ -828,9 +828,9 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     RocRobotStepErrorCheck(&XStepError);
 
     /***********the coordinate datas of the first group legs ****************/
-    x = ROC_ROBOT_FRO_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X + XStepError;
-    y = ROC_ROBOT_FRO_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Y;
-    z = ROC_ROBOT_FRO_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Z;
+    x = ROC_ROBOT_FRO_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X + XStepError;
+    y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Y;
+    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Z;
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
     ROC_LOGW("x:%.2f, y:%.2f, z:%.2f", x, y, z);
@@ -842,17 +842,17 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_FET_CENTER + (ROC_ROBOT_FRO_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotCtrl.CurState.WalkMode)
+    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotMoveCtrl.CurState.WalkMode)
     {
         x = ROC_ROBOT_MID_INIT_X;
         y = ROC_ROBOT_MID_INIT_Y;
         z = ROC_ROBOT_MID_INIT_Z + ROC_ROBOT_QUAD_MODE_FEET_LIFT;
     }
-    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotCtrl.CurState.WalkMode)
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotMoveCtrl.CurState.WalkMode)
     {
-        x = ROC_ROBOT_MID_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X;
-        y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
-        z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+        x = ROC_ROBOT_MID_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X;
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
     }
 
     RocDhAlgorithmReverse(x, y, z);
@@ -862,9 +862,9 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_FET_CENTER + (-ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_HIN_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].X + XStepError;
-    y = ROC_ROBOT_HIN_INIT_Y - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Y;
-    z = ROC_ROBOT_HIN_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
+    x = ROC_ROBOT_HIN_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].X + XStepError;
+    y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Y;
+    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -874,9 +874,9 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
 
 
     /***********the coordinate datas of the second group legs ***************/
-    x = ROC_ROBOT_FRO_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].X - XStepError;
-    y = ROC_ROBOT_FRO_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Y;
-    z = ROC_ROBOT_FRO_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
+    x = ROC_ROBOT_FRO_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].X - XStepError;
+    y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Y;
+    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -885,17 +885,17 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_FET_CENTER + (-ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotCtrl.CurState.WalkMode)
+    if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotMoveCtrl.CurState.WalkMode)
     {
         x = ROC_ROBOT_MID_INIT_X;
         y = ROC_ROBOT_MID_INIT_Y;
         z = ROC_ROBOT_MID_INIT_Z + ROC_ROBOT_QUAD_MODE_FEET_LIFT;
     }
-    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotCtrl.CurState.WalkMode)
+    else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotMoveCtrl.CurState.WalkMode)
     {
-        x = ROC_ROBOT_MID_INIT_X + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X;
-        y = ROC_ROBOT_MID_INIT_Y + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
-        z = ROC_ROBOT_MID_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
+        x = ROC_ROBOT_MID_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X;
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
     }
 
     RocDhAlgorithmReverse(x, y, z);
@@ -905,9 +905,9 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_FET_CENTER + (ROC_ROBOT_MID_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_HIN_INIT_X - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].X - XStepError;
-    y = ROC_ROBOT_HIN_INIT_Y - g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Y;
-    z = ROC_ROBOT_HIN_INIT_Z + g_RobotCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
+    x = ROC_ROBOT_HIN_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].X - XStepError;
+    y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Y;
+    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
 
     RocDhAlgorithmReverse(x, y, z);
 
@@ -931,9 +931,9 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
  *  Author:
  *              ROC LiRen(2019.03.30)
 **********************************************************************************/
-ROC_ROBOT_CONTROL_s *RocRobotCtrlInfoGet(void)
+ROC_ROBOT_MOVE_CTRL_s *RocRobotCtrlInfoGet(void)
 {
-    return &g_RobotCtrl;
+    return &g_RobotMoveCtrl;
 }
 
 /*********************************************************************************
@@ -951,7 +951,7 @@ ROC_ROBOT_CONTROL_s *RocRobotCtrlInfoGet(void)
 **********************************************************************************/
 void RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_e MoveStatus)
 {
-    g_RobotCtrl.CurState.MoveStatus = MoveStatus;
+    g_RobotMoveCtrl.CurState.MoveStatus = MoveStatus;
 }
 
 /*********************************************************************************
@@ -969,7 +969,7 @@ void RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_e MoveStatus)
 **********************************************************************************/
 ROC_ROBOT_MOVE_STATUS_e RocRobotMoveStatus_Get(void)
 {
-    return g_RobotCtrl.CurState.MoveStatus;
+    return g_RobotMoveCtrl.CurState.MoveStatus;
 }
 
 /*********************************************************************************
@@ -991,11 +991,11 @@ ROC_ROBOT_MOVE_STATUS_e RocRobotMoveStatus_Get(void)
 **********************************************************************************/
 void RocRobotCtrlDeltaMoveCoorInput(double x, double y, double z, double a, double h)
 {
-    g_RobotCtrl.CurState.TravelLength.X = x;
-    g_RobotCtrl.CurState.TravelLength.Y = y;
-    g_RobotCtrl.CurState.TravelLength.Z = z;
-    g_RobotCtrl.CurState.TravelLength.A = a;
-    g_RobotCtrl.CurState.LegLiftHeight  = h;
+    g_RobotMoveCtrl.CurState.TravelLength.X = x;
+    g_RobotMoveCtrl.CurState.TravelLength.Y = y;
+    g_RobotMoveCtrl.CurState.TravelLength.Z = z;
+    g_RobotMoveCtrl.CurState.TravelLength.A = a;
+    g_RobotMoveCtrl.CurState.LegLiftHeight  = h;
 }
 
 /*********************************************************************************
@@ -1017,10 +1017,10 @@ static void RocRobotCurLegPosUpdate(void)
 
     for(i = 0; i < ROC_ROBOT_CNT_LEGS; i++)
     {
-        g_RobotCtrl.CurState.LegCurPos[i].X = g_RobotCtrl.CurState.TravelLength.X;
-        g_RobotCtrl.CurState.LegCurPos[i].Y = g_RobotCtrl.CurState.TravelLength.Y;
-        g_RobotCtrl.CurState.LegCurPos[i].Z = g_RobotCtrl.CurState.TravelLength.Z;
-        g_RobotCtrl.CurState.LegCurPos[i].A = g_RobotCtrl.CurState.TravelLength.A;
+        g_RobotMoveCtrl.CurState.LegCurPos[i].X = g_RobotMoveCtrl.CurState.TravelLength.X;
+        g_RobotMoveCtrl.CurState.LegCurPos[i].Y = g_RobotMoveCtrl.CurState.TravelLength.Y;
+        g_RobotMoveCtrl.CurState.LegCurPos[i].Z = g_RobotMoveCtrl.CurState.TravelLength.Z;
+        g_RobotMoveCtrl.CurState.LegCurPos[i].A = g_RobotMoveCtrl.CurState.TravelLength.A;
     }
 }
 
@@ -1039,7 +1039,7 @@ static void RocRobotCurLegPosUpdate(void)
 **********************************************************************************/
 void RocRobotSingleLegSelect(ROC_ROBOT_LEG_e SlecetLegNum)
 {
-    g_RobotCtrl.CurState.SelectLegNum = SlecetLegNum;
+    g_RobotMoveCtrl.CurState.SelectLegNum = SlecetLegNum;
 }
 
 /*********************************************************************************
@@ -1060,42 +1060,42 @@ void RocRobotSingleLegCtrl(ROC_ROBOT_SERVO_s *pRobotServo)
     uint8_t                 i = 0;
     static ROC_ROBOT_LEG_e  PrevSelectedLeg = ROC_ROBOT_RIG_FRO_LEG;
 
-    if(ROC_ROBOT_CNT_LEGS == g_RobotCtrl.CurState.SelectLegNum)
+    if(ROC_ROBOT_CNT_LEGS == g_RobotMoveCtrl.CurState.SelectLegNum)
     {
         RocRobotCurLegPosUpdate();  /* control all the legs */
     }
     else
     {
-        if(ROC_FALSE == g_RobotCtrl.CurState.SelectLegIsAllDown)
+        if(ROC_FALSE == g_RobotMoveCtrl.CurState.SelectLegIsAllDown)
         {
-            g_RobotCtrl.CurState.LegCurPos[PrevSelectedLeg].Z = 0;
+            g_RobotMoveCtrl.CurState.LegCurPos[PrevSelectedLeg].Z = 0;
 
-            g_RobotCtrl.CurState.LegCurPos[g_RobotCtrl.CurState.SelectLegNum].Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5;
+            g_RobotMoveCtrl.CurState.LegCurPos[g_RobotMoveCtrl.CurState.SelectLegNum].Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5;
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
-            ROC_LOGN("SelectLegNum: %u, PrevSelectedLeg: %u", g_RobotCtrl.CurState.SelectLegNum, PrevSelectedLeg);
+            ROC_LOGN("SelectLegNum: %u, PrevSelectedLeg: %u", g_RobotMoveCtrl.CurState.SelectLegNum, PrevSelectedLeg);
 #endif
-            PrevSelectedLeg = g_RobotCtrl.CurState.SelectLegNum;
+            PrevSelectedLeg = g_RobotMoveCtrl.CurState.SelectLegNum;
         }
-        else if(ROC_TRUE == g_RobotCtrl.CurState.SelectLegIsAllDown)
+        else if(ROC_TRUE == g_RobotMoveCtrl.CurState.SelectLegIsAllDown)
         {
-            g_RobotCtrl.CurState.LegCurPos[g_RobotCtrl.CurState.SelectLegNum].Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5;
+            g_RobotMoveCtrl.CurState.LegCurPos[g_RobotMoveCtrl.CurState.SelectLegNum].Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 1.5;
         }
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
-        ROC_LOGN("LegCurPos.Z: %.2f ", g_RobotCtrl.CurState.LegCurPos[g_RobotCtrl.CurState.SelectLegNum].Z);
+        ROC_LOGN("LegCurPos.Z: %.2f ", g_RobotMoveCtrl.CurState.LegCurPos[g_RobotMoveCtrl.CurState.SelectLegNum].Z);
 #endif
     }
 
     RocRobotOpenLoopWalkCalculate(pRobotServo);
 
-    g_RobotCtrl.CurState.SelectLegIsAllDown = ROC_TRUE;
+    g_RobotMoveCtrl.CurState.SelectLegIsAllDown = ROC_TRUE;
 
     for(i = 0; i < ROC_ROBOT_CNT_LEGS; i++)
     {
-        if(0 != g_RobotCtrl.CurState.LegCurPos[i].Z)
+        if(0 != g_RobotMoveCtrl.CurState.LegCurPos[i].Z)
         {
-            g_RobotCtrl.CurState.SelectLegIsAllDown = ROC_FALSE;
+            g_RobotMoveCtrl.CurState.SelectLegIsAllDown = ROC_FALSE;
         }
     }
 }
@@ -1120,17 +1120,17 @@ ROC_RESULT RocRobotAlgoCtrlInit(void)
 
     for(i = 0; i < ROC_ROBOT_CNT_LEGS; i++)
     {
-        g_RobotCtrl.CurState.LegCurPos[i].X = 0;
-        g_RobotCtrl.CurState.LegCurPos[i].Y = 0;
-        g_RobotCtrl.CurState.LegCurPos[i].Z = 0;
-        g_RobotCtrl.CurState.LegCurPos[i].A = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[i].X = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[i].Y = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[i].Z = 0;
+        g_RobotMoveCtrl.CurState.LegCurPos[i].A = 0;
     }
 
-    g_RobotCtrl.CurState.GaitStep = 1;
-    g_RobotCtrl.CurState.GaitType = ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_6;
-    g_RobotCtrl.CurState.WalkMode = ROC_ROBOT_WALK_MODE_HEXAPOD;
-    //g_RobotCtrl.CurState.GaitType = ROC_ROBOT_GAIT_QUAD_MODE_AMBLE_4;
-    //g_RobotCtrl.CurState.WalkMode = ROC_ROBOT_WALK_MODE_QUADRUPED;
+    g_RobotMoveCtrl.CurState.GaitStep = 1;
+    g_RobotMoveCtrl.CurState.GaitType = ROC_ROBOT_GAIT_HEXP_MODE_TRIPOD_6;
+    g_RobotMoveCtrl.CurState.WalkMode = ROC_ROBOT_WALK_MODE_HEXAPOD;
+    //g_RobotMoveCtrl.CurState.GaitType = ROC_ROBOT_GAIT_QUAD_MODE_AMBLE_4;
+    //g_RobotMoveCtrl.CurState.WalkMode = ROC_ROBOT_WALK_MODE_QUADRUPED;
 
     Ret = RocRobotGaitSelect();
     if(RET_OK != Ret)

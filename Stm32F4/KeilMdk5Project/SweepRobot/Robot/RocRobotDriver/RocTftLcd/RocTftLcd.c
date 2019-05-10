@@ -148,6 +148,8 @@ static void  RocSpiWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+
     WriteStatus = HAL_SPI_Transmit(&hspi1, Dat, DatLen, ROC_TFT_LCD_WRITE_TIME_OUT);
     if(HAL_OK != WriteStatus)
     {
@@ -252,6 +254,24 @@ static void RocTftLcdWrite16Dat(uint16_t Data)
 
     RocSpiWriteData(Buff, 2);
     //RocSpiDmaWriteData(Buff, 2);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Wait TFT LCD write done
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.21)
+**********************************************************************************/
+static void RocTftLcdWaitWriteDone(void)
+{
+    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
 }
 
 /*********************************************************************************
@@ -424,7 +444,9 @@ static void RocTftLcdSetXY(uint16_t Xpos, uint16_t Ypos)
 {
     RocTftLcdWriteReg(0x2A);
     RocTftLcdWrite16Dat(Xpos);
+    RocTftLcdWrite16Dat(Xpos);
     RocTftLcdWriteReg(0x2B);
+    RocTftLcdWrite16Dat(Ypos);
     RocTftLcdWrite16Dat(Ypos);
     RocTftLcdWriteReg(0x2c);
 }
@@ -474,6 +496,7 @@ static void RocTftLcdSetRegion(uint16_t XStart, uint16_t YStart, uint16_t XEnd, 
 void RocTftLcdDrawPoint(uint16_t X, uint16_t Y, uint16_t Color)
 {
     RocTftLcdSetXY(X, Y);
+
     RocTftLcdWrite16Dat(Color);
 }
 
@@ -1311,7 +1334,7 @@ void RocTftLcdDrawGbk16Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, flo
         Ret = RocDoubleDatToStringDat(Num, NumStr);
         if(RET_OK == Ret)
         {
-            while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);     /* To wait the string buffer write done */
+            RocTftLcdWaitWriteDone();   /* To wait the string buffer write done */
 
             for(i = 0; i < ROC_TFT_LCD_STR_PIXEL_SIZE; i++)
             {
@@ -1365,7 +1388,7 @@ void RocTftLcdDrawGbk24Num(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, flo
 
         if(RET_OK == Ret)
         {
-            while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);     /* To wait the string buffer write done */
+            RocTftLcdWaitWriteDone();   /* To wait the string buffer write done */
 
             for(i = 0; i < ROC_TFT_LCD_STR_PIXEL_SIZE; i++)
             {

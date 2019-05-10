@@ -8,10 +8,14 @@
 #define __ROC_ROBOTCONTROL_H
 
 
+#include "RocRemoteControl.h"
+#include "RocRobotDhAlgorithm.h"
+
+
 #define ROC_ROBOT_CONTROL_DEBUG
 
 
-#define ROC_ROBOT_CTRL_TIME_LCD_TICK    50
+#define ROC_ROBOT_CTRL_TIME_LCD_TICK    10
 
 
 typedef enum _ROC_ROBOT_RUN_MODE_e
@@ -41,6 +45,7 @@ typedef enum _ROC_ROBOT_CTRL_CMD_e
     ROC_ROBOT_CTRL_MEASURE_STOP,
 
     ROC_ROBOT_CTRL_CMD_NUM = 13,
+
 }ROC_ROBOT_CTRL_CMD_e;
 
 
@@ -57,6 +62,17 @@ typedef struct _ROC_ROBOT_CTRL_TIME_s
     uint8_t     LcdTimeIsReady;         // check if the lcd show time is ready
 
 }ROC_ROBOT_CTRL_TIME_s;
+
+typedef struct _ROC_ROBOT_CTRL_s
+{
+    ROC_ROBOT_CTRL_FlAG_s    CtrlFlag;
+    ROC_ROBOT_CTRL_TIME_s    CtrlTime;
+    ROC_ROBOT_RUN_MODE_e     RunMode;
+    ROC_REMOTE_CTRL_INPUT_s  RemoteCtrl;
+    ROC_ROBOT_MOVE_CTRL_s    *MoveCtrl;
+
+}ROC_ROBOT_CTRL_s;
+
 
 void RocRobotInit(void);
 void RocRobotMain(void);
