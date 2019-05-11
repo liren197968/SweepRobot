@@ -1,10 +1,9 @@
 ##############################
 ## Folders                  ##
 ##############################
-Stm32F4/SiProject/
-Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/SweepRobot
-Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/DebugConfig
-Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/RTE
+Stm32F4/KeilMdk5Project/MDK-ARM/SweepRobot
+Stm32F4/KeilMdk5Project/MDK-ARM/DebugConfig
+Stm32F4/KeilMdk5Project/MDK-ARM/RTE
 
 ##############################
 ## Netbeans conf            ##
@@ -12,3 +11,8 @@ Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/RTE
 Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/JLinkLog.txt
 Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/startup_stm32f405xx.lst
 Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/SweepRobot.uvguix.Admin
+Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/debug.ini
+Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/EventRecorderStub.scvd
+Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/JLinkSettings.ini
+Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/libeco2_m4.lst
+Stm32F4/KeilMdk5Project/SweepRobot/MDK-ARM/SweepRobot.uvguix.zdx
