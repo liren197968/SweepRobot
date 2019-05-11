@@ -48,7 +48,7 @@ extern "C" {
 #include "main.h"
 
     /* USER CODE BEGIN Includes */
-
+#define ROC_TIMER_PRESCALER_TIM2    2000
     /* USER CODE END Includes */
 
     extern TIM_HandleTypeDef htim2;

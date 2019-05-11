@@ -53,9 +53,9 @@ void MX_TIM2_Init(void)
     TIM_MasterConfigTypeDef sMasterConfig;
 
     htim2.Instance = TIM2;
-    htim2.Init.Prescaler = 84000000 / 1000 - 1;
+    htim2.Init.Prescaler = 84000000 / ROC_TIMER_PRESCALER_TIM2 - 1;
     htim2.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim2.Init.Period = 0;
+    htim2.Init.Period = 200 - 1;
     if (HAL_TIM_Base_Init(&htim2) != HAL_OK)
     {
         _Error_Handler(__FILE__, __LINE__);
@@ -78,7 +78,7 @@ void MX_TIM6_Init(void)
     htim6.Instance = TIM6;
     htim6.Init.Prescaler = 84000000 / 10000 - 1;
     htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
-    htim6.Init.Period = 0;
+    htim6.Init.Period = 200 - 1;
     if (HAL_TIM_Base_Init(&htim6) != HAL_OK)
     {
         _Error_Handler(__FILE__, __LINE__);

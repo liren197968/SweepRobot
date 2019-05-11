@@ -27,6 +27,42 @@ static ROC_ROBOT_CTRL_s    g_RobotCtrl = {{0}, {0}, ROC_ROBOT_RUN_MODE_HEXAPOD, 
 
 /*********************************************************************************
  *  Description:
+ *              Robot init success beeper aciton
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.05.11)
+**********************************************************************************/
+static void RocRobotInitEndBeeperAction(void)
+{
+    RocBeeperBlink(4, 100);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot battery need charge beeper aciton
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.05.11)
+**********************************************************************************/
+static void RocRobotBatteryChargeBeeperAction(void)
+{
+    RocBeeperBlink(ROC_BEEPER_BLINK_FOREVER, 1000);
+}
+
+/*********************************************************************************
+ *  Description:
  *              Set the robot walk mode
  *
  *  Parameter:
@@ -815,7 +851,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //Ret = RocBeeperInit();
+    Ret = RocBeeperInit();
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
@@ -871,7 +907,7 @@ void RocRobotInit(void)
         while(1);
     }
 
-    //RocBeeperBlink(2, 200);
+    RocRobotInitEndBeeperAction();
 
     ROC_LOGI("Robot hardware init is in success, and the system start running.");
 
@@ -882,9 +918,6 @@ void RocRobotInit(void)
     }
 
     RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
-
-    RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
-
 }
 
 /*********************************************************************************
@@ -938,7 +971,7 @@ static void RocBatteryCheckTaskEntry(void)
         ROC_LOGN("Battery is in low electricity! Charge it!");
 
         RocRobotStopRun();
-        RocBeeperBlink(ROC_BEEPER_BLINK_FOREVER, 200);
+        RocRobotBatteryChargeBeeperAction();
     }
 #endif
 
@@ -971,8 +1004,6 @@ static void RocRobotLcdShowInfoEntry(void)
         RocTftLcdDrawGbk16Num(50, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch);
         RocTftLcdDrawGbk16Num(130, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll);
         RocTftLcdDrawGbk16Num(210, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw);
-
-        //RocRobotMotionTrackOnLcdDraw(&g_RobotCtrl.MoveCtrl->CurState);
     }
 }
 

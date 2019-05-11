@@ -169,7 +169,8 @@ static void RocBeeperTimerPeriodSet(uint16_t Period)
  *              Blink beeper for serval times
  *
  *  Parameter:
- *              None
+ *              BlinkTimes: beeper on and off times
+ *              PeriodTime: the time of beeper on for every blink(ms)
  *
  *  Return:
  *              None
@@ -179,16 +180,18 @@ static void RocBeeperTimerPeriodSet(uint16_t Period)
 **********************************************************************************/
 void RocBeeperBlink(uint16_t BlinkTimes, uint16_t PeriodTime)
 {
+    while(0 != g_BeeperCtrl.RunTimes);  /* Wait for the last beeper action finshed */
+
     if(ROC_BEEPER_BLINK_FOREVER == BlinkTimes)
     {
         g_BeeperCtrl.RunTimes = ROC_BEEPER_BLINK_FOREVER;
     }
     else
     {
-        g_BeeperCtrl.RunTimes = BlinkTimes * 2;
+        g_BeeperCtrl.RunTimes = BlinkTimes * 2 - 1;
     }
 
-    RocBeeperTimerPeriodSet(PeriodTime);
+    RocBeeperTimerPeriodSet(PeriodTime * ROC_BEEPER_ONE_SECOND_TICKS);
 
     RocBeeperOn();
 }
