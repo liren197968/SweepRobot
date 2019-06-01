@@ -572,6 +572,118 @@ static void RocRobotMoveContextSwitch(ROC_ROBOT_MOVE_CTRL_s *pRobotCtrl)
 
 /*********************************************************************************
  *  Description:
+ *              Rotate robot body for body IK test
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+static void RocRobotBodyRotateTest(void)
+{
+    static uint8_t RotateTimes  = 0;
+    static uint8_t TestFlag = ROC_FALSE;
+
+    RotateTimes++;
+
+    if(16 >= RotateTimes)
+    {
+        if(ROC_FALSE == TestFlag)
+        {
+            g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z + 5;
+        }
+
+        if(ROC_TRUE == TestFlag)
+        {
+            g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z - 5;
+        }
+
+        if(20 == g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z)
+        {
+            TestFlag = ROC_TRUE;
+        }
+
+        if(-20 == g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z)
+        {
+            TestFlag = ROC_FALSE;
+        }
+
+        ROC_LOGI("BodyRot.Z: %.2f", g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z);
+    }
+    else if((32 >= RotateTimes) && (16 < RotateTimes))
+    {
+        if(ROC_FALSE == TestFlag)
+        {
+            g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = g_RobotCtrl.MoveCtrl->CurState.BodyRot.X + 4;
+        }
+
+        if(ROC_TRUE == TestFlag)
+        {
+            g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = g_RobotCtrl.MoveCtrl->CurState.BodyRot.X - 4;
+        }
+
+        if(16 == g_RobotCtrl.MoveCtrl->CurState.BodyRot.X)
+        {
+            TestFlag = ROC_TRUE;
+        }
+
+        if(-16 == g_RobotCtrl.MoveCtrl->CurState.BodyRot.X)
+        {
+            TestFlag = ROC_FALSE;
+        }
+
+        ROC_LOGI("BodyRot.X: %.2f", g_RobotCtrl.MoveCtrl->CurState.BodyRot.X);
+    }
+    else if((48 >= RotateTimes) && (32 < RotateTimes))
+    {
+        if(ROC_FALSE == TestFlag)
+        {
+            g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y + 4;
+        }
+
+        if(ROC_TRUE == TestFlag)
+        {
+            g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y - 4;
+        }
+
+        if(16 == g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y)
+        {
+            TestFlag = ROC_TRUE;
+        }
+
+        if(-16 == g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y)
+        {
+            TestFlag = ROC_FALSE;
+        }
+
+        ROC_LOGI("BodyRot.Y: %.2f", g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y);
+    }
+    else
+    {
+        RotateTimes = 0;
+    }
+
+//    if(ROC_FALSE == TestFlag)
+//    {
+//        TestFlag = ROC_TRUE;
+//
+//        g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = 8;
+//    }
+//    else if(ROC_TRUE == TestFlag)
+//    {
+//        TestFlag = ROC_FALSE;
+//
+//        g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -8;
+//    }
+//
+//    ROC_LOGI("BodyRot.Y: %.2f", g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z);
+}
+/*********************************************************************************
+ *  Description:
  *              Robot move core
  *
  *  Parameter:
@@ -615,7 +727,10 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_MOVE_CTRL_s *pRobotCtrl)
             RocRobotGaitSeqUpdate();
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
+            RocRobotBodyRotateTest();
+
             RocRobotMotionTrackOnLcdDraw(&g_RobotCtrl.MoveCtrl->CurState);
+
             RocRobotClosedLoopWalkCalculate(&pRobotCtrl->CurServo);
 #else
             RocRobotOpenLoopWalkCalculate(&pRobotCtrl->CurServo);
@@ -831,7 +946,7 @@ void RocRobotInit(void)
     if(RET_OK != Ret)
     {
         ROC_LOGE("Robot hardware is in error, the system will not run!");
-    
+
         while(1);
     }
 
@@ -862,6 +977,8 @@ void RocRobotInit(void)
     Ret = RocPca9685Init();
     if(RET_OK != Ret)
     {
+        RocTftLcdShowErrorMsg("PCA9685 ERROR!");
+
         ROC_LOGE("Robot hardware is in error, the system will not run!");
 
         while(1);
@@ -878,6 +995,8 @@ void RocRobotInit(void)
     Ret = RocMpu6050Init();
     if(RET_OK != Ret)
     {
+        RocTftLcdShowErrorMsg("MPU6050 ERROR!");
+
         ROC_LOGE("Robot hardware is in error, the system will not run!");
 
         while(1);
@@ -918,6 +1037,7 @@ void RocRobotInit(void)
     }
 
     RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
+    RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
 }
 
 /*********************************************************************************
@@ -1029,7 +1149,8 @@ static void RocRobotCtrlTaskEntry(void)
         uint32_t CurExeTime = HAL_GetTick();
         static uint32_t LastExeTime = 0;
 
-        ROC_LOGN("robot execution time interval is %d ms", CurExeTime - LastExeTime);
+        RocServoOutputDisable();
+        //ROC_LOGN("robot execution time interval is %d ms", CurExeTime - LastExeTime);
 
         LastExeTime = CurExeTime;
 #endif
@@ -1049,7 +1170,6 @@ static void RocRobotCtrlTaskEntry(void)
     }
     else
     {
-
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
         RocRobotImuEulerAngleGet(&g_RobotCtrl.MoveCtrl->CurState.CurImuAngle);
 #endif

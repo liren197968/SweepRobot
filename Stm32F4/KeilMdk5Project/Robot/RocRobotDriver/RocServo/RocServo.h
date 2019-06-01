@@ -29,7 +29,7 @@
 
 #define ROC_SERVO_MAX_SUPPORT_NUM       18U
 
-#define ROC_SERVO_MAX_PWM_VAL           512
+#define ROC_SERVO_MAX_PWM_VAL           502
 #define ROC_SERVO_MIN_PWM_VAL           102
 #define ROC_SERVO_CENTER_VAL            256
 

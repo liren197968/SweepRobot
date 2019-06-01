@@ -930,8 +930,17 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
     uint16_t k = 0;
     uint16_t x0 = 0;
     uint16_t l = 0;
+    uint16_t Size = 0;
 
     x0 = X;
+
+    while(*pStr)
+    {
+        Size++;
+        pStr++;
+    }
+
+    pStr = pStr - Size;
 
     while(*pStr)
     {
@@ -963,8 +972,8 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                         {
                             //RocTftLcdDrawPoint(X + j, Y + i, Fc);
 
-                            g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Fc >> 8;
-                            g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Fc;
+                            g_TftLcdStrBuff[2 * (i * Size * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Fc >> 8;
+                            g_TftLcdStrBuff[2 * (i * Size * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Fc;
                         }
                         else
                         {
@@ -972,8 +981,8 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                             {
                                 //RocTftLcdDrawPoint(X + j, Y + i, Bc);
 
-                                g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Bc >> 8;
-                                g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Bc;
+                                g_TftLcdStrBuff[2 * (i * Size * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Bc >> 8;
+                                g_TftLcdStrBuff[2 * (i * Size * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Bc;
                             }
                         }
                     }
@@ -1030,11 +1039,11 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
         }
     }
 
-    RocTftLcdSetRegion(X, Y, X + ROC_TFT_LCD_STR_PIXEL_SIZE / ROC_TFT_LCD_HEIGHT_GBK_16 - 1, Y + ROC_TFT_LCD_HEIGHT_GBK_16 - 1);
+    RocTftLcdSetRegion(X, Y, X + Size * ROC_TFT_LCD_WIDTH_GBK_16 - 1, Y + ROC_TFT_LCD_HEIGHT_GBK_16 - 1);
 
     ROC_TFT_LCD_RS_SET();
 
-    RocSpiDmaWriteData(g_TftLcdStrBuff, ROC_TFT_LCD_STR_BUFF_SIZE);
+    RocSpiDmaWriteData(g_TftLcdStrBuff, Size * ROC_TFT_LCD_WIDTH_GBK_16 * ROC_TFT_LCD_HEIGHT_GBK_16 * ROC_TFT_LCD_ONE_PIXEL_BYTE);
 }
 
 /*********************************************************************************
@@ -1060,6 +1069,15 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
     uint16_t j = 0;
     uint16_t k = 0;
     uint16_t l = 0;
+    uint16_t Size = 0;
+
+    while(*pStr)
+    {
+        Size++;
+        pStr++;
+    }
+
+    pStr = pStr - Size;
 
     while(*pStr)
     {
@@ -1084,8 +1102,8 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                     {
                         //RocTftLcdDrawPoint(X + j, Y + i, Fc);
 
-                        g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Fc >> 8;
-                        g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Fc;
+                        g_TftLcdStrBuff[2 * (i * Size * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Fc >> 8;
+                        g_TftLcdStrBuff[2 * (i * Size * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Fc;
                     }
                     else
                     {
@@ -1093,8 +1111,8 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
                         {
                             //RocTftLcdDrawPoint(X + j, Y + i, Bc);
 
-                            g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Bc >> 8;
-                            g_TftLcdStrBuff[2 * (i * ROC_TFT_LCD_SUPPORT_NUM_LEN * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Bc;
+                            g_TftLcdStrBuff[2 * (i * Size * ROC_TFT_LCD_WIDTH_GBK_16 + j + l)] = Bc >> 8;
+                            g_TftLcdStrBuff[2 * (i * Size * ROC_TFT_LCD_WIDTH_GBK_16 + j + l) + 1] = Bc;
                         }
                     }
                 }
@@ -1164,11 +1182,11 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
         }
     }
 
-    RocTftLcdSetRegion(X, Y, X + ROC_TFT_LCD_STR_PIXEL_SIZE / ROC_TFT_LCD_HEIGHT_GBK_16 - 1, Y + ROC_TFT_LCD_HEIGHT_GBK_16 - 1);
+    RocTftLcdSetRegion(X, Y, X + Size * ROC_TFT_LCD_WIDTH_GBK_16 - 1, Y + ROC_TFT_LCD_HEIGHT_GBK_16 - 1);
 
     ROC_TFT_LCD_RS_SET();
 
-    RocSpiDmaWriteData(g_TftLcdStrBuff, ROC_TFT_LCD_STR_BUFF_SIZE);
+    RocSpiDmaWriteData(g_TftLcdStrBuff, Size * ROC_TFT_LCD_WIDTH_GBK_16 * ROC_TFT_LCD_HEIGHT_GBK_16 * ROC_TFT_LCD_ONE_PIXEL_BYTE);
 }
 
 /*********************************************************************************

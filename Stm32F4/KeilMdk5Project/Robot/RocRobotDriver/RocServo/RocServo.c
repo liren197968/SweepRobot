@@ -66,13 +66,17 @@ static void RocServoPwmIncreCalculate(void)
     {
         if(g_PwmExpetVal[i] < ROC_SERVO_MIN_PWM_VAL)
         {
-            ROC_LOGE("Servo(%d) input PWM value(%d) is less than ROC_SERVO_MIN_PWM_VAL! Be careful! \r\n", i, g_PwmExpetVal[i]);
+            ROC_LOGE("Servo(%d) input PWM value(%d) is less than ROC_SERVO_MIN_PWM_VAL! Be careful!", i, g_PwmExpetVal[i]);
+
+            RocServoOutputDisable();
 
             g_PwmExpetVal[i] = ROC_SERVO_MIN_PWM_VAL;
         }
         else if(g_PwmExpetVal[i] > ROC_SERVO_MAX_PWM_VAL)
         {
-            ROC_LOGE("Servo(%d) input PWM value(%d) is more than ROC_SERVO_MAX_PWM_VAL! Be careful! \r\n", i, g_PwmExpetVal[i]);
+            ROC_LOGE("Servo(%d) input PWM value(%d) is more than ROC_SERVO_MAX_PWM_VAL! Be careful!", i, g_PwmExpetVal[i]);
+
+            RocServoOutputDisable();
 
             g_PwmExpetVal[i] = ROC_SERVO_MAX_PWM_VAL;
         }

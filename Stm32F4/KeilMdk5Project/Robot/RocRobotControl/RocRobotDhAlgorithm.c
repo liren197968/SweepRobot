@@ -46,8 +46,8 @@ static ROC_PHOENIX_GAIT_s g_RobotGait[] =
 
 
 static float                    g_DhAngleBuffer[3];
+static float                    g_BodyIkPos[3] = {0};
 static ROC_ROBOT_MOVE_CTRL_s    g_RobotMoveCtrl = {0};
-
 
 /*********************************************************************************
  *  Description:
@@ -337,9 +337,9 @@ static void RocRobotGaitPosUpdate(uint8_t CurLegNum)
 
     GaitPos = GaitPos;
 #ifdef ROC_ROBOT_GAIT_DEBUG
-    ROC_LOGI("LegNum: %d, LegStep: %d, GaitPos: %d", CurLegNum, LegStep, GaitPos);
-    ROC_LOGI("x:%.2f, y:%.2f, z:%.2f, a: %.2f", g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X, g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y,
-                                                g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z, g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A);
+//    ROC_LOGI("LegNum: %d, LegStep: %d, GaitPos: %d", CurLegNum, LegStep, GaitPos);
+//    ROC_LOGI("x:%.2f, y:%.2f, z:%.2f, a: %.2f", g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].X, g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Y,
+//                                                g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].Z, g_RobotMoveCtrl.CurState.LegCurPos[CurLegNum].A);
 #endif
 }  
 
@@ -419,8 +419,140 @@ void RocRobotGaitSeqUpdate(void)
 
 /*********************************************************************************
  *  Description:
+ *              The robot body inverse kinematic, which be used to caculate the
+ *              the coordinate of robot feet after rotating from pitch, roll, yaw
+                axis.
+ *
+ *  Parameter:
+ *              x: the expected X position of the robot leg tiptoe
+ *              y: the expected Y position of the robot leg tiptoe
+ *              z: the expected Z position of the robot leg tiptoe
+ *
+ *              BodyRotX: Global Input pitch of the body
+ *              BodyRotY: Global Input roll of the body
+ *              BodyRotZ: Global Input yaw of the body
+ *              RotationY: Input Rotation for the gait
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
+static void RocBodyInverseKinematic(float x, float y, float z, ROC_ROBOT_LEG_e LegNum)
+{
+    float   SinA;   //Sin buffer for BodyRotX calculations
+    float   CosA;   //Cos buffer for BodyRotX calculations
+    float   SinB;   //Sin buffer for BodyRotX calculations
+    float   CosB;   //Cos buffer for BodyRotX calculations
+    float   SinG;   //Sin buffer for BodyRotZ calculations
+    float   CosG;   //Cos buffer for BodyRotZ calculations
+    float   CprX;   //Final X value for centerpoint of rotation
+    float   CprY;   //Final Y value for centerpoint of rotation
+    float   CprZ;   //Final Z value for centerpoint of rotation
+
+    //Calculating totals from center of the body to the feet
+    switch(LegNum)
+    {
+        case ROC_ROBOT_RIG_FRO_LEG:
+        {
+            CprX = ROC_ROBOT_RIG_FRO_OFFSET_X + ROC_ROBOT_FRO_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
+            CprY = ROC_ROBOT_RIG_FRO_OFFSET_Y + ROC_ROBOT_FRO_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
+            CprZ = ROC_ROBOT_RIG_FRO_OFFSET_Z + ROC_ROBOT_FRO_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+
+            break;
+        }
+
+        case ROC_ROBOT_RIG_MID_LEG:
+        {
+            CprX = ROC_ROBOT_RIG_MID_OFFSET_X + ROC_ROBOT_MID_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
+            CprY = ROC_ROBOT_RIG_MID_OFFSET_Y + ROC_ROBOT_MID_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
+            CprZ = ROC_ROBOT_RIG_MID_OFFSET_Z + ROC_ROBOT_MID_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+
+            break;
+        }
+
+        case ROC_ROBOT_RIG_HIN_LEG:
+        {
+            CprX = ROC_ROBOT_RIG_HIN_OFFSET_X + ROC_ROBOT_HIN_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
+            CprY = ROC_ROBOT_RIG_HIN_OFFSET_Y - ROC_ROBOT_HIN_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
+            CprZ = ROC_ROBOT_RIG_HIN_OFFSET_Z + ROC_ROBOT_HIN_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+
+            break;
+        }
+
+        case ROC_ROBOT_LEF_FRO_LEG:
+        {
+            CprX = ROC_ROBOT_LEF_FRO_OFFSET_X - ROC_ROBOT_FRO_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
+            CprY = ROC_ROBOT_LEF_FRO_OFFSET_Y + ROC_ROBOT_FRO_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
+            CprZ = ROC_ROBOT_LEF_FRO_OFFSET_Z + ROC_ROBOT_FRO_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+
+            break;
+        }
+
+        case ROC_ROBOT_LEF_MID_LEG:
+        {
+            CprX = ROC_ROBOT_LEF_MID_OFFSET_X - ROC_ROBOT_MID_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
+            CprY = ROC_ROBOT_LEF_MID_OFFSET_Y + ROC_ROBOT_MID_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
+            CprZ = ROC_ROBOT_LEF_MID_OFFSET_Z + ROC_ROBOT_MID_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+
+            break;
+        }
+
+        case ROC_ROBOT_LEF_HIN_LEG:
+        {
+            CprX = ROC_ROBOT_LEF_HIN_OFFSET_X - ROC_ROBOT_HIN_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
+            CprY = ROC_ROBOT_LEF_HIN_OFFSET_Y - ROC_ROBOT_HIN_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
+            CprZ = ROC_ROBOT_LEF_HIN_OFFSET_Z + ROC_ROBOT_HIN_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+
+            break;
+        }
+
+//      CprX = x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
+//      CprY = y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
+//      CprZ = z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;  //Define centerpoint for rotation along the Y-axis
+
+        default:
+        {
+            break;
+        }
+    }
+
+    //ROC_LOGI("BodyRot.Z: %.2f", g_RobotMoveCtrl.CurState.BodyRot.Z);
+    //ROC_LOGW("CprX: %.2f, CprY: %.2f, CprZ: %.2f", CprX, CprY, CprZ);
+
+    /*Successive global rotation matrix:
+    Math shorts for rotation: Alfa [A] = Zrotate, Beta [B] = Yrotate, Gamma [G] = Xrotate
+    Sinus Alfa = SinA, cosinus Alfa = cosA, and so on. */
+    //First calculate sinus and cosinus for each rotation:
+    SinG = Sin(g_RobotMoveCtrl.CurState.BodyRot.X * ROC_ROBOT_ANGLE_TO_RADIAN);
+    CosG = Cos(g_RobotMoveCtrl.CurState.BodyRot.X * ROC_ROBOT_ANGLE_TO_RADIAN);
+
+    SinB = Sin(g_RobotMoveCtrl.CurState.BodyRot.Y * ROC_ROBOT_ANGLE_TO_RADIAN);
+    CosB = Cos(g_RobotMoveCtrl.CurState.BodyRot.Y * ROC_ROBOT_ANGLE_TO_RADIAN);
+
+    SinA = Sin(g_RobotMoveCtrl.CurState.BodyRot.Z * ROC_ROBOT_ANGLE_TO_RADIAN);
+    CosA = Cos(g_RobotMoveCtrl.CurState.BodyRot.Z * ROC_ROBOT_ANGLE_TO_RADIAN);
+
+    //Calcualtion of rotation matrix:
+    //Increment for the feet coordinate
+    g_BodyIkPos[0] = (CprX - (CprX * CosA * CosB - CprY * CosB * SinA + CprZ * SinB));
+
+    g_BodyIkPos[1] = (CprY - (CprX * CosG * SinA + CprX * CosA * SinB * SinG + CprY * CosA * CosG
+                    - CprY * SinA * SinB * SinG - CprZ * CosB * SinG));
+
+    g_BodyIkPos[2] = (CprZ - (CprX * SinA * SinG - CprX * CosA * CosG * SinB + CprY * CosA * SinG
+                    + CprY * CosG * SinA * SinB + CprZ * CosB * CosG));
+
+#ifdef ROC_ROBOT_GAIT_DEBUG
+    ROC_LOGI("BodyIkPosX: %.2f, BodyIkPosY: %.2f, BodyIkPosZ: %.2f, LegNum: %d", g_BodyIkPos[0], g_BodyIkPos[1], g_BodyIkPos[2], LegNum);
+#endif
+}
+
+/*********************************************************************************
+ *  Description:
  *              The reverse DH algorithm, which be used to caculate the three joint
- *              rotate angle of the hexapod robot leg.
+ *              rotate angle of the robot leg for the given position of the feet.
  *
  *  Parameter:
  *              x: the expected X position of the robot leg tiptoe
@@ -433,7 +565,7 @@ void RocRobotGaitSeqUpdate(void)
  *  Author:
  *              ROC LiRen(2018.12.16)
 **********************************************************************************/
-static void RocDhAlgorithmReverse(float x, float y, float z)
+static void RocLegInverseKinematic(float x, float y, float z)
 {
     double  a = 0;
     double  e = 0;
@@ -501,7 +633,7 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
 #ifdef ROC_ROBOT_GAIT_DEBUG
     ROC_LOGW("x:%.2f, y:%.2f, z:%.2f", x, y, z);
 #endif
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_HIP_CENTER + (ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_LEG_CENTER + (ROC_ROBOT_FRO_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -521,7 +653,7 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
         z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
     }
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_MID_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_LEG_CENTER + (ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -532,7 +664,7 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Y;
     z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_HIN_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_HIN_LEG_CENTER + (ROC_ROBOT_HIN_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -544,7 +676,7 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Y;
     z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_FRO_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_LEG_CENTER + (g_DhAngleBuffer[1] - ROC_ROBOT_FRO_LEG_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -564,7 +696,7 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
         z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
     }
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_HIP_CENTER + (ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_LEG_CENTER + (-ROC_ROBOT_MID_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -575,7 +707,7 @@ void RocRobotOpenLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Y;
     z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_HIN_HIP_CENTER + (ROC_ROBOT_HIN_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_HIN_LEG_CENTER + (g_DhAngleBuffer[1] - ROC_ROBOT_HIN_LEG_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -611,7 +743,7 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
 #ifdef ROC_ROBOT_GAIT_DEBUG
     ROC_LOGW("x:%.2f, y:%.2f, z:%.2f", x, y, z);
 #endif
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_HIP_CENTER + (ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_LEG_CENTER + (ROC_ROBOT_FRO_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -622,7 +754,7 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_MID_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
     z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_MID_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_LEG_CENTER + (ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -633,7 +765,7 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_HIN_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
     z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_HIN_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_HIN_LEG_CENTER + (ROC_ROBOT_HIN_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -645,7 +777,7 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
     z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_FRO_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_LEG_CENTER + (g_DhAngleBuffer[1] - ROC_ROBOT_FRO_LEG_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -656,7 +788,7 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_MID_HIP_INIT_ANGLE + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
     z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_HIP_CENTER + (ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_LEG_CENTER + (-ROC_ROBOT_MID_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -667,7 +799,7 @@ void RocRobotOpenLoopCircleCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     y = ROC_ROBOT_WIDTH * Sin( (ROC_ROBOT_HIN_HIP_INIT_ANGLE + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].A) * ROC_ROBOT_ANGLE_TO_RADIAN);
     z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_HIN_HIP_CENTER + (ROC_ROBOT_HIN_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_HIN_LEG_CENTER + (g_DhAngleBuffer[1] - ROC_ROBOT_HIN_LEG_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -823,24 +955,37 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
         MaxError = XStepError;
     }
 
+    XStepError = 0;
+
     //RocTftLcdDrawGbk24Num(120, 200, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, fabs(MaxError));
 
     RocRobotStepErrorCheck(&XStepError);
 
+    RocBodyInverseKinematic(g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Y,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Z,
+                            ROC_ROBOT_RIG_FRO_LEG);
+
     /***********the coordinate datas of the first group legs ****************/
-    x = ROC_ROBOT_FRO_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X + XStepError;
-    y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Y;
-    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Z;
+    x = ROC_ROBOT_FRO_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].X - g_BodyIkPos[0] + XStepError;
+    y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Y - g_BodyIkPos[1];
+    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_FRO_LEG].Z - g_BodyIkPos[2];
+
+    RocLegInverseKinematic(x, y, z);
 
 #ifdef ROC_ROBOT_GAIT_DEBUG
-    ROC_LOGW("x:%.2f, y:%.2f, z:%.2f", x, y, z);
+    ROC_LOGW("FeetInPosX: %.2f, FeetInPosY: %.2f, FeetInPosZ: %.2f", x, y, z);
 #endif
-    RocDhAlgorithmReverse(x, y, z);
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_HIP_CENTER + (ROC_ROBOT_FRO_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_LEG_CENTER + (ROC_ROBOT_FRO_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_FRO_FET_CENTER + (ROC_ROBOT_FRO_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
+
+    RocBodyInverseKinematic(g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z,
+                            ROC_ROBOT_LEF_MID_LEG);
 
     if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotMoveCtrl.CurState.WalkMode)
     {
@@ -850,23 +995,36 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     }
     else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotMoveCtrl.CurState.WalkMode)
     {
-        x = ROC_ROBOT_MID_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X;
-        y = ROC_ROBOT_MID_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y;
-        z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z;
+        x = ROC_ROBOT_MID_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].X + g_BodyIkPos[0];
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Y - g_BodyIkPos[1];
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_MID_LEG].Z - g_BodyIkPos[2];
     }
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
+
+#ifdef ROC_ROBOT_GAIT_DEBUG
+    ROC_LOGW("FeetInPosX: %.2f, FeetInPosY: %.2f, FeetInPosZ: %.2f", x, y, z);
+#endif
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_MID_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_LEG_CENTER + (ROC_ROBOT_MID_LEG_INIT_ANGLE + g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_MID_FET_CENTER + (-ROC_ROBOT_MID_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_HIN_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].X + XStepError;
-    y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Y;
-    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z;
+    RocBodyInverseKinematic(g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].X,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Y,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z,
+                            ROC_ROBOT_RIG_HIN_LEG);
 
-    RocDhAlgorithmReverse(x, y, z);
+    x = ROC_ROBOT_HIN_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].X - g_BodyIkPos[0] + XStepError;
+    y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Y + g_BodyIkPos[1];
+    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_HIN_LEG].Z - g_BodyIkPos[2];
+
+    RocLegInverseKinematic(x, y, z);
+
+#ifdef ROC_ROBOT_GAIT_DEBUG
+    ROC_LOGW("FeetInPosX: %.2f, FeetInPosY: %.2f, FeetInPosZ: %.2f", x, y, z);
+#endif
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_HIN_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_HIN_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_HIN_LEG_CENTER + (ROC_ROBOT_HIN_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
@@ -874,16 +1032,30 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
 
 
     /***********the coordinate datas of the second group legs ***************/
-    x = ROC_ROBOT_FRO_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].X - XStepError;
-    y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Y;
-    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z;
+    RocBodyInverseKinematic(g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].X,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Y,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z,
+                            ROC_ROBOT_LEF_FRO_LEG);
 
-    RocDhAlgorithmReverse(x, y, z);
+    x = ROC_ROBOT_FRO_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].X + g_BodyIkPos[0] - XStepError;
+    y = ROC_ROBOT_FRO_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Y - g_BodyIkPos[1];
+    z = ROC_ROBOT_FRO_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_FRO_LEG].Z - g_BodyIkPos[2];
+
+    RocLegInverseKinematic(x, y, z);
+
+#ifdef ROC_ROBOT_GAIT_DEBUG
+    ROC_LOGW("FeetInPosX: %.2f, FeetInPosY: %.2f, FeetInPosZ: %.2f", x, y, z);
+#endif
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_HIP_CENTER + (g_DhAngleBuffer[0] - ROC_ROBOT_FRO_HIP_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_LEG_CENTER + (g_DhAngleBuffer[1] - ROC_ROBOT_FRO_LEG_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_FRO_FET_CENTER + (-ROC_ROBOT_FRO_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
+
+    RocBodyInverseKinematic(g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z,
+                            ROC_ROBOT_RIG_MID_LEG);
 
     if(ROC_ROBOT_WALK_MODE_QUADRUPED == g_RobotMoveCtrl.CurState.WalkMode)
     {
@@ -893,28 +1065,40 @@ void RocRobotClosedLoopWalkCalculate(ROC_ROBOT_SERVO_s *pRobotServo)
     }
     else if(ROC_ROBOT_WALK_MODE_HEXAPOD == g_RobotMoveCtrl.CurState.WalkMode)
     {
-        x = ROC_ROBOT_MID_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X;
-        y = ROC_ROBOT_MID_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y;
-        z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z;
+        x = ROC_ROBOT_MID_INIT_X + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].X - g_BodyIkPos[0];
+        y = ROC_ROBOT_MID_INIT_Y + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Y - g_BodyIkPos[1];
+        z = ROC_ROBOT_MID_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_RIG_MID_LEG].Z - g_BodyIkPos[2];
     }
 
-    RocDhAlgorithmReverse(x, y, z);
+    RocLegInverseKinematic(x, y, z);
+
+#ifdef ROC_ROBOT_GAIT_DEBUG
+    ROC_LOGW("FeetInPosX: %.2f, FeetInPosY: %.2f, FeetInPosZ: %.2f", x, y, z);
+#endif
 
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_HIP_CENTER + (ROC_ROBOT_MID_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_LEG_CENTER + (-ROC_ROBOT_MID_LEG_INIT_ANGLE - g_DhAngleBuffer[1]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_RIG_MID_FET_CENTER + (ROC_ROBOT_MID_FET_INIT_ANGLE + g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
 
 
-    x = ROC_ROBOT_HIN_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].X - XStepError;
-    y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Y;
-    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z;
+    RocBodyInverseKinematic(g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].X,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Y,
+                            g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z,
+                            ROC_ROBOT_LEF_HIN_LEG);
 
-    RocDhAlgorithmReverse(x, y, z);
+    x = ROC_ROBOT_HIN_INIT_X - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].X + g_BodyIkPos[0] - XStepError;
+    y = ROC_ROBOT_HIN_INIT_Y - g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Y + g_BodyIkPos[1];
+    z = ROC_ROBOT_HIN_INIT_Z + g_RobotMoveCtrl.CurState.LegCurPos[ROC_ROBOT_LEF_HIN_LEG].Z - g_BodyIkPos[2];
+
+    RocLegInverseKinematic(x, y, z);
+
+#ifdef ROC_ROBOT_GAIT_DEBUG
+    ROC_LOGW("FeetInPosX: %.2f, FeetInPosY: %.2f, FeetInPosZ: %.2f", x, y, z);
+#endif
 
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_HIP_JOINT] = (int16_t)(ROC_ROBOT_LEF_HIN_HIP_CENTER + (ROC_ROBOT_HIN_HIP_INIT_ANGLE - g_DhAngleBuffer[0]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_KNEE_JOINT] = (int16_t)(ROC_ROBOT_LEF_HIN_LEG_CENTER + (g_DhAngleBuffer[1] - ROC_ROBOT_HIN_LEG_INIT_ANGLE) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
     pRobotServo->RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] = (int16_t)(ROC_ROBOT_LEF_HIN_FET_CENTER + (-ROC_ROBOT_HIN_FET_INIT_ANGLE - g_DhAngleBuffer[2]) * ROC_ROBOT_ROTATE_ANGLE_TO_PWM);
-
 }
 #endif
 

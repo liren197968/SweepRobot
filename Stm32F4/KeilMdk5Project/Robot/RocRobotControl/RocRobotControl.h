@@ -12,7 +12,7 @@
 #include "RocRobotDhAlgorithm.h"
 
 
-//#define ROC_ROBOT_CONTROL_DEBUG
+#define ROC_ROBOT_CONTROL_DEBUG
 
 
 #define ROC_ROBOT_CTRL_TIME_LCD_TICK    10

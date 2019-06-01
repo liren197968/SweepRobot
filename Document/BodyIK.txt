@@ -1,0 +1,44 @@
+BodyIK [PosX, PosZ, PosY, BodyOffsetX, BodyOffsetZ, RotationY]
+
+  ;Calculating totals from center of the body to the feet
+
+  TotalZ = BodyOffsetZ+PosZ
+
+  TotalX = BodyOffsetX+PosX
+
+  ;PosY are equal to a "TotalY"
+
+
+  ;Successive global rotation matrix:
+
+  ;Math shorts for rotation: Alfa (A) = Xrotate, Beta (B) = Zrotate, Gamma (G) = Yrotate
+
+  ;Sinus Alfa = sinA, cosinus Alfa = cosA. and so on...
+
+
+  ;First calculate sinus and cosinus for each rotation:
+
+  gosub GetSinCos [TOFLOAT(BodyRotX)]
+
+  sinG = sinA
+
+  cosG = cosA
+
+  gosub GetSinCos [TOFLOAT(BodyRotZ)]
+
+  sinB = sinA
+
+  cosB = cosA
+
+  gosub GetSinCos [TOFLOAT(BodyRotY+RotationY)]
+
+
+  ;Calcualtion of rotation matrix:
+
+  BodyIKPosX = TotalX-TOINT(TOFLOAT(TotalX)*cosA*cosB - TOFLOAT(TotalZ)*cosB*sinA + TOFLOAT(PosY)*sinB)
+
+  BodyIKPosZ = TotalZ-TOINT(TOFLOAT(TotalX)*cosG*sinA + TOFLOAT(TotalX)*cosA*sinB*sinG +TOFLOAT(TotalZ)*cosA*cosG-TOFLOAT(TotalZ)*sinA*sinB*sinG-TOFLOAT(PosY)*cosB*sinG)
+
+  BodyIKPosY = PosY - TOINT(TOFLOAT(TotalX)*sinA*sinG - TOFLOAT(TotalX)*cosA*cosG*sinB + TOFLOAT(TotalZ)*cosA*sinG + TOFLOAT(TotalZ)*cosG*sinA*sinB + TOFLOAT(PosY)*cosB*cosG)
+
+return
