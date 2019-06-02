@@ -118,11 +118,11 @@ static void RocRobotCtrlFlagSet(uint8_t FlagNum)
     {
         if(FlagNum == i)
         {
-            g_RobotCtrl.CtrlFlag.CtrlFlag[i] = ROC_TRUE;
+            g_RobotCtrl.CtrlFlag.FlagStatus[i] = ROC_TRUE;
         }
         else
         {
-            g_RobotCtrl.CtrlFlag.CtrlFlag[i] = ROC_FALSE;
+            g_RobotCtrl.CtrlFlag.FlagStatus[i] = ROC_FALSE;
         }
     }
 }
@@ -142,7 +142,7 @@ static void RocRobotCtrlFlagSet(uint8_t FlagNum)
 **********************************************************************************/
 static uint8_t RocRobotCtrlFlagGet(uint8_t FlagNum)
 {
-    return g_RobotCtrl.CtrlFlag.CtrlFlag[FlagNum];
+    return g_RobotCtrl.CtrlFlag.FlagStatus[FlagNum];
 }
 
 /*********************************************************************************
@@ -320,6 +320,10 @@ static void RocRobotRemoteControl(void)
                     RocRobotCtrlFlagSet(1);
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
 
@@ -343,6 +347,10 @@ static void RocRobotRemoteControl(void)
                     RocRobotCtrlFlagSet(2);
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
 
@@ -408,6 +416,10 @@ static void RocRobotRemoteControl(void)
                     RocRobotCtrlFlagSet(5);
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
 
@@ -431,6 +443,10 @@ static void RocRobotRemoteControl(void)
                     RocRobotCtrlFlagSet(6);
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
 
@@ -454,6 +470,10 @@ static void RocRobotRemoteControl(void)
                     RocRobotCtrlFlagSet(7);
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
 
@@ -477,6 +497,10 @@ static void RocRobotRemoteControl(void)
                     RocRobotCtrlFlagSet(8);
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
 
@@ -570,6 +594,7 @@ static void RocRobotMoveContextSwitch(ROC_ROBOT_MOVE_CTRL_s *pRobotCtrl)
     }
 }
 
+#if 0
 /*********************************************************************************
  *  Description:
  *              Rotate robot body for body IK test
@@ -666,22 +691,9 @@ static void RocRobotBodyRotateTest(void)
     {
         RotateTimes = 0;
     }
-
-//    if(ROC_FALSE == TestFlag)
-//    {
-//        TestFlag = ROC_TRUE;
-//
-//        g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = 8;
-//    }
-//    else if(ROC_TRUE == TestFlag)
-//    {
-//        TestFlag = ROC_FALSE;
-//
-//        g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -8;
-//    }
-//
-//    ROC_LOGI("BodyRot.Y: %.2f", g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z);
 }
+#endif
+
 /*********************************************************************************
  *  Description:
  *              Robot move core
@@ -727,7 +739,7 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_MOVE_CTRL_s *pRobotCtrl)
             RocRobotGaitSeqUpdate();
 
 #ifdef ROC_ROBOT_CLOSED_LOOP_CONTROL
-            RocRobotBodyRotateTest();
+            //RocRobotBodyRotateTest();
 
             RocRobotMotionTrackOnLcdDraw(&g_RobotCtrl.MoveCtrl->CurState);
 
@@ -995,7 +1007,14 @@ void RocRobotInit(void)
     Ret = RocMpu6050Init();
     if(RET_OK != Ret)
     {
-        RocTftLcdShowErrorMsg("MPU6050 ERROR!");
+        if(ROC_MPU6050_INIT_ERROR == Ret)
+        {
+            RocTftLcdShowErrorMsg("MPU6050 INIT ERROR!");
+        }
+        else if(ROC_MPU6050_DMP_INIT_ERROR == Ret)
+        {
+            RocTftLcdShowErrorMsg("MPU6050 DMP ERROR!");
+        }
 
         ROC_LOGE("Robot hardware is in error, the system will not run!");
 
@@ -1037,7 +1056,6 @@ void RocRobotInit(void)
     }
 
     RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
-    RocBluetoothCtrlCmd_Set(ROC_ROBOT_CTRL_CMD_FORWARD);
 }
 
 /*********************************************************************************

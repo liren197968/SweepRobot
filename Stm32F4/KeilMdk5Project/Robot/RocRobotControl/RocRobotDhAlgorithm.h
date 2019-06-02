@@ -20,6 +20,8 @@
 //#define ROC_ROBOT_GAIT_DEBUG
 #define ROC_ROBOT_GAIT_QUAD_MODE_ENABLE
 #define ROC_ROBOT_CLOSED_LOOP_CONTROL
+#define ROC_ROBOT_DISPLAY_GAIT_NAMES
+//#define ROC_ROBOT_GAIT_QUADMODE       // Building for quad support
 
 
 #define ROC_ROBOT_MATH_CONST_PI                     3.1415926
@@ -136,15 +138,18 @@
 #define ROC_ROBOT_LEF_HIN_FET_CENTER                310
 
 
-#define ROC_ROBOT_DEFAULT_LEG_STEP                  0//60
+#define ROC_ROBOT_DEFAULT_LEG_STEP                  60
 #define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
-#define ROC_ROBOT_DEFAULT_FEET_LIFT                 0//24
+#define ROC_ROBOT_DEFAULT_FEET_LIFT                 24
 #define ROC_ROBOT_QUAD_MODE_FEET_LIFT               40
 
 
-//#define ROC_ROBOT_GAIT_DEBUG
-#define ROC_ROBOT_DISPLAY_GAIT_NAMES
-//#define ROC_ROBOT_GAIT_QUADMODE                       // We are building for quad support
+#define ROC_ROBOT_BODY_ROTATE_MIN_PITCH             (-16)
+#define ROC_ROBOT_BODY_ROTATE_MAX_PITCH             16
+#define ROC_ROBOT_BODY_ROTATE_MIN_ROLL              (-16)
+#define ROC_ROBOT_BODY_ROTATE_MAX_ROLL              16
+#define ROC_ROBOT_BODY_ROTATE_MIN_YAW               (-20)
+#define ROC_ROBOT_BODY_ROTATE_MAX_YAW               20
 
 
 #define ROC_ROBOT_TRAVEL_DEAD_ZONE                  1   //The deadzone for the analog input from the remote
@@ -267,10 +272,10 @@ typedef struct _ROC_PHOENIX_STATE_s
     //Body position
     ROC_ROBOT_COORD_s           BodyCurPos;
     ROC_ROBOT_COORD_s           LegCurPos[ROC_ROBOT_CNT_LEGS];
-    ROC_ROBOT_COORD_s           BodyRotOffset;          // Body rotation offset;
+    ROC_ROBOT_COORD_s           BodyOffset;             // Body coordinate offset
 
     //Body Inverse Kinematics
-    ROC_ROBOT_COORD_s           BodyRot;                // X-Pitch, Y-Rotation, Z-Roll
+    ROC_ROBOT_COORD_s           BodyRot;                // Body rotation offset, X-Pitch, Y-Rotation, Z-Roll
 
     //[gait]
     ROC_ROBOT_GAIT_TYPE_e       GaitType;               // Gait type

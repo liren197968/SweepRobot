@@ -51,7 +51,7 @@ typedef enum _ROC_ROBOT_CTRL_CMD_e
 
 typedef struct _ROC_ROBOT_CTRL_FlAG_s
 {
-    uint8_t CtrlFlag[ROC_ROBOT_CTRL_CMD_NUM];
+    uint8_t FlagStatus[ROC_ROBOT_CTRL_CMD_NUM];
 
 }ROC_ROBOT_CTRL_FlAG_s;
 

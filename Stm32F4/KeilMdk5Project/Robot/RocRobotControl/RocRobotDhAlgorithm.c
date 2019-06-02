@@ -419,9 +419,52 @@ void RocRobotGaitSeqUpdate(void)
 
 /*********************************************************************************
  *  Description:
+ *              Check the body rotate angle range
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.06.02)
+**********************************************************************************/
+static void RocBodyRotateRangeCheck(void)
+{
+    if(ROC_ROBOT_BODY_ROTATE_MIN_PITCH > g_RobotMoveCtrl.CurState.BodyRot.X)
+    {
+        g_RobotMoveCtrl.CurState.BodyRot.X = ROC_ROBOT_BODY_ROTATE_MIN_PITCH;
+    }
+    else if(ROC_ROBOT_BODY_ROTATE_MAX_PITCH < g_RobotMoveCtrl.CurState.BodyRot.X)
+    {
+        g_RobotMoveCtrl.CurState.BodyRot.X = ROC_ROBOT_BODY_ROTATE_MAX_PITCH;
+    }
+
+    if(ROC_ROBOT_BODY_ROTATE_MIN_ROLL > g_RobotMoveCtrl.CurState.BodyRot.Y)
+    {
+        g_RobotMoveCtrl.CurState.BodyRot.Y = ROC_ROBOT_BODY_ROTATE_MIN_ROLL;
+    }
+    else if(ROC_ROBOT_BODY_ROTATE_MAX_ROLL < g_RobotMoveCtrl.CurState.BodyRot.Y)
+    {
+        g_RobotMoveCtrl.CurState.BodyRot.Y = ROC_ROBOT_BODY_ROTATE_MAX_ROLL;
+    }
+
+    if(ROC_ROBOT_BODY_ROTATE_MIN_YAW > g_RobotMoveCtrl.CurState.BodyRot.Z)
+    {
+        g_RobotMoveCtrl.CurState.BodyRot.Z = ROC_ROBOT_BODY_ROTATE_MIN_YAW;
+    }
+    else if(ROC_ROBOT_BODY_ROTATE_MAX_YAW < g_RobotMoveCtrl.CurState.BodyRot.Z)
+    {
+        g_RobotMoveCtrl.CurState.BodyRot.Z = ROC_ROBOT_BODY_ROTATE_MAX_YAW;
+    }
+}
+
+/*********************************************************************************
+ *  Description:
  *              The robot body inverse kinematic, which be used to caculate the
  *              the coordinate of robot feet after rotating from pitch, roll, yaw
-                axis.
+ *              axis.
  *
  *  Parameter:
  *              x: the expected X position of the robot leg tiptoe
@@ -451,66 +494,68 @@ static void RocBodyInverseKinematic(float x, float y, float z, ROC_ROBOT_LEG_e L
     float   CprY;   //Final Y value for centerpoint of rotation
     float   CprZ;   //Final Z value for centerpoint of rotation
 
+    RocBodyRotateRangeCheck();
+
     //Calculating totals from center of the body to the feet
     switch(LegNum)
     {
         case ROC_ROBOT_RIG_FRO_LEG:
         {
-            CprX = ROC_ROBOT_RIG_FRO_OFFSET_X + ROC_ROBOT_FRO_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
-            CprY = ROC_ROBOT_RIG_FRO_OFFSET_Y + ROC_ROBOT_FRO_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
-            CprZ = ROC_ROBOT_RIG_FRO_OFFSET_Z + ROC_ROBOT_FRO_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+            CprX = ROC_ROBOT_RIG_FRO_OFFSET_X + ROC_ROBOT_FRO_INIT_X + x - g_RobotMoveCtrl.CurState.BodyOffset.X;
+            CprY = ROC_ROBOT_RIG_FRO_OFFSET_Y + ROC_ROBOT_FRO_INIT_Y + y - g_RobotMoveCtrl.CurState.BodyOffset.Y;
+            CprZ = ROC_ROBOT_RIG_FRO_OFFSET_Z + ROC_ROBOT_FRO_INIT_Z + z - g_RobotMoveCtrl.CurState.BodyOffset.Z;
 
             break;
         }
 
         case ROC_ROBOT_RIG_MID_LEG:
         {
-            CprX = ROC_ROBOT_RIG_MID_OFFSET_X + ROC_ROBOT_MID_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
-            CprY = ROC_ROBOT_RIG_MID_OFFSET_Y + ROC_ROBOT_MID_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
-            CprZ = ROC_ROBOT_RIG_MID_OFFSET_Z + ROC_ROBOT_MID_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+            CprX = ROC_ROBOT_RIG_MID_OFFSET_X + ROC_ROBOT_MID_INIT_X + x - g_RobotMoveCtrl.CurState.BodyOffset.X;
+            CprY = ROC_ROBOT_RIG_MID_OFFSET_Y + ROC_ROBOT_MID_INIT_Y + y - g_RobotMoveCtrl.CurState.BodyOffset.Y;
+            CprZ = ROC_ROBOT_RIG_MID_OFFSET_Z + ROC_ROBOT_MID_INIT_Z + z - g_RobotMoveCtrl.CurState.BodyOffset.Z;
 
             break;
         }
 
         case ROC_ROBOT_RIG_HIN_LEG:
         {
-            CprX = ROC_ROBOT_RIG_HIN_OFFSET_X + ROC_ROBOT_HIN_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
-            CprY = ROC_ROBOT_RIG_HIN_OFFSET_Y - ROC_ROBOT_HIN_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
-            CprZ = ROC_ROBOT_RIG_HIN_OFFSET_Z + ROC_ROBOT_HIN_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+            CprX = ROC_ROBOT_RIG_HIN_OFFSET_X + ROC_ROBOT_HIN_INIT_X + x - g_RobotMoveCtrl.CurState.BodyOffset.X;
+            CprY = ROC_ROBOT_RIG_HIN_OFFSET_Y - ROC_ROBOT_HIN_INIT_Y + y - g_RobotMoveCtrl.CurState.BodyOffset.Y;
+            CprZ = ROC_ROBOT_RIG_HIN_OFFSET_Z + ROC_ROBOT_HIN_INIT_Z + z - g_RobotMoveCtrl.CurState.BodyOffset.Z;
 
             break;
         }
 
         case ROC_ROBOT_LEF_FRO_LEG:
         {
-            CprX = ROC_ROBOT_LEF_FRO_OFFSET_X - ROC_ROBOT_FRO_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
-            CprY = ROC_ROBOT_LEF_FRO_OFFSET_Y + ROC_ROBOT_FRO_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
-            CprZ = ROC_ROBOT_LEF_FRO_OFFSET_Z + ROC_ROBOT_FRO_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+            CprX = ROC_ROBOT_LEF_FRO_OFFSET_X - ROC_ROBOT_FRO_INIT_X + x - g_RobotMoveCtrl.CurState.BodyOffset.X;
+            CprY = ROC_ROBOT_LEF_FRO_OFFSET_Y + ROC_ROBOT_FRO_INIT_Y + y - g_RobotMoveCtrl.CurState.BodyOffset.Y;
+            CprZ = ROC_ROBOT_LEF_FRO_OFFSET_Z + ROC_ROBOT_FRO_INIT_Z + z - g_RobotMoveCtrl.CurState.BodyOffset.Z;
 
             break;
         }
 
         case ROC_ROBOT_LEF_MID_LEG:
         {
-            CprX = ROC_ROBOT_LEF_MID_OFFSET_X - ROC_ROBOT_MID_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
-            CprY = ROC_ROBOT_LEF_MID_OFFSET_Y + ROC_ROBOT_MID_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
-            CprZ = ROC_ROBOT_LEF_MID_OFFSET_Z + ROC_ROBOT_MID_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+            CprX = ROC_ROBOT_LEF_MID_OFFSET_X - ROC_ROBOT_MID_INIT_X + x - g_RobotMoveCtrl.CurState.BodyOffset.X;
+            CprY = ROC_ROBOT_LEF_MID_OFFSET_Y + ROC_ROBOT_MID_INIT_Y + y - g_RobotMoveCtrl.CurState.BodyOffset.Y;
+            CprZ = ROC_ROBOT_LEF_MID_OFFSET_Z + ROC_ROBOT_MID_INIT_Z + z - g_RobotMoveCtrl.CurState.BodyOffset.Z;
 
             break;
         }
 
         case ROC_ROBOT_LEF_HIN_LEG:
         {
-            CprX = ROC_ROBOT_LEF_HIN_OFFSET_X - ROC_ROBOT_HIN_INIT_X + x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
-            CprY = ROC_ROBOT_LEF_HIN_OFFSET_Y - ROC_ROBOT_HIN_INIT_Y + y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
-            CprZ = ROC_ROBOT_LEF_HIN_OFFSET_Z + ROC_ROBOT_HIN_INIT_Z + z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;
+            CprX = ROC_ROBOT_LEF_HIN_OFFSET_X - ROC_ROBOT_HIN_INIT_X + x - g_RobotMoveCtrl.CurState.BodyOffset.X;
+            CprY = ROC_ROBOT_LEF_HIN_OFFSET_Y - ROC_ROBOT_HIN_INIT_Y + y - g_RobotMoveCtrl.CurState.BodyOffset.Y;
+            CprZ = ROC_ROBOT_LEF_HIN_OFFSET_Z + ROC_ROBOT_HIN_INIT_Z + z - g_RobotMoveCtrl.CurState.BodyOffset.Z;
 
             break;
         }
 
-//      CprX = x + g_RobotMoveCtrl.CurState.BodyRotOffset.X;
-//      CprY = y + g_RobotMoveCtrl.CurState.BodyRotOffset.Y;
-//      CprZ = z + g_RobotMoveCtrl.CurState.BodyRotOffset.Z;  //Define centerpoint for rotation along the Y-axis
+//      CprX = x + g_RobotMoveCtrl.CurState.BodyOffset.X;
+//      CprY = y + g_RobotMoveCtrl.CurState.BodyOffset.Y;
+//      CprZ = z + g_RobotMoveCtrl.CurState.BodyOffset.Z;  //Define centerpoint for rotation along the Y-axis
 
         default:
         {
@@ -518,7 +563,7 @@ static void RocBodyInverseKinematic(float x, float y, float z, ROC_ROBOT_LEG_e L
         }
     }
 
-    //ROC_LOGI("BodyRot.Z: %.2f", g_RobotMoveCtrl.CurState.BodyRot.Z);
+    //ROC_LOGI("BodyRot.X: %.2f", g_RobotMoveCtrl.CurState.BodyRot.X);
     //ROC_LOGW("CprX: %.2f, CprY: %.2f, CprZ: %.2f", CprX, CprY, CprZ);
 
     /*Successive global rotation matrix:
