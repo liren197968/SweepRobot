@@ -221,6 +221,7 @@ void RocBeeperTaskBackground(void)
         RocBeeperOff();
     }
 }
+
 /*********************************************************************************
  *  Description:
  *              Beeper driver init

@@ -7,18 +7,12 @@
 #include <string.h>
 
 #include "stm32f4xx_hal.h"
-#include "gpio.h"
-#include "spi.h"
-#include "dma.h"
 
 #include "RocFont.h"
 #include "RocPicture.h"
 
 #include "RocLog.h"
 #include "RocTftLcd.h"
-
-
-extern DMA_HandleTypeDef hdma_spi1_tx;
 
 
 static uint8_t g_DisplayNum[10]={0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
@@ -148,9 +142,9 @@ static void  RocSpiWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+    while(HAL_SPI_GetState(ROC_TFT_LCD_SPI_CHANNEL) != HAL_SPI_STATE_READY);
 
-    WriteStatus = HAL_SPI_Transmit(&hspi1, Dat, DatLen, ROC_TFT_LCD_WRITE_TIME_OUT);
+    WriteStatus = HAL_SPI_Transmit(ROC_TFT_LCD_SPI_CHANNEL, Dat, DatLen, ROC_TFT_LCD_WRITE_TIME_OUT);
     if(HAL_OK != WriteStatus)
     {
         ROC_LOGE("SPI write data is in error(%d)", WriteStatus);
@@ -175,9 +169,9 @@ static void  RocSpiDmaWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+    while(HAL_SPI_GetState(ROC_TFT_LCD_SPI_CHANNEL) != HAL_SPI_STATE_READY);
 
-    WriteStatus = HAL_SPI_Transmit_DMA(&hspi1, Dat, DatLen);
+    WriteStatus = HAL_SPI_Transmit_DMA(ROC_TFT_LCD_SPI_CHANNEL, Dat, DatLen);
     if(HAL_OK != WriteStatus)
     {
         ROC_LOGE("SPI write data is in error(%d)", WriteStatus);
@@ -199,7 +193,7 @@ static void  RocSpiDmaWriteData(uint8_t *Dat, uint16_t DatLen)
 **********************************************************************************/
 static void RocTftLcdWriteReg(uint8_t Reg)
 {
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+    while(HAL_SPI_GetState(ROC_TFT_LCD_SPI_CHANNEL) != HAL_SPI_STATE_READY);
 
     ROC_TFT_LCD_RS_CLR();
 
@@ -221,7 +215,7 @@ static void RocTftLcdWriteReg(uint8_t Reg)
 **********************************************************************************/
 static void RocTftLcdWriteDat(uint8_t Data)
 {
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+    while(HAL_SPI_GetState(ROC_TFT_LCD_SPI_CHANNEL) != HAL_SPI_STATE_READY);
 
     ROC_TFT_LCD_RS_SET();
 
@@ -248,7 +242,7 @@ static void RocTftLcdWrite16Dat(uint16_t Data)
     Buff[0] = Data >> 8;
     Buff[1] = Data;
 
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+    while(HAL_SPI_GetState(ROC_TFT_LCD_SPI_CHANNEL) != HAL_SPI_STATE_READY);
 
     ROC_TFT_LCD_RS_SET();
 
@@ -271,7 +265,7 @@ static void RocTftLcdWrite16Dat(uint16_t Data)
 **********************************************************************************/
 static void RocTftLcdWaitWriteDone(void)
 {
-    while(HAL_SPI_GetState(&hspi1) != HAL_SPI_STATE_READY);
+    while(HAL_SPI_GetState(ROC_TFT_LCD_SPI_CHANNEL) != HAL_SPI_STATE_READY);
 }
 
 /*********************************************************************************

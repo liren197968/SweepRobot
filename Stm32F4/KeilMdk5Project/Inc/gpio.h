@@ -53,14 +53,17 @@ extern "C" {
 #define ROC_PCA9685_A_EN_GPIO_PORT          GPIOC
 #define ROC_PCA9685_B_EN_PIN                GPIO_PIN_3
 #define ROC_PCA9685_B_EN_GPIO_PORT          GPIOC
-#define ROC_DEBUG_LED_PIN                   GPIO_PIN_7
+#define ROC_PCA9685_C_EN_PIN                GPIO_PIN_3
+#define ROC_PCA9685_C_EN_GPIO_PORT          GPIOC
+
+#define ROC_DEBUG_LED_PIN                   GPIO_PIN_8
 #define ROC_DEBUG_LED_GPIO_PORT             GPIOA
 #define ROC_ROBOT_BATTERY_ADC_PIN           GPIO_PIN_4
 #define ROC_ROBOT_BATTERY_ADC_PORT          GPIOA
 
-#define ROC_TFTLCD_DC_PIN                   GPIO_PIN_1
+#define ROC_TFTLCD_DC_PIN                   GPIO_PIN_2
 #define ROC_TFTLCD_DC_PORT                  GPIOB
-#define ROC_TFTLCD_RST_PIN                  GPIO_PIN_2
+#define ROC_TFTLCD_RST_PIN                  GPIO_PIN_12
 #define ROC_TFTLCD_RST_PORT                 GPIOB
 
 #define ROC_BEEPER_CTRL_PIN                 GPIO_PIN_15
@@ -73,6 +76,8 @@ extern "C" {
 #define ROC_MOTOR_GPIO_PORT1                GPIOB
 #define ROC_MOTOR_GPIO_PORT2                GPIOA
 
+#define ROC_ROBOT_RELAY_PIN                 GPIO_PIN_6
+#define ROC_ROBOT_RELAY_PORT                GPIOC
 
 /* USER CODE END Includes */
 

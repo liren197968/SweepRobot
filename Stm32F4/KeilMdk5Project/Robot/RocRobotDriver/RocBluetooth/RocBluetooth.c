@@ -13,7 +13,7 @@
 static uint8_t g_BtRecvEnd = ROC_FALSE;
 static uint8_t g_BtRxDatLen = ROC_NONE;
 static uint8_t g_BtTxBuffer[ROC_BT_TXD_LENGTH] = "Start";
-static uint8_t g_BtRxBuffer[ROC_BT_RXD_LENGTH] = {ROC_NONE};
+uint8_t g_BtRxBuffer[ROC_BT_RXD_LENGTH] = {ROC_NONE};
 
 
 /*********************************************************************************

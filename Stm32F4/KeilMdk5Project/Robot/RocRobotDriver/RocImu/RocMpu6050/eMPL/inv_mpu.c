@@ -776,6 +776,8 @@ int mpu_init(void)
 
 #if defined MPU6050
     /* Check product revision. */
+    i2c_read(st.hw->addr, st.reg->who_am_i, 1, data);
+
     if (i2c_read(st.hw->addr, st.reg->accel_offs, 6, data))
         return -1;
     rev = ((data[5] & 0x01) << 2) | ((data[3] & 0x01) << 1) |

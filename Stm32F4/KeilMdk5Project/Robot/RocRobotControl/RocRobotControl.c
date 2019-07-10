@@ -12,6 +12,7 @@
 
 #include "RocLog.h"
 #include "RocLed.h"
+#include "RocRelay.h"
 #include "RocServo.h"
 #include "RocMotor.h"
 #include "RocBeeper.h"
@@ -23,8 +24,10 @@
 #include "RocRobotControl.h"
 
 
-static ROC_ROBOT_CTRL_s    g_RobotCtrl = {{0}, {0}, ROC_ROBOT_RUN_MODE_HEXAPOD, {0}, NULL};
+static void RocRobotCarTransformRun(void);
 
+
+ROC_ROBOT_CTRL_s    g_RobotCtrl = {{0}, {0}, ROC_ROBOT_RUN_MODE_HEXAPOD, {0}, NULL};
 /*********************************************************************************
  *  Description:
  *              Robot init success beeper aciton
@@ -299,6 +302,10 @@ static void RocRobotRemoteControl(void)
                     RocRobotCtrlFlagSet(0);
                 }
             }
+            else if(ROC_ROBOT_RUN_MODE_CAR == RocRobotRunModeGet())
+            {
+                RocRobotCarTransformRun();
+            }
 
             break;
         }
@@ -321,9 +328,10 @@ static void RocRobotRemoteControl(void)
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
 
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
+                    /* Used for robot bady balance control */
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
 
@@ -348,8 +356,8 @@ static void RocRobotRemoteControl(void)
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
 
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
                     //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
@@ -401,54 +409,58 @@ static void RocRobotRemoteControl(void)
 
         case ROC_ROBOT_CTRL_CMD_LFRWARD:
         {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
-                g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
-                g_RobotCtrl.RemoteCtrl.Z = 0;
-                g_RobotCtrl.RemoteCtrl.A = 0;
-                g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+//            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+//            {
+//                g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
+//                g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
+//                g_RobotCtrl.RemoteCtrl.Z = 0;
+//                g_RobotCtrl.RemoteCtrl.A = 0;
+//                g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+//
+//                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_FORWALKING);
+//
+//                if(ROC_FALSE == RocRobotCtrlFlagGet(5))
+//                {
+//                    RocRobotCtrlFlagSet(5);
+//
+//                    g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+//
+//                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+//                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+//                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
+//                }
+//            }
 
-                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_FORWALKING);
-
-                if(ROC_FALSE == RocRobotCtrlFlagGet(5))
-                {
-                    RocRobotCtrlFlagSet(5);
-
-                    g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
-
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
-                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
-                }
-            }
+            RocRelayTurnOn();
 
             break;
         }
 
         case ROC_ROBOT_CTRL_CMD_RFRWARD:
         {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP;
-                g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
-                g_RobotCtrl.RemoteCtrl.Z = 0;
-                g_RobotCtrl.RemoteCtrl.A = 0;
-                g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+//            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+//            {
+//                g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP;
+//                g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
+//                g_RobotCtrl.RemoteCtrl.Z = 0;
+//                g_RobotCtrl.RemoteCtrl.A = 0;
+//                g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+//
+//                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_FORWALKING);
+//
+//                if(ROC_FALSE == RocRobotCtrlFlagGet(6))
+//                {
+//                    RocRobotCtrlFlagSet(6);
+//
+//                    g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+//
+//                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+//                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+//                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
+//                }
+//            }
 
-                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_FORWALKING);
-
-                if(ROC_FALSE == RocRobotCtrlFlagGet(6))
-                {
-                    RocRobotCtrlFlagSet(6);
-
-                    g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
-
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
-                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
-                }
-            }
+            RocRelayTurnOff();
 
             break;
         }
@@ -458,7 +470,7 @@ static void RocRobotRemoteControl(void)
             if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
-                g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
+                g_RobotCtrl.RemoteCtrl.Y = 0;
                 g_RobotCtrl.RemoteCtrl.Z = 0;
                 g_RobotCtrl.RemoteCtrl.A = 0;
                 g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -471,8 +483,8 @@ static void RocRobotRemoteControl(void)
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
 
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
                     //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
@@ -485,7 +497,7 @@ static void RocRobotRemoteControl(void)
             if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
             {
                 g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP;
-                g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
+                g_RobotCtrl.RemoteCtrl.Y = 0;
                 g_RobotCtrl.RemoteCtrl.Z = 0;
                 g_RobotCtrl.RemoteCtrl.A = 0;
                 g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -498,8 +510,8 @@ static void RocRobotRemoteControl(void)
 
                     g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
 
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
-                    g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
                     //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
                 }
             }
@@ -829,6 +841,98 @@ static void RocRobotPowerOnGaitSeq_Run(void)
     RocRobotSingleLegSelect(ROC_ROBOT_CNT_LEGS);
     HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
 
+    g_RobotCtrl.RemoteCtrl.X = 0;
+    g_RobotCtrl.RemoteCtrl.Y = 0;
+    g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT;
+    g_RobotCtrl.RemoteCtrl.A = 0;
+    g_RobotCtrl.RemoteCtrl.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+    g_RobotCtrl.RemoteCtrl.X = 0;
+    g_RobotCtrl.RemoteCtrl.Y = 0;
+    g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 2;
+    g_RobotCtrl.RemoteCtrl.A = 0;
+    g_RobotCtrl.RemoteCtrl.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+
+    g_RobotCtrl.RemoteCtrl.X = 0;
+    g_RobotCtrl.RemoteCtrl.Y = 0;
+    g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 3;
+    g_RobotCtrl.RemoteCtrl.A = 0;
+    g_RobotCtrl.RemoteCtrl.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+    g_RobotCtrl.RemoteCtrl.X = 0;
+    g_RobotCtrl.RemoteCtrl.Y = 0;
+    g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 4;
+    g_RobotCtrl.RemoteCtrl.A = 0;
+    g_RobotCtrl.RemoteCtrl.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+    g_RobotCtrl.RemoteCtrl.X = 0;
+    g_RobotCtrl.RemoteCtrl.Y = 0;
+    g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 5;
+    g_RobotCtrl.RemoteCtrl.A = 0;
+    g_RobotCtrl.RemoteCtrl.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+    g_RobotCtrl.RemoteCtrl.X = 0;
+    g_RobotCtrl.RemoteCtrl.Y = 0;
+    g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * 6;
+    g_RobotCtrl.RemoteCtrl.A = 0;
+    g_RobotCtrl.RemoteCtrl.H = 0;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+
+    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_TRANSFORM);
+
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 80;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 80;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 80;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 80;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 80;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 80;
+    HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
+
+    RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_CAR);
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot run special gait sequence when power on
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.04.06)
+**********************************************************************************/
+static void RocRobotCarTransformRun(void)
+{
+    static uint8_t Index = 0;
+
+    if(ROC_TRUE == RocServoTurnIsFinshed())
+    {
+        RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_POWER_ON);
+
+        g_RobotCtrl.RemoteCtrl.X = 0;
+        g_RobotCtrl.RemoteCtrl.Y = 0;
+        g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * (24 - Index) / 4;
+        g_RobotCtrl.RemoteCtrl.A = 0;
+        g_RobotCtrl.RemoteCtrl.H = 0;
+
+        if(Index == 24)
+        {
+            RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_HEXAPOD);
+            RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
+        }
+
+        Index++;
+    }
 }
 
 /*********************************************************************************
@@ -946,6 +1050,14 @@ void RocRobotInit(void)
 
     RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_POWER_ON);
 
+    Ret = RocRelayInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+
     Ret = RocLedInit();
     if(RET_OK != Ret)
     {
@@ -1055,7 +1167,7 @@ void RocRobotInit(void)
         ROC_LOGW("############# Robot is running! Be careful! #############");
     }
 
-    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
+    //RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
 }
 
 /*********************************************************************************
@@ -1142,6 +1254,10 @@ static void RocRobotLcdShowInfoEntry(void)
         RocTftLcdDrawGbk16Num(50, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch);
         RocTftLcdDrawGbk16Num(130, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll);
         RocTftLcdDrawGbk16Num(210, 5, ROC_TFT_LCD_COLOR_WHITE, ROC_TFT_LCD_COLOR_BLUE, g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw);
+
+//        ROC_LOGN("Pitch: %.2f, Roll: %.2f, Yaw: %.2f", g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch,
+//                                                       g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll,
+//                                                       g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw);
     }
 }
 
@@ -1167,7 +1283,6 @@ static void RocRobotCtrlTaskEntry(void)
         uint32_t CurExeTime = HAL_GetTick();
         static uint32_t LastExeTime = 0;
 
-        RocServoOutputDisable();
         //ROC_LOGN("robot execution time interval is %d ms", CurExeTime - LastExeTime);
 
         LastExeTime = CurExeTime;
@@ -1219,7 +1334,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         MoveStatus = RocRobotMoveStatus_Get();
 
-        if(ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus)
+        if((ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus) && (ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet()))
         {
             RocRobotPowerOnTaskEntry();
         }

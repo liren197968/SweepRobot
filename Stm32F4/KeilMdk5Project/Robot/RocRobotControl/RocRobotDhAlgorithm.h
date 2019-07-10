@@ -117,28 +117,28 @@
 #define ROC_ROBOT_HIN_INIT_Z                        (-ROC_ROBOT_HEIGHT)
 
 
-#define ROC_ROBOT_RIG_FRO_HIP_CENTER                302
-#define ROC_ROBOT_RIG_FRO_LEG_CENTER                172
-#define ROC_ROBOT_RIG_FRO_FET_CENTER                332
-#define ROC_ROBOT_RIG_MID_HIP_CENTER                301
-#define ROC_ROBOT_RIG_MID_LEG_CENTER                180
-#define ROC_ROBOT_RIG_MID_FET_CENTER                300
-#define ROC_ROBOT_RIG_HIN_HIP_CENTER                307
-#define ROC_ROBOT_RIG_HIN_LEG_CENTER                180
-#define ROC_ROBOT_RIG_HIN_FET_CENTER                310
+#define ROC_ROBOT_RIG_FRO_HIP_CENTER                (302)
+#define ROC_ROBOT_RIG_FRO_LEG_CENTER                (172 + 180)
+#define ROC_ROBOT_RIG_FRO_FET_CENTER                (320)
+#define ROC_ROBOT_RIG_MID_HIP_CENTER                (301)
+#define ROC_ROBOT_RIG_MID_LEG_CENTER                (180 + 170)
+#define ROC_ROBOT_RIG_MID_FET_CENTER                (290)
+#define ROC_ROBOT_RIG_HIN_HIP_CENTER                (307)
+#define ROC_ROBOT_RIG_HIN_LEG_CENTER                (180 + 178)
+#define ROC_ROBOT_RIG_HIN_FET_CENTER                (300)
 
-#define ROC_ROBOT_LEF_FRO_HIP_CENTER                306
-#define ROC_ROBOT_LEF_FRO_LEG_CENTER                402
-#define ROC_ROBOT_LEF_FRO_FET_CENTER                310
-#define ROC_ROBOT_LEF_MID_HIP_CENTER                310
-#define ROC_ROBOT_LEF_MID_LEG_CENTER                410
-#define ROC_ROBOT_LEF_MID_FET_CENTER                304
-#define ROC_ROBOT_LEF_HIN_HIP_CENTER                303
-#define ROC_ROBOT_LEF_HIN_LEG_CENTER                400
-#define ROC_ROBOT_LEF_HIN_FET_CENTER                310
+#define ROC_ROBOT_LEF_FRO_HIP_CENTER                (306)
+#define ROC_ROBOT_LEF_FRO_LEG_CENTER                (402 - 196)
+#define ROC_ROBOT_LEF_FRO_FET_CENTER                (300)
+#define ROC_ROBOT_LEF_MID_HIP_CENTER                (310)
+#define ROC_ROBOT_LEF_MID_LEG_CENTER                (410 - 214)
+#define ROC_ROBOT_LEF_MID_FET_CENTER                (300)
+#define ROC_ROBOT_LEF_HIN_HIP_CENTER                (303)
+#define ROC_ROBOT_LEF_HIN_LEG_CENTER                (400 - 198)
+#define ROC_ROBOT_LEF_HIN_FET_CENTER                (310)
 
 
-#define ROC_ROBOT_DEFAULT_LEG_STEP                  60
+#define ROC_ROBOT_DEFAULT_LEG_STEP                  40
 #define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
 #define ROC_ROBOT_DEFAULT_FEET_LIFT                 24
 #define ROC_ROBOT_QUAD_MODE_FEET_LIFT               40
@@ -214,6 +214,7 @@ typedef enum _ROC_ROBOT_MOVE_STATUS_e
     ROC_ROBOT_MOVE_STATUS_FORWALKING,       /* Robot is forward walking */
     ROC_ROBOT_MOVE_STATUS_BAKWALKING,       /* Robot is backward walking */
     ROC_ROBOT_MOVE_STATUS_CIRCLING,
+    ROC_ROBOT_MOVE_STATUS_TRANSFORM,
 
     ROC_ROBOT_MOVE_STATUS_NUM,
 }ROC_ROBOT_MOVE_STATUS_e;

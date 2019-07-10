@@ -156,21 +156,21 @@ static uint8_t RocMpu6050RegInit(void)
 {
     uint8_t Res;
 
-    RocMpu6050WriteByte(ROC_MPU6050_PWR_MGMT1_REG,0X80);
-    RocMpu6050WriteByte(ROC_MPU6050_PWR_MGMT1_REG,0X00);
+    RocMpu6050WriteByte(ROC_MPU6050_PWR_MGMT1_REG, 0X80);
+    RocMpu6050WriteByte(ROC_MPU6050_PWR_MGMT1_REG, 0X00);
     RocMpu6050SetGyroFsr(3);
     RocMpu6050SetAccelFsr(0);
     RocMpu6050SetRate(50);
-    RocMpu6050WriteByte(ROC_MPU6050_INT_EN_REG,0X00);
-    RocMpu6050WriteByte(ROC_MPU6050_USER_CTRL_REG,0X00);
-    RocMpu6050WriteByte(ROC_MPU6050_FIFO_EN_REG,0X00);
-    RocMpu6050WriteByte(ROC_MPU6050_INTBP_CFG_REG,0X80);
+    RocMpu6050WriteByte(ROC_MPU6050_INT_EN_REG, 0X00);
+    RocMpu6050WriteByte(ROC_MPU6050_USER_CTRL_REG, 0X00);
+    RocMpu6050WriteByte(ROC_MPU6050_FIFO_EN_REG, 0X00);
+    RocMpu6050WriteByte(ROC_MPU6050_INTBP_CFG_REG, 0X80);
 
-    Res=RocMpu6050ReadByte(ROC_MPU6050_DEVICE_ID_REG);
-    if(Res==ROC_MPU6050_ADDRESS)
+    Res = RocMpu6050ReadByte(ROC_MPU6050_DEVICE_ID_REG);
+    if(Res == ROC_MPU6050_ADDRESS)
     {
-        RocMpu6050WriteByte(ROC_MPU6050_PWR_MGMT1_REG,0X01);
-        RocMpu6050WriteByte(ROC_MPU6050_PWR_MGMT2_REG,0X00);
+        RocMpu6050WriteByte(ROC_MPU6050_PWR_MGMT1_REG, 0X01);
+        RocMpu6050WriteByte(ROC_MPU6050_PWR_MGMT2_REG, 0X00);
         RocMpu6050SetRate(50);
     }
     else

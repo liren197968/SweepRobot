@@ -31,15 +31,17 @@ void RocPca9685PwmOutEnable(void)
 {
     HAL_GPIO_WritePin(ROC_PCA9685_A_EN_GPIO_PORT, ROC_PCA9685_A_EN_PIN, GPIO_PIN_RESET);
     HAL_GPIO_WritePin(ROC_PCA9685_B_EN_GPIO_PORT, ROC_PCA9685_B_EN_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ROC_PCA9685_C_EN_GPIO_PORT, ROC_PCA9685_C_EN_PIN, GPIO_PIN_RESET);
 }
 
 /*********************************************************************************
+
  *  Description:
  *              Disable PCA9685 output PWM pulse
  *
  *  Parameter:
  *              None
- *
+ *  
  *
  *  Return:
  *              None
@@ -51,6 +53,7 @@ void RocPca9685PwmOutDisable(void)
 {
     HAL_GPIO_WritePin(ROC_PCA9685_A_EN_GPIO_PORT, ROC_PCA9685_A_EN_PIN, GPIO_PIN_SET);
     HAL_GPIO_WritePin(ROC_PCA9685_B_EN_GPIO_PORT, ROC_PCA9685_B_EN_PIN, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(ROC_PCA9685_C_EN_GPIO_PORT, ROC_PCA9685_C_EN_PIN, GPIO_PIN_SET);
 }
 
 /*********************************************************************************
