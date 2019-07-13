@@ -60,6 +60,7 @@ extern "C" {
 
     extern void _Error_Handler(char *, int);
 
+    void MX_SPI1_Init(void);
     void MX_SPI2_Init(void);
 
     /* USER CODE BEGIN Prototypes */

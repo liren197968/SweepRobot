@@ -12,6 +12,7 @@
 
 #include "RocLog.h"
 #include "RocLed.h"
+#include "RocOled.h"
 #include "RocRelay.h"
 #include "RocServo.h"
 #include "RocMotor.h"
@@ -1065,6 +1066,16 @@ void RocRobotInit(void)
 
         while(1);
     }
+
+#ifdef ROC_OLED_ENABLE
+    Ret = RocOledInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
+#endif
 
     Ret = RocTftLcdInit();
     if(RET_OK != Ret)

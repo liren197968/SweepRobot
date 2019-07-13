@@ -138,7 +138,7 @@ static void RocTftLcdRegWriteCmd(uint8_t Reg,uint16_t Data)
  *  Author:
  *              ROC LiRen(2019.04.21)
 **********************************************************************************/
-static void  RocSpiWriteData(uint8_t *Dat, uint16_t DatLen)
+static void  RocTftSpiWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
@@ -154,7 +154,7 @@ static void  RocSpiWriteData(uint8_t *Dat, uint16_t DatLen)
 /*********************************************************************************
  *  Description:
  *              Write a byte data with SPI DMA communication
- *00211.
+ *
  *  Parameter:
  *              Dat:    the data written to SPI
  *              DatLen: the data length
@@ -165,7 +165,7 @@ static void  RocSpiWriteData(uint8_t *Dat, uint16_t DatLen)
  *  Author:
  *              ROC LiRen(2019.04.21)
 **********************************************************************************/
-static void  RocSpiDmaWriteData(uint8_t *Dat, uint16_t DatLen)
+static void  RocTftSpiDmaWriteData(uint8_t *Dat, uint16_t DatLen)
 {
     HAL_StatusTypeDef WriteStatus;
 
@@ -197,7 +197,7 @@ static void RocTftLcdWriteReg(uint8_t Reg)
 
     ROC_TFT_LCD_RS_CLR();
 
-    RocSpiWriteData(&Reg, 1);
+    RocTftSpiWriteData(&Reg, 1);
 }
 
 /*********************************************************************************
@@ -219,7 +219,7 @@ static void RocTftLcdWriteDat(uint8_t Data)
 
     ROC_TFT_LCD_RS_SET();
 
-    RocSpiWriteData(&Data, 1);
+    RocTftSpiWriteData(&Data, 1);
 }
 
 /*********************************************************************************
@@ -246,8 +246,8 @@ static void RocTftLcdWrite16Dat(uint16_t Data)
 
     ROC_TFT_LCD_RS_SET();
 
-    RocSpiWriteData(Buff, 2);
-    //RocSpiDmaWriteData(Buff, 2);
+    RocTftSpiWriteData(Buff, 2);
+    //RocTftSpiDmaWriteData(Buff, 2);
 }
 
 /*********************************************************************************
@@ -523,7 +523,7 @@ void RocTftLcdAllClear(uint16_t BakColor)
 
     for(i = 0; i < ROC_TFT_LCD_PIXEL_SIZE / ROC_TFT_LCD_BUFF_STORAGE_PIXEL; i++)
     {
-        RocSpiDmaWriteData(g_TftLcdBuff, ROC_TFT_LCD_BUFF_SIZE);
+        RocTftSpiDmaWriteData(g_TftLcdBuff, ROC_TFT_LCD_BUFF_SIZE);
     }
 }
 
@@ -561,7 +561,7 @@ static void RocTftLcdRegionClear(uint16_t XStart, uint16_t YStart, uint16_t XEnd
 
         for(i = 0; i < RegionPixel / ROC_TFT_LCD_BUFF_STORAGE_PIXEL; i++)
         {
-            RocSpiDmaWriteData(g_TftLcdBuff, ROC_TFT_LCD_BUFF_SIZE);
+            RocTftSpiDmaWriteData(g_TftLcdBuff, ROC_TFT_LCD_BUFF_SIZE);
         }
     }
     else
@@ -571,7 +571,7 @@ static void RocTftLcdRegionClear(uint16_t XStart, uint16_t YStart, uint16_t XEnd
             g_TftLcdBuff[i * 2] = BakColor >> 8;
             g_TftLcdBuff[i * 2 + 1] = BakColor;
         }
-        RocSpiDmaWriteData(g_TftLcdBuff, RegionPixel * ROC_TFT_LCD_ONE_PIXEL_BYTE);
+        RocTftSpiDmaWriteData(g_TftLcdBuff, RegionPixel * ROC_TFT_LCD_ONE_PIXEL_BYTE);
     }
 }
 
@@ -1037,7 +1037,7 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
 
     ROC_TFT_LCD_RS_SET();
 
-    RocSpiDmaWriteData(g_TftLcdStrBuff, Size * ROC_TFT_LCD_WIDTH_GBK_16 * ROC_TFT_LCD_HEIGHT_GBK_16 * ROC_TFT_LCD_ONE_PIXEL_BYTE);
+    RocTftSpiDmaWriteData(g_TftLcdStrBuff, Size * ROC_TFT_LCD_WIDTH_GBK_16 * ROC_TFT_LCD_HEIGHT_GBK_16 * ROC_TFT_LCD_ONE_PIXEL_BYTE);
 }
 
 /*********************************************************************************
@@ -1180,7 +1180,7 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
 
     ROC_TFT_LCD_RS_SET();
 
-    RocSpiDmaWriteData(g_TftLcdStrBuff, Size * ROC_TFT_LCD_WIDTH_GBK_16 * ROC_TFT_LCD_HEIGHT_GBK_16 * ROC_TFT_LCD_ONE_PIXEL_BYTE);
+    RocTftSpiDmaWriteData(g_TftLcdStrBuff, Size * ROC_TFT_LCD_WIDTH_GBK_16 * ROC_TFT_LCD_HEIGHT_GBK_16 * ROC_TFT_LCD_ONE_PIXEL_BYTE);
 }
 
 /*********************************************************************************

@@ -76,6 +76,11 @@ extern "C" {
 #define ROC_MOTOR_GPIO_PORT1                GPIOB
 #define ROC_MOTOR_GPIO_PORT2                GPIOA
 
+#define ROC_OLED_DC_PIN                     GPIO_PIN_1
+#define ROC_OLED_DC_PORT                    GPIOB
+#define ROC_OLED_RST_PIN                    GPIO_PIN_2
+#define ROC_OLED_RST_PORT                   GPIOB
+
 #define ROC_ROBOT_RELAY_PIN                 GPIO_PIN_6
 #define ROC_ROBOT_RELAY_PORT                GPIOC
 

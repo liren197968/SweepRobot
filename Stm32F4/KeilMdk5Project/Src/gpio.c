@@ -88,6 +88,10 @@ void MX_GPIO_Init(void)
     HAL_GPIO_WritePin(ROC_MOTOR_GPIO_PORT2, ROC_MOTOR_IN3_PIN | ROC_MOTOR_IN4_PIN, GPIO_PIN_RESET);
 
     /*Configure GPIO pin Output Level */
+    HAL_GPIO_WritePin(ROC_OLED_RST_PORT, ROC_OLED_RST_PIN, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(ROC_OLED_DC_PORT, ROC_OLED_DC_PIN, GPIO_PIN_RESET);
+
+    /*Configure GPIO pin Output Level */
     HAL_GPIO_WritePin(ROC_ROBOT_RELAY_PORT, ROC_ROBOT_RELAY_PIN, GPIO_PIN_SET);
 
     /*Configure GPIO pins : PCA9685 ENA Pin */
@@ -151,6 +155,19 @@ void MX_GPIO_Init(void)
     GPIO_InitStruct.Pull = GPIO_PULLUP;
     GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
     HAL_GPIO_Init(ROC_MOTOR_GPIO_PORT2, &GPIO_InitStruct);
+
+    /*Configure GPIO pins : OLED Pin */
+    GPIO_InitStruct.Pin = ROC_OLED_RST_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(ROC_OLED_RST_PORT, &GPIO_InitStruct);
+
+    GPIO_InitStruct.Pin = ROC_OLED_DC_PIN;
+    GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
+    GPIO_InitStruct.Pull = GPIO_PULLUP;
+    GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
+    HAL_GPIO_Init(ROC_OLED_DC_PORT, &GPIO_InitStruct);
 
     /*Configure GPIO pins : RELAY Pin */
     GPIO_InitStruct.Pin = ROC_ROBOT_RELAY_PIN;
