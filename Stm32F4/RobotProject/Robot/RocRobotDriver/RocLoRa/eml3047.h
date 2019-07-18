@@ -1,16 +1,31 @@
-/**
+/*
+ * Copyright (C) 2015-2017 Alibaba Group Holding Limited
+ */
+
+/*
+ / _____)             _              | |
+( (____  _____ ____ _| |_ _____  ____| |__
+ \____ \| ___ |    (_   _) ___ |/ ___)  _ \
+ _____) ) ____| | | || |_| ____( (___| | | |
+(______/|_____)_|_|_| \__)_____)\____)_| |_|
+    (C)2013 Semtech
+
+Description: Generic SX1276mb1mas driver implementation
+
+License: Revised BSD License, see LICENSE.TXT file include in the project
+
+Maintainer: Miguel Luis and Gregory Cristian
+*/
+ /*******************************************************************************
+  * @file    eml3047.h
+  * @author  MCD Application Team
+  * @version V1.0.2
+  * @date    01-June-2017
+  * @brief   driver LoRa module murata cmwx1zzabz-091
   ******************************************************************************
-  * File Name          : USART.h
-  * Description        : This file provides code for the configuration
-  *                      of the USART instances.
-  ******************************************************************************
-  ** This notice applies to any and all portions of this file
-  * that are not between comment pairs USER CODE BEGIN and
-  * USER CODE END. Other portions of this file, whether
-  * inserted by the user or by software development tools
-  * are owned by their respective copyright owners.
+  * @attention
   *
-  * COPYRIGHT(c) 2018 STMicroelectronics
+  * <h2><center>&copy; COPYRIGHT(c) 2017 STMicroelectronics</center></h2>
   *
   * Redistribution and use in source and binary forms, with or without modification,
   * are permitted provided that the following conditions are met:
@@ -37,51 +52,56 @@
   ******************************************************************************
   */
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __usart_H
-#define __usart_H
+#ifndef __EML3047_H__
+#define __EML3047_H__
+
 #ifdef __cplusplus
-extern "C" {
+ extern "C" {
 #endif
 
-    /* Includes ------------------------------------------------------------------*/
-#include "stm32f4xx_hal.h"
-#include "main.h"
+/* Includes ------------------------------------------------------------------*/
+/* Exported types ------------------------------------------------------------*/
+/* Exported constants --------------------------------------------------------*/
 
-    /* USER CODE BEGIN Includes */
-    typedef  void (*RxCpltCallback_T) (uint8_t* rxChar);
-    /* USER CODE END Includes */
+#define BOARD_WAKEUP_TIME  5 //TCXO
 
-    extern UART_HandleTypeDef huart1;
-    extern UART_HandleTypeDef huart2;
-    extern UART_HandleTypeDef huart3;
 
-    /* USER CODE BEGIN Private defines */
-    extern DMA_HandleTypeDef hdma_usart2_rx;
-    extern DMA_HandleTypeDef hdma_usart3_rx;
-    /* USER CODE END Private defines */
 
-    extern void _Error_Handler(char *, int);
 
-    void MX_USART1_UART_Init(void);
-    void MX_USART2_UART_Init(void);
-    void MX_USART3_UART_Init(void);
 
-    /* USER CODE BEGIN Prototypes */
-    void vcom_ReceiveInit( RxCpltCallback_T Rxcb );
-    void vcom_send_data(uint8_t* data,uint32_t len);
-    /* USER CODE END Prototypes */
+#define RF_MID_BAND_THRESH                          525000000
+
+/* Exported functions ------------------------------------------------------- */ 
+
+/*!
+ * \brief Initializes the radio I/Os pins interface
+ */
+void SX1276IoInit( void );
+
+
+/*!
+ * \brief De-initializes the radio I/Os pins interface. 
+ *
+ * \remark Useful when going in MCU lowpower modes
+ */
+void SX1276IoDeInit( void );
+
+/*!
+ * \brief Checks if the given RF frequency is supported by the hardware
+ *
+ * \param [IN] frequency RF frequency to be checked
+ * \retval isSupported [true: supported, false: unsupported]
+ */
+bool SX1276CheckRfFrequency( uint32_t frequency );
+
+/*!
+ * Radio hardware and global parameters
+ */
 
 #ifdef __cplusplus
 }
 #endif
-#endif /*__ usart_H */
 
-/**
-  * @}
-  */
-
-/**
-  * @}
-  */
+#endif /* __MLM32L07X01_H__*/
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/

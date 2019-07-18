@@ -335,7 +335,7 @@
               <MiscControls>--locale=english</MiscControls>
               <Define>USE_HAL_DRIVER,STM32F405xx,ARM_MATH_CM4,__CC_ARM</Define>
               <Undefine></Undefine>
-              <IncludePath>..\Inc;..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc;..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include;..\..\RobotProject\Drivers\CMSIS\Include;..\..\RobotProject\Robot\RocRobotDriver\RocError;..\..\RobotProject\Robot\RocRobotDriver\RocLog;..\..\RobotProject\Robot\RocRobotDriver\RocLed;..\..\RobotProject\Robot\RocRobotDriver\RocOled;..\..\RobotProject\Robot\RocRobotDriver\RocBeeper;..\..\RobotProject\Robot\RocRobotDriver\RocBattery;..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl;..\..\RobotProject\Robot\RocRobotDriver\RocGui;..\..\RobotProject\Robot\RocRobotDriver\RocKey;..\..\RobotProject\Robot\RocRobotDriver\RocLoRa;..\Joystick</IncludePath>
+              <IncludePath>..\Inc;..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc;..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy;..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include;..\..\RobotProject\Drivers\CMSIS\Include;..\..\RobotProject\Robot\RocRobotDriver\RocError;..\..\RobotProject\Robot\RocRobotDriver\RocLog;..\..\RobotProject\Robot\RocRobotDriver\RocLed;..\..\RobotProject\Robot\RocRobotDriver\RocOled;..\..\RobotProject\Robot\RocRobotDriver\RocBeeper;..\..\RobotProject\Robot\RocRobotDriver\RocBattery;..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl;..\..\RobotProject\Robot\RocRobotDriver\RocGui;..\..\RobotProject\Robot\RocRobotDriver\RocKey;..\Joystick</IncludePath>
             </VariousControls>
           </Cads>
           <Aads>
@@ -513,31 +513,6 @@
               <FileName>RocRemoteControl.c</FileName>
               <FileType>1</FileType>
               <FilePath>..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl\RocRemoteControl.c</FilePath>
-            </File>
-          </Files>
-        </Group>
-        <Group>
-          <GroupName>Drivers/LoRa</GroupName>
-          <Files>
-            <File>
-              <FileName>eml3047.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\eml3047.c</FilePath>
-            </File>
-            <File>
-              <FileName>lora_ptp.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\lora_ptp.c</FilePath>
-            </File>
-            <File>
-              <FileName>sx1276.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276.c</FilePath>
-            </File>
-            <File>
-              <FileName>utilities.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\utilities.c</FilePath>
             </File>
           </Files>
         </Group>

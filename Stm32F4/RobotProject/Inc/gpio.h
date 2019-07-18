@@ -56,8 +56,13 @@ extern "C" {
 #define ROC_PCA9685_C_EN_PIN                GPIO_PIN_3
 #define ROC_PCA9685_C_EN_GPIO_PORT          GPIOC
 
-#define ROC_DEBUG_LED_PIN                   GPIO_PIN_8
-#define ROC_DEBUG_LED_GPIO_PORT             GPIOA
+#define ROC_LED_DEBUG_PIN                   GPIO_PIN_8
+#define ROC_LED_DEBUG_PORT                  GPIOA
+#define ROC_LED_1_PIN                       GPIO_PIN_14
+#define ROC_LED_1_PORT                      GPIOB
+#define ROC_LED_2_PIN                       GPIO_PIN_15
+#define ROC_LED_2_PORT                      GPIOB
+
 #define ROC_ROBOT_BATTERY_ADC_PIN           GPIO_PIN_4
 #define ROC_ROBOT_BATTERY_ADC_PORT          GPIOA
 

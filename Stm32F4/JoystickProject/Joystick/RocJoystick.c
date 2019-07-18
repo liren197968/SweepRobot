@@ -203,13 +203,13 @@ void RocJoystickInit(void)
 //        while(1);
 //    }
 
-//    Ret = RocRemoteControlInit();
-//    if(RET_OK != Ret)
-//    {
-//        ROC_LOGE("Robot hardware is in error, the system will not run!");
-//
-//        while(1);
-//    }
+    Ret = RocRemoteControlInit();
+    if(RET_OK != Ret)
+    {
+        ROC_LOGE("Robot hardware is in error, the system will not run!");
+
+        while(1);
+    }
 
 //    RocJoystickInitEndAction();
 

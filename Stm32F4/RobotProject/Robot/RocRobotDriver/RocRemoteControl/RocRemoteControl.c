@@ -13,9 +13,14 @@
 #include "usbh_hid_parser.h"
 #endif
 
+#include <string.h>
+
 #include "usart.h"
 
+#include "lora_ptp.h"
+
 #include "RocLog.h"
+#include "RocLed.h"
 #include "RocRemoteControl.h"
 
 
@@ -340,6 +345,113 @@ ROC_RESULT RocRemoteRecvIsFinshed(void)
 
 /*********************************************************************************
  *  Description:
+ *              Check bluetooth receive is finshed
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              The running state
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.19)
+**********************************************************************************/
+#define CMD_SIZE    255
+#define AT_CMD_TIME_OUT   50
+
+static char command[CMD_SIZE];
+static volatile unsigned cmd_index = 0;
+static volatile FlagStatus IsCmdReceived = RESET;
+static uint32_t cmd_rx_time_out = 0;
+
+static void CMD_GetChar( uint8_t* rxChar)
+{
+    cmd_index %= CMD_SIZE;
+    command[cmd_index] = *rxChar;
+    cmd_rx_time_out = AT_CMD_TIME_OUT;
+    cmd_index++;
+}
+
+void StartTransTxRxTask(void const * argument)
+{
+    uint8_t* prxchar = NULL;
+    uint16_t len   = 0;
+    int8_t   snr = 0;
+    int16_t  rssi = 0;
+    uint8_t* pchar = NULL;
+    uint8_t sf = 0 ;
+	uint8_t   current_sf = 0;
+
+    vcom_ReceiveInit(CMD_GetChar);
+
+    LORA_ptop_config(0x12, 20);
+
+    SX1276SetOpMode( RF_OPMODE_SLEEP );
+
+    RocLedTurnOn(ROC_LED_2);
+    RocLedTurnOff(ROC_LED_1);
+
+    while(1)
+    {
+
+        if (IsCmdReceived == SET)
+        {
+
+            if(cmd_index > CMD_SIZE)
+            {
+                cmd_index = CMD_SIZE;
+            }
+
+//			sf = BSP_PB_GetState(BUTTON_MODE);
+
+//			if(sf == 0)
+//			{
+//				sf = 7;
+//			}
+//			else
+//			{
+//				sf = 12;
+//			}
+            sf = 7;
+
+            RocLedTurnOff(ROC_LED_1);
+            LORA_ptop_SendMsg(sf, TX_PWR, (uint8_t*)&command[0], cmd_index );
+            RocLedTurnOn(ROC_LED_1);
+
+            cmd_index = 0 ;
+            IsCmdReceived = RESET;
+            memset(command, 0, sizeof(command));
+        }
+        else
+        {
+            LORA_ptop_SetInRxMode(0);
+
+            pchar = LORA_ptop_ReceiveMsg(&prxchar, &len, &rssi, &snr, 5);
+
+            if(pchar != 0)
+            {
+
+                RocLedTurnOff(ROC_LED_2);
+                HAL_Delay(400);
+                RocLedTurnOn(ROC_LED_2);
+
+                if(len > CMD_SIZE)
+                {
+                    len = CMD_SIZE;
+                }
+
+                vcom_send_data(pchar, len);
+
+                free(pchar);
+            }
+        }
+
+        HAL_Delay(10);
+    }
+}
+
+/*********************************************************************************
+ *  Description:
  *              Remote control init
  *
  *  Parameter:
@@ -358,6 +470,11 @@ ROC_RESULT RocRemoteControlInit(void)
 #ifdef ROC_REMOTE_USB_CONTROL
     RocRemoteUsbControlInit();
 #endif
+
+    while(1)
+    {
+        StartTransTxRxTask();
+    }
 
     Ret = RocRemoteTransUsartInit();
     if(RET_OK != Ret)

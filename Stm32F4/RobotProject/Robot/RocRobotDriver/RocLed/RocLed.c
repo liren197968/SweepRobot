@@ -24,9 +24,33 @@
  *  Author:
  *              ROC LiRen(2018.12.16)
 **********************************************************************************/
-void RocLedTurnOn(void)
+void RocLedTurnOn(ROC_LED_TYPE_e Led)
 {
-    HAL_GPIO_WritePin(ROC_DEBUG_LED_GPIO_PORT, ROC_DEBUG_LED_PIN, GPIO_PIN_RESET);
+    switch(Led)
+    {
+        case ROC_LED_DEBUG:
+        {
+            HAL_GPIO_WritePin(ROC_LED_DEBUG_PORT, ROC_LED_DEBUG_PIN, GPIO_PIN_RESET);
+            break;
+        }
+
+        case ROC_LED_1:
+        {
+            HAL_GPIO_WritePin(ROC_LED_1_PORT, ROC_LED_1_PIN, GPIO_PIN_RESET);
+            break;
+        }
+
+        case ROC_LED_2:
+        {
+            HAL_GPIO_WritePin(ROC_LED_2_PORT, ROC_LED_2_PIN, GPIO_PIN_RESET);
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
 }
 
 /*********************************************************************************
@@ -43,9 +67,33 @@ void RocLedTurnOn(void)
  *  Author:
  *              ROC LiRen(2018.12.16)
 **********************************************************************************/
-void RocLedTurnOff(void)
+void RocLedTurnOff(ROC_LED_TYPE_e Led)
 {
-    HAL_GPIO_WritePin(ROC_DEBUG_LED_GPIO_PORT, ROC_DEBUG_LED_PIN, GPIO_PIN_SET);
+    switch(Led)
+    {
+        case ROC_LED_DEBUG:
+        {
+            HAL_GPIO_WritePin(ROC_LED_DEBUG_PORT, ROC_LED_DEBUG_PIN, GPIO_PIN_SET);
+            break;
+        }
+
+        case ROC_LED_1:
+        {
+            HAL_GPIO_WritePin(ROC_LED_1_PORT, ROC_LED_1_PIN, GPIO_PIN_SET);
+            break;
+        }
+
+        case ROC_LED_2:
+        {
+            HAL_GPIO_WritePin(ROC_LED_2_PORT, ROC_LED_2_PIN, GPIO_PIN_SET);
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
 }
 
 /*********************************************************************************
@@ -61,9 +109,33 @@ void RocLedTurnOff(void)
  *  Author:
  *              ROC LiRen(2018.12.16)
 **********************************************************************************/
-void RocLedToggle(void)
+void RocLedToggle(ROC_LED_TYPE_e Led)
 {
-    HAL_GPIO_TogglePin(ROC_DEBUG_LED_GPIO_PORT, ROC_DEBUG_LED_PIN);
+    switch(Led)
+    {
+        case ROC_LED_DEBUG:
+        {
+            HAL_GPIO_TogglePin(ROC_LED_DEBUG_PORT, ROC_LED_DEBUG_PIN);
+            break;
+        }
+
+        case ROC_LED_1:
+        {
+            HAL_GPIO_TogglePin(ROC_LED_1_PORT, ROC_LED_1_PIN);
+            break;
+        }
+
+        case ROC_LED_2:
+        {
+            HAL_GPIO_TogglePin(ROC_LED_2_PORT, ROC_LED_2_PIN);
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
 }
 
 /*********************************************************************************

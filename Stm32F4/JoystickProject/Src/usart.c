@@ -44,7 +44,8 @@
 #include "dma.h"
 
 /* USER CODE BEGIN 0 */
-
+uint8_t charRx;
+static RxCpltCallback_T RxCpltCallback;
 /* USER CODE END 0 */
 
 UART_HandleTypeDef huart1;
@@ -336,6 +337,20 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
+void vcom_ReceiveInit( RxCpltCallback_T Rxcb )
+{
+
+    /*record call back*/
+    RxCpltCallback=Rxcb;
+
+    /*Start LPUART receive on IT*/
+    HAL_UART_Receive_IT(&huart2, &charRx,1);
+}
+
+void vcom_send_data(uint8_t* data,uint32_t len)
+{
+    HAL_UART_Transmit(&huart2,data,len,0xFFFF);
+}
 
 /* USER CODE END 1 */
 

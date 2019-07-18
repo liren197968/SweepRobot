@@ -12,9 +12,23 @@
 #define ROC_DEBUG_LED_OFF       GPIO_PIN_SET
 
 
-void RocLedToggle(void);
-void RocLedTurnOn(void);
-void RocLedTurnOff(void);
+typedef enum _ROC_LED_TYPE_e
+{
+    ROC_LED_DEBUG = 0,
+    ROC_LED_1,
+    ROC_LED_2,
+    ROC_LED_3,
+    ROC_LED_4,
+    ROC_LED_5,
+
+    ROC_LED_NUM
+}ROC_LED_TYPE_e;
+
+
+void RocLedToggle(ROC_LED_TYPE_e Led);
+void RocLedTurnOn(ROC_LED_TYPE_e Led);
+void RocLedTurnOff(ROC_LED_TYPE_e Led);
 ROC_RESULT RocLedInit(void);
 
 #endif
+
