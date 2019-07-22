@@ -463,7 +463,10 @@ ROC_RESULT RocOledInit(void)
 
     RocOledRegInit();
 
-    RocOledDrawGbk8Str(30, 3, "Init Success");
+    RocOledDrawGbk8Str(30, 1, "Init Success");
+    RocOledDrawGbk8Str(10, 3, "Bat:");
+    RocOledDrawGbk8Str(70, 3, "Key:");
+    RocOledDrawGbk8Str(0, 5, "ADC:");
 
     if(RET_OK != Ret)
     {

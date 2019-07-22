@@ -189,24 +189,24 @@ void SX1276IoInit( void )
     initStruct.Pin  = RFDIO_1_Pin;
     HAL_GPIO_Init( RFDIO_1_GPIO_Port, &initStruct );
 
-    initStruct.Pin  = RFDIO_2_Pin;
-    HAL_GPIO_Init( RFDIO_2_GPIO_Port, &initStruct );
+//    initStruct.Pin  = RFDIO_2_Pin;
+//    HAL_GPIO_Init( RFDIO_2_GPIO_Port, &initStruct );
+//
+//    initStruct.Pin  = RFDIO_3_Pin;
+//    HAL_GPIO_Init( RFDIO_3_GPIO_Port, &initStruct );
 
-    initStruct.Pin  = RFDIO_3_Pin;
-    HAL_GPIO_Init( RFDIO_3_GPIO_Port, &initStruct );
-
-//  initStruct.Pin = RADIO_TCXO_VCC_PIN;
-//  initStruct.Mode =GPIO_MODE_OUTPUT_PP;
-//  initStruct.Pull = GPIO_NOPULL;
-//  HAL_GPIO_Init( RADIO_TCXO_VCC_PORT, &initStruct );
+//    initStruct.Pin = RADIO_TCXO_VCC_PIN;
+//    initStruct.Mode =GPIO_MODE_OUTPUT_PP;
+//    initStruct.Pull = GPIO_NOPULL;
+//    HAL_GPIO_Init( RADIO_TCXO_VCC_PORT, &initStruct );
 }
 
 void SX1276IoIrqInit( DioIrqHandler **irqHandlers )
 {
     HW_GPIO_SetIrq( RFDIO_0_GPIO_Port, RFDIO_0_Pin, IRQ_HIGH_PRIORITY, irqHandlers[0] );
     HW_GPIO_SetIrq( RFDIO_1_GPIO_Port, RFDIO_1_Pin, IRQ_HIGH_PRIORITY, irqHandlers[1] );
-    HW_GPIO_SetIrq( RFDIO_2_GPIO_Port, RFDIO_2_Pin, IRQ_HIGH_PRIORITY, irqHandlers[2] );
-    HW_GPIO_SetIrq( RFDIO_3_GPIO_Port, RFDIO_3_Pin, IRQ_HIGH_PRIORITY, irqHandlers[3] );
+//    HW_GPIO_SetIrq( RFDIO_2_GPIO_Port, RFDIO_2_Pin, IRQ_HIGH_PRIORITY, irqHandlers[2] );
+//    HW_GPIO_SetIrq( RFDIO_3_GPIO_Port, RFDIO_3_Pin, IRQ_HIGH_PRIORITY, irqHandlers[3] );
 }
 
 
@@ -218,15 +218,15 @@ void SX1276IoDeInit( void )
     initStruct.Mode = GPIO_MODE_ANALOG;
     initStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init( RFDIO_0_GPIO_Port, &initStruct );
-    
+
     initStruct.Pin  = RFDIO_1_Pin;
     HAL_GPIO_Init( RFDIO_1_GPIO_Port, &initStruct );
-    
-    initStruct.Pin  = RFDIO_2_Pin;
-    HAL_GPIO_Init( RFDIO_2_GPIO_Port, &initStruct );
-    
-    initStruct.Pin  = RFDIO_3_Pin;
-    HAL_GPIO_Init( RFDIO_3_GPIO_Port, &initStruct );
+
+//    initStruct.Pin  = RFDIO_2_Pin;
+//    HAL_GPIO_Init( RFDIO_2_GPIO_Port, &initStruct );
+//
+//    initStruct.Pin  = RFDIO_3_Pin;
+//    HAL_GPIO_Init( RFDIO_3_GPIO_Port, &initStruct );
 
 }
 

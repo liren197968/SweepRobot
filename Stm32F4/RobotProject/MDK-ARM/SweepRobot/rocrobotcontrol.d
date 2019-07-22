@@ -44,6 +44,7 @@ sweeprobot\rocrobotcontrol.o: ..\Robot\RocRobotDriver\RocImu\RocMpu6050\eMPL\inv
 sweeprobot\rocrobotcontrol.o: ..\Robot\RocRobotDriver\RocLog\RocLog.h
 sweeprobot\rocrobotcontrol.o: ..\Robot\RocRobotDriver\RocError\RocError.h
 sweeprobot\rocrobotcontrol.o: ..\Robot\RocRobotDriver\RocLed\RocLed.h
+sweeprobot\rocrobotcontrol.o: ..\Robot\RocRobotDriver\RocKey\RocKey.h
 sweeprobot\rocrobotcontrol.o: ..\Robot\RocRobotDriver\RocOled\RocOled.h
 sweeprobot\rocrobotcontrol.o: ../Inc/gpio.h
 sweeprobot\rocrobotcontrol.o: ../Inc/spi.h

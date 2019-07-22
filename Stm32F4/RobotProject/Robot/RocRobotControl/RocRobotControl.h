@@ -12,7 +12,7 @@
 #include "RocRobotDhAlgorithm.h"
 
 
-//#define ROC_ROBOT_CONTROL_DEBUG
+#define ROC_ROBOT_CONTROL_DEBUG
 
 
 #define ROC_ROBOT_CTRL_TIME_LCD_TICK    10
@@ -70,6 +70,7 @@ typedef struct _ROC_ROBOT_CTRL_s
     ROC_ROBOT_RUN_MODE_e     RunMode;
     ROC_REMOTE_CTRL_INPUT_s  RemoteCtrl;
     ROC_ROBOT_MOVE_CTRL_s    *MoveCtrl;
+    float                    BatVoltage;
 
 }ROC_ROBOT_CTRL_s;
 

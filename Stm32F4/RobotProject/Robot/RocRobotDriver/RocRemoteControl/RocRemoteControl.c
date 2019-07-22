@@ -17,7 +17,7 @@
 
 #include "usart.h"
 
-#include "lora_ptp.h"
+//#include "lora_ptp.h"
 
 #include "RocLog.h"
 #include "RocLed.h"
@@ -26,7 +26,7 @@
 
 static uint8_t g_RemoteRecvEnd = ROC_FALSE;
 static uint8_t g_RemoteRxDatLen = ROC_NONE;
-static uint8_t g_RemoteTxBuffer[ROC_REMOTE_MAX_NUM_LEN_SEND] = {ROC_NONE};
+static uint8_t g_RemoteTxBuffer[ROC_REMOTE_MAX_NUM_LEN_SEND] = {0xFA, 0x00, 0x00, 0x00};
 static uint8_t g_RemoteRxBuffer[ROC_REMOTE_MAX_NUM_LEN_SEND] = {ROC_NONE};
 
 
@@ -222,21 +222,20 @@ static void RocRemoteUsbControlInit(void)
  *  Author:
  *              ROC LiRen(2018.12.20)
 **********************************************************************************/
-ROC_RESULT RocRemoteTransUsartInit(void)
+static ROC_RESULT RocRemoteTransUsartInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    if(HAL_OK != HAL_UART_Transmit_DMA(&huart2, g_RemoteTxBuffer, ROC_REMOTE_MAX_NUM_LEN_SEND))
+    if(HAL_OK != HAL_UART_Transmit_DMA(ROC_REMOTE_UART_CHANNEL, g_RemoteTxBuffer, ROC_REMOTE_MAX_NUM_LEN_SEND))
     {
         Ret = RET_ERROR;
 
         Error_Handler();
     }
-    while(HAL_UART_STATE_READY != HAL_UART_GetState(&huart2));
 
-    __HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);
+    __HAL_UART_ENABLE_IT(ROC_REMOTE_UART_CHANNEL, UART_IT_IDLE);
 
-    if(HAL_OK != HAL_UART_Receive_DMA(&huart2, g_RemoteRxBuffer, ROC_REMOTE_MAX_NUM_LEN_SEND))
+    if(HAL_OK != HAL_UART_Receive_DMA(ROC_REMOTE_UART_CHANNEL, g_RemoteRxBuffer, ROC_REMOTE_MAX_NUM_LEN_SEND))
     {
         Ret = RET_ERROR;
 
@@ -267,31 +266,31 @@ void RocRemoteReceiveCallback(UART_HandleTypeDef *Huart)
 
     if(USART2 == Huart->Instance)
     {
-        BufferFlag = __HAL_UART_GET_FLAG(&huart2, UART_FLAG_IDLE);
+        BufferFlag = __HAL_UART_GET_FLAG(ROC_REMOTE_UART_CHANNEL, UART_FLAG_IDLE);
 
         if((BufferFlag != RESET))
         { 
             g_RemoteRecvEnd = ROC_TRUE;
 
-            __HAL_UART_CLEAR_IDLEFLAG(&huart2);
+            __HAL_UART_CLEAR_IDLEFLAG(ROC_REMOTE_UART_CHANNEL);
 
-            HAL_UART_DMAStop(&huart2);
+            HAL_UART_DMAStop(ROC_REMOTE_UART_CHANNEL);
 
             BufferData = __HAL_DMA_GET_COUNTER(&hdma_usart2_rx);
 
             g_RemoteRxDatLen = ROC_REMOTE_MAX_NUM_LEN_SEND - BufferData;
-            HAL_UART_Receive_DMA(&huart2, g_RemoteRxBuffer, ROC_REMOTE_MAX_NUM_LEN_SEND);
+            HAL_UART_Receive_DMA(ROC_REMOTE_UART_CHANNEL, g_RemoteRxBuffer, ROC_REMOTE_MAX_NUM_LEN_SEND);
         }
     }
 }
 
 /*********************************************************************************
  *  Description:
- *              Send data with bluetooth
+ *              Send data with remote control
  *
  *  Parameter:
- *              None
- *
+ *              *Buff: the pointer to send buffer
+ *              DatLen: the length of send buffer
  *
  *  Return:
  *              None
@@ -303,17 +302,44 @@ void RocRemoteDataTransmit(uint8_t *Buff, uint16_t DatLen)
 {
     ROC_RESULT Ret = RET_OK;
 
-    Ret = HAL_UART_Transmit_DMA(&huart2, Buff, DatLen);
+    //while(HAL_UART_GetState(ROC_REMOTE_UART_CHANNEL) != HAL_UART_STATE_READY);
+
+    Ret = HAL_UART_Transmit_DMA(ROC_REMOTE_UART_CHANNEL, Buff, DatLen);
     if(HAL_OK != Ret)
     {
-        ROC_LOGE("Remote usart transmission is in error(%d)!");
-
-        Error_Handler();
+        ROC_LOGE("Remote usart transmission is in error(%d)!", Ret);
     }
 
     while(ROC_NONE != huart2.TxXferCount);
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Receive data with remote control
+ *
+ *  Parameter:
+ *              DatLen: the length of receive buffer
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.20)
+**********************************************************************************/
+uint8_t* RocRemoteDataReceive(void)
+{
+//    ROC_RESULT Ret = RET_OK;
+
+//    Ret = HAL_UART_Receive_DMA(ROC_REMOTE_UART_CHANNEL, g_RemoteRxBuffer, DatLen);
+//    if(HAL_OK != Ret)
+//    {
+//        ROC_LOGE("Remote usart receive is in error(%d)!", Ret);
+//    }
+
+//    while(ROC_TRUE != RocRemoteRecvIsFinshed());
+
+    return g_RemoteRxBuffer;
+}
 /*********************************************************************************
  *  Description:
  *              Check bluetooth receive is finshed
@@ -331,7 +357,7 @@ ROC_RESULT RocRemoteRecvIsFinshed(void)
 {
     if(g_RemoteRecvEnd == ROC_TRUE)
     {
-        ROC_LOGI("Remote receive (%d) data(%s).", g_RemoteRxDatLen, g_RemoteRxBuffer);
+        //ROC_LOGI("Remote receive (%d) data(%s).", g_RemoteRxDatLen, g_RemoteRxBuffer);
 
         g_RemoteRecvEnd = ROC_FALSE;
 
@@ -343,6 +369,7 @@ ROC_RESULT RocRemoteRecvIsFinshed(void)
     }
 }
 
+#if 0
 /*********************************************************************************
  *  Description:
  *              Check bluetooth receive is finshed
@@ -361,7 +388,7 @@ ROC_RESULT RocRemoteRecvIsFinshed(void)
 
 static char command[CMD_SIZE];
 static volatile unsigned cmd_index = 0;
-static volatile FlagStatus IsCmdReceived = RESET;
+FlagStatus IsCmdReceived = RESET;
 static uint32_t cmd_rx_time_out = 0;
 
 static void CMD_GetChar( uint8_t* rxChar)
@@ -372,7 +399,7 @@ static void CMD_GetChar( uint8_t* rxChar)
     cmd_index++;
 }
 
-void StartTransTxRxTask(void const * argument)
+void StartTransTxRxTask(void)
 {
     uint8_t* prxchar = NULL;
     uint16_t len   = 0;
@@ -382,7 +409,7 @@ void StartTransTxRxTask(void const * argument)
     uint8_t sf = 0 ;
 	uint8_t   current_sf = 0;
 
-    vcom_ReceiveInit(CMD_GetChar);
+    //vcom_ReceiveInit(CMD_GetChar);
 
     LORA_ptop_config(0x12, 20);
 
@@ -390,6 +417,11 @@ void StartTransTxRxTask(void const * argument)
 
     RocLedTurnOn(ROC_LED_2);
     RocLedTurnOff(ROC_LED_1);
+
+    for(len = 0; len < CMD_SIZE; len++)
+    {
+        command[len] = len;
+    }
 
     while(1)
     {
@@ -415,6 +447,7 @@ void StartTransTxRxTask(void const * argument)
             sf = 7;
 
             RocLedTurnOff(ROC_LED_1);
+            cmd_index = CMD_SIZE;
             LORA_ptop_SendMsg(sf, TX_PWR, (uint8_t*)&command[0], cmd_index );
             RocLedTurnOn(ROC_LED_1);
 
@@ -441,12 +474,33 @@ void StartTransTxRxTask(void const * argument)
                 }
 
                 vcom_send_data(pchar, len);
+                ROC_LOGN("The receive data is %s", pchar);
 
-                free(pchar);
+                //free(pchar);
             }
         }
 
         HAL_Delay(10);
+    }
+}
+#endif
+static uint8_t RocRobotJoystickCmdGet(void)
+{
+    uint8_t *RemoteData = NULL;
+
+    RemoteData = RocRemoteDataReceive();
+
+    if(ROC_JOYSTICK_FRAME_HEADER != RemoteData[0])
+    {
+        return ROC_NONE;
+    }
+    else if(ROC_JOYSTICK_KEY_HEADER != RemoteData[1])
+    {
+        return ROC_NONE;
+    }
+    else
+    {
+        return RemoteData[3];
     }
 }
 
@@ -466,15 +520,10 @@ void StartTransTxRxTask(void const * argument)
 ROC_RESULT RocRemoteControlInit(void)
 {
     ROC_RESULT Ret = RET_OK;
-
+    uint16_t Dat[4];
 #ifdef ROC_REMOTE_USB_CONTROL
     RocRemoteUsbControlInit();
 #endif
-
-    while(1)
-    {
-        StartTransTxRxTask();
-    }
 
     Ret = RocRemoteTransUsartInit();
     if(RET_OK != Ret)

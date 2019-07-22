@@ -3,6 +3,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "stm32f4xx_hal.h"
+
+
 #define   MSG_Q_NUM       300
 #define   TX_MODE            true
 #define   RX_MODE            false
@@ -22,9 +25,9 @@ struct lorapp_dev_t
     uint8_t*  prx;
     uint32_t  rx_len;
 
-    SemaphoreHandle_t  op_mutex;
+//    SemaphoreHandle_t  op_mutex;
 
-    xQueueHandle  msg_q;
+//    xQueueHandle  msg_q;
 
     struct msg_q_t* msg_q_num[MSG_Q_NUM];
 };
@@ -60,29 +63,13 @@ void LORA_ptop_config(uint8_t sync_byte, int8_t power)
 
     SX1276IoInit();
 
-    lorapp_dev.op_mutex = xSemaphoreCreateMutex();
-
-    if(lorapp_dev.op_mutex == NULL)
-    {
-        printf("mutex create error!\r\n");
-    }
-
-    lorapp_dev.msg_q = xQueueCreate( MSG_Q_NUM, sizeof( struct msg_q_t ) );
-
-    if(lorapp_dev.msg_q == 0 )
-    {
-        printf("queue create error!\r\n");
-    }
-
     lorapp_dev.prx       = NULL;
     lorapp_dev.rx_len    = 0;
 
-    for (uint32_t i = 0; i < MSG_Q_NUM; i++)
-    {
-        lorapp_dev.msg_q_num[i] = NULL;
-    }
-
-    xSemaphoreTake(lorapp_dev.op_mutex, portMAX_DELAY);
+//    for (uint32_t i = 0; i < MSG_Q_NUM; i++)
+//    {
+//        lorapp_dev.msg_q_num[i] = NULL;
+//    }
 
     SX1276Init(&RadioEvents);
 
@@ -90,6 +77,12 @@ void LORA_ptop_config(uint8_t sync_byte, int8_t power)
     SX1276SetModem( MODEM_LORA );
 
     SX1276Write( REG_OCP, 0x0B );
+
+    printf("reg: %d \r\n", 0x0B);
+    reg_value = 10;
+    reg_value = SX1276Read(REG_OCP);
+    printf("reg: %d \r\n", reg_value);
+
     SX1276Write( REG_PADAC, 0x84 );
     SX1276Write( REG_OSC, 0xFF);
     SX1276Write( REG_LNA, 0x23 );
@@ -99,8 +92,6 @@ void LORA_ptop_config(uint8_t sync_byte, int8_t power)
     uint32_t rand_v = SX1276Random();
     reg_value = SX1276Read(REG_LR_VERSION);
     SX1276SetStby();
-
-    xSemaphoreGive(lorapp_dev.op_mutex);
 
     printf("LORA_Module_V%d.%d Init OK ...\r\n", reg_value, rand_v);
 }
@@ -215,25 +206,25 @@ void LORA_ptop_SetInTxMode(uint8_t sf, int8_t pwr)
  */
 void LORA_ptop_SendMsg(uint8_t sf, int8_t pwr, uint8_t* pchar, uint32_t len)
 {
-    osMutexWait(lorapp_dev.op_mutex, portMAX_DELAY);
-
     LORA_ptop_SetInTxMode(sf, pwr);
     SX1276Send(pchar, len);
 
-    osMutexRelease(lorapp_dev.op_mutex);
+    HAL_Delay(20);
 
-    while(RF_IDLE != SX1276GetStatus())
-    {
-        osDelay(1);
-    }
+//    while(RF_IDLE != SX1276GetStatus())
+//    {
+//        HAL_Delay(1);
+//    }
 }
 
-void* LORA_ptop_ReceiveMsg( uint8_t **ppchar, uint16_t* len, int16_t* rssi, int8_t* snr, TickType_t block_wait)
-{
-    struct msg_q_t ptmp_msg;
-    memset(&ptmp_msg, 0, sizeof(ptmp_msg));
+struct msg_q_t ptmp_msg;
 
-    if( xQueueReceive( lorapp_dev.msg_q, &ptmp_msg,  block_wait ) )
+void* LORA_ptop_ReceiveMsg( uint8_t **ppchar, uint16_t* len, int16_t* rssi, int8_t* snr, uint32_t block_wait)
+{
+//    struct msg_q_t ptmp_msg;
+//    memset(&ptmp_msg, 0, sizeof(ptmp_msg));
+
+    //if( xQueueReceive( lorapp_dev.msg_q, &ptmp_msg,  block_wait ) )
     {
         *rssi   = ptmp_msg.rssi;
         *snr    = ptmp_msg.snr;
@@ -261,7 +252,7 @@ void EVENT_TxTimeoutCallback(void)
 
 void EVENT_RxDoneCallback( uint8_t *payload, uint16_t size, int16_t rssi, int8_t snr )
 {
-    struct msg_q_t tmp_msg;
+//    struct msg_q_t tmp_msg;
 //    uint8_t* pchar = NULL;
 
     if (NULL == payload)
@@ -273,17 +264,17 @@ void EVENT_RxDoneCallback( uint8_t *payload, uint16_t size, int16_t rssi, int8_t
     {
         size %= 256;
 
-        tmp_msg.rssi = rssi;
-        tmp_msg.snr  = snr;
-        tmp_msg.tcb_len = size;
-        tmp_msg.tcb     = (uint8_t*)malloc(size);
+        ptmp_msg.rssi = rssi;
+        ptmp_msg.snr  = snr;
+        ptmp_msg.tcb_len = size;
+        ptmp_msg.tcb     = (uint8_t*)malloc(size);
 
-        memcpy(tmp_msg.tcb, payload, tmp_msg.tcb_len);
+        memcpy(ptmp_msg.tcb, payload, ptmp_msg.tcb_len);
 
-        if(pdPASS != xQueueSendFromISR(lorapp_dev.msg_q, (void *)&tmp_msg, NULL))
-        {
-            free(tmp_msg.tcb);
-        }
+//        if(pdPASS != xQueueSendFromISR(lorapp_dev.msg_q, (void *)&tmp_msg, NULL))
+//        {
+//            free(tmp_msg.tcb);
+//        }
 
     }
 }

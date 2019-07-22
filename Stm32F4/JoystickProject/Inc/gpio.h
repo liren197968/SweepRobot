@@ -110,6 +110,30 @@ extern "C" {
 #define ROC_OLED_RST_PIN                    GPIO_PIN_2
 #define ROC_OLED_RST_PORT                   GPIOB
 
+#define ROC_RF_SET_PIN                      GPIO_PIN_8
+#define ROC_RF_SET_PORT                     GPIOA
+
+#define RFNSS_Pin                           GPIO_PIN_4
+#define RFNSS_GPIO_Port                     GPIOA
+#define RFSCK_Pin                           GPIO_PIN_5
+#define RFSCK_GPIO_Port                     GPIOA
+#define RFMISO_Pin                          GPIO_PIN_6
+#define RFMISO_GPIO_Port                    GPIOA
+#define RFMOSI_Pin                          GPIO_PIN_7
+#define RFMOSI_GPIO_Port                    GPIOA
+#define RFDIO_3_Pin                         GPIO_PIN_0
+#define RFDIO_3_GPIO_Port                   GPIOB
+#define RFDIO_3_EXTI_IRQn                   EXTI0_IRQn
+#define RFDIO_2_Pin                         GPIO_PIN_1
+#define RFDIO_2_GPIO_Port                   GPIOB
+#define RFDIO_2_EXTI_IRQn                   EXTI1_IRQn
+#define RFDIO_1_Pin                         GPIO_PIN_7
+#define RFDIO_1_GPIO_Port                   GPIOB
+#define RFDIO_1_EXTI_IRQn                   EXTI9_5_IRQn
+#define RFDIO_0_Pin                         GPIO_PIN_6
+#define RFDIO_0_GPIO_Port                   GPIOB
+#define RFDIO_0_EXTI_IRQn                   EXTI9_5_IRQn
+
 /* USER CODE END Includes */
 
 /* USER CODE BEGIN Private defines */
@@ -119,6 +143,24 @@ extern "C" {
 void MX_GPIO_Init(void);
 
 /* USER CODE BEGIN Prototypes */
+#define RCC_GPIO_CLK_ENABLE( __GPIO_PORT__ )              \
+do {                                                    \
+    switch( __GPIO_PORT__)                                \
+    {                                                     \
+      case GPIOA_BASE: __HAL_RCC_GPIOA_CLK_ENABLE(); break;    \
+      case GPIOB_BASE: __HAL_RCC_GPIOB_CLK_ENABLE(); break;    \
+      case GPIOC_BASE: __HAL_RCC_GPIOC_CLK_ENABLE(); break;    \
+      case GPIOD_BASE: __HAL_RCC_GPIOD_CLK_ENABLE(); break;    \
+    }                                                    \
+  } while(0)
+
+typedef void( GpioIrqHandler )( void );
+IRQn_Type MSP_GetIRQn( uint16_t gpioPin);
+void HW_GPIO_Init( GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, GPIO_InitTypeDef* initStruct);
+void HW_GPIO_SetIrq( GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin, uint32_t prio,  GpioIrqHandler *irqHandler );
+void HW_GPIO_IrqHandler( uint16_t GPIO_Pin );
+void HW_GPIO_Write( GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin,  uint32_t value );
+uint32_t HW_GPIO_Read( GPIO_TypeDef* GPIOx, uint16_t GPIO_Pin );
 
 /* USER CODE END Prototypes */
 

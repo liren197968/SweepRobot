@@ -8,6 +8,10 @@
 #define __ROC_JOYSTICK_H
 
 
+#define ROC_JOYSTICK_CTRL_TIME_TICK         25
+#define ROC_BATTERY_CHECK_TIME_TICK         10
+
+
 void RocJoystickInit(void);
 void RocJoystickMain(void);
 

@@ -1,4 +1,5 @@
 sweeprobot\rocremotecontrol.o: ..\Robot\RocRobotDriver\RocRemoteControl\RocRemoteControl.c
+sweeprobot\rocremotecontrol.o: D:\Program Files (x86)\Keil_v5\ARM\ARMCC\Bin\..\include\string.h
 sweeprobot\rocremotecontrol.o: ../Inc/usart.h
 sweeprobot\rocremotecontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h
 sweeprobot\rocremotecontrol.o: ../Inc/stm32f4xx_hal_conf.h
@@ -40,4 +41,5 @@ sweeprobot\rocremotecontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal
 sweeprobot\rocremotecontrol.o: ../Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_ll_usb.h
 sweeprobot\rocremotecontrol.o: ..\Robot\RocRobotDriver\RocLog\RocLog.h
 sweeprobot\rocremotecontrol.o: ..\Robot\RocRobotDriver\RocError\RocError.h
+sweeprobot\rocremotecontrol.o: ..\Robot\RocRobotDriver\RocLed\RocLed.h
 sweeprobot\rocremotecontrol.o: ..\Robot\RocRobotDriver\RocRemoteControl\RocRemoteControl.h

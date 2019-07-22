@@ -25,7 +25,8 @@
 void RocBatteryVoltageAdcSample(void);
 float RocBatteryVoltageGet(void);
 ROC_RESULT RocBatteryInit(void);
-void RocAdcVoltageGet(void);
+void RocJoystickAdcGet(uint16_t *JoystickAdc);
+
 
 
 #endif

@@ -12,6 +12,7 @@
 
 #include "RocLog.h"
 #include "RocLed.h"
+#include "RocKey.h"
 #include "RocOled.h"
 #include "RocRelay.h"
 #include "RocServo.h"
@@ -267,6 +268,78 @@ static void RocRobotSensorMeasure(void)
 
 /*********************************************************************************
  *  Description:
+ *              Get the joystick key command
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              The key commmand
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
+static uint8_t RocRobotJoystickCmdGet(void)
+{
+    uint8_t *RemoteData = NULL;
+
+    RemoteData = RocRemoteDataReceive();
+
+    if(ROC_JOYSTICK_FRAME_HEADER != RemoteData[0])
+    {
+        return ROC_NONE;
+    }
+    else if(ROC_JOYSTICK_KEY_HEADER != RemoteData[1])
+    {
+        return ROC_NONE;
+    }
+    else
+    {
+        return RemoteData[3];
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Get the joystick 4 adc channel data
+ *
+ *  Parameter:
+ *              JoysticAdcDat: the pointer to adc channel value
+ *
+ *  Return:
+ *              The result status
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
+static uint8_t RocRobotJoystickAdcGet(uint16_t* JoysticAdcDat)
+{
+    uint8_t i = 0;
+    uint8_t *RemoteData = NULL;
+
+    RemoteData = RocRemoteDataReceive();
+
+    if(ROC_JOYSTICK_FRAME_HEADER != RemoteData[0])
+    {
+        return ROC_NONE;
+    }
+    else if(ROC_JOYSTICK_KEY_HEADER != RemoteData[1])
+    {
+        return ROC_NONE;
+    }
+    else
+    {
+        for(i = 0; i < 4; i++)
+        {
+            JoysticAdcDat[i] = (RemoteData[2 * i + 4 + 1] << 8) | RemoteData[2 * i + 4];
+        }
+
+        return ROC_TRUE;
+    }
+}
+
+/*********************************************************************************
+ *  Description:
  *              Robot remote control function
  *
  *  Parameter:
@@ -280,11 +353,13 @@ static void RocRobotSensorMeasure(void)
 **********************************************************************************/
 static void RocRobotRemoteControl(void)
 {
-    uint8_t RobotCtrlCmd;
+    uint8_t RobotBleCtrlCmd = ROC_NONE;
+    uint8_t RobotRemoteCmd = ROC_NONE;
+    uint16_t RobotRemoteAdc[4] = {ROC_NONE};
 
-    RobotCtrlCmd = RocBluetoothCtrlCmd_Get();
+    RobotBleCtrlCmd = RocBluetoothCtrlCmd_Get();
 
-    switch(RobotCtrlCmd)
+    switch(RobotBleCtrlCmd)
     {
         case ROC_ROBOT_CTRL_CMD_MOSTAND:
         {
@@ -539,6 +614,70 @@ static void RocRobotRemoteControl(void)
         case ROC_ROBOT_CTRL_MEASURE_START:
         {
             RocRobotSensorMeasure();
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
+
+    RobotRemoteCmd = RocRobotJoystickCmdGet();
+    RocRobotJoystickAdcGet(RobotRemoteAdc);
+
+    switch(RobotRemoteCmd)
+    {
+        case ROC_KEY_13:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                g_RobotCtrl.RemoteCtrl.X = 0;
+                g_RobotCtrl.RemoteCtrl.Y = 0;
+                g_RobotCtrl.RemoteCtrl.Z = 0;
+                g_RobotCtrl.RemoteCtrl.A = 0;
+                g_RobotCtrl.RemoteCtrl.H = 0;
+
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(0))
+                {
+                    RocRobotCtrlFlagSet(0);
+                }
+            }
+            else if(ROC_ROBOT_RUN_MODE_CAR == RocRobotRunModeGet())
+            {
+                RocRobotCarTransformRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_1:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                g_RobotCtrl.RemoteCtrl.X = 0;
+                g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
+                g_RobotCtrl.RemoteCtrl.Z = 0;
+                g_RobotCtrl.RemoteCtrl.A = 0;
+                g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
+
+                RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_FORWALKING);
+
+                if(ROC_FALSE == RocRobotCtrlFlagGet(1))
+                {
+                    RocRobotCtrlFlagSet(1);
+
+                    g_RobotCtrl.MoveCtrl->CurState.RefImuAngle = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle;
+
+                    /* Used for robot bady balance control */
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.X = -g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Y = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll;
+                    //g_RobotCtrl.MoveCtrl->CurState.BodyRot.Z = g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw;
+                }
+            }
+
             break;
         }
 
@@ -1226,8 +1365,10 @@ static void RocBatteryCheckTaskEntry(void)
         RocBatteryVoltageAdcSample();
     }
 
+    g_RobotCtrl.BatVoltage = RocBatteryVoltageGet();
+
 #ifndef ROC_ROBOT_CONTROL_DEBUG
-    if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > RocBatteryVoltageGet())
+    if(ROC_ROBOT_BATTERY_LIMITED_VOLTATE > g_RobotCtrl.BatVoltage)
     {
         ROC_LOGN("Battery is in low electricity! Charge it!");
 
@@ -1269,6 +1410,10 @@ static void RocRobotLcdShowInfoEntry(void)
 //        ROC_LOGN("Pitch: %.2f, Roll: %.2f, Yaw: %.2f", g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Pitch,
 //                                                       g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Roll,
 //                                                       g_RobotCtrl.MoveCtrl->CurState.CurImuAngle.Yaw);
+
+//        RocTftLcdDrawGbk16Str(10, 40, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Bat:");
+//        RocTftLcdDrawGbk16Str(80, 40, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+//        RocTftLcdDrawGbk16Num(80, 40, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, g_RobotCtrl.BatVoltage);
     }
 }
 
@@ -1299,7 +1444,7 @@ static void RocRobotCtrlTaskEntry(void)
         LastExeTime = CurExeTime;
 #endif
 
-        RocLedToggle();
+        RocLedToggle(ROC_LED_DEBUG);
 
         RocRobotRemoteControl();
 

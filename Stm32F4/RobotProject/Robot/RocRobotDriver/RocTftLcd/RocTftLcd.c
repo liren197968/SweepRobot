@@ -18,6 +18,8 @@
 static uint8_t g_DisplayNum[10]={0, 1, 2, 3, 4, 5, 6, 7, 8, 9};
 static uint8_t g_TftLcdBuff[ROC_TFT_LCD_BUFF_SIZE] = {0};
 static uint8_t g_TftLcdStrBuff[ROC_TFT_LCD_STR_BUFF_SIZE] = {0};
+
+
 /**
   * @brief  TxRx Transfer completed callback.
   * @param  hspi: SPI handle.

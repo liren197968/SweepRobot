@@ -15,7 +15,7 @@
 #define     ROC_OLED_X_SIZE             128
 #define     ROC_OLED_Y_SIZE             64
 
-#define     ROC_OLED_SPI_CHANNEL        (&hspi1)
+#define     ROC_OLED_SPI_CHANNEL        (&hspi3)
 #define     ROC_OLED_SUPPORT_NUM_LEN    6
 
 #define     ROC_OLED_X_LEVEL_L          0x00

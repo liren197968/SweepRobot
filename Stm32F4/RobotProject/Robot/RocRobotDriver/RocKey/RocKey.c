@@ -13,7 +13,7 @@
 
 
 static uint32_t g_KeyMask = 0x00;
-static uint16_t KeyCoder[ROC_KEY_NUM] = {0};
+static uint16_t g_KeyCoder[ROC_KEY_NUM] = {0};
 
 /*********************************************************************************
  *  Description:
@@ -34,32 +34,33 @@ void RocKeyTaskBackground(void)
 
     for(KeyNum = ROC_KEY_1; KeyNum < ROC_KEY_NUM; KeyNum++)
     {
-        KeyCoder[KeyNum] <<= 1;
+        g_KeyCoder[KeyNum] <<= 1;
     }
 
-    KeyCoder[ROC_KEY_1]  |= HAL_GPIO_ReadPin(ROC_KEY_1_PORT, ROC_KEY_1_PIN);
-    KeyCoder[ROC_KEY_2]  |= HAL_GPIO_ReadPin(ROC_KEY_2_PORT, ROC_KEY_2_PIN);
-    KeyCoder[ROC_KEY_3]  |= HAL_GPIO_ReadPin(ROC_KEY_3_PORT, ROC_KEY_3_PIN);
-    KeyCoder[ROC_KEY_4]  |= HAL_GPIO_ReadPin(ROC_KEY_4_PORT, ROC_KEY_4_PIN);
-    KeyCoder[ROC_KEY_5]  |= HAL_GPIO_ReadPin(ROC_KEY_5_PORT, ROC_KEY_5_PIN);
-    KeyCoder[ROC_KEY_6]  |= HAL_GPIO_ReadPin(ROC_KEY_6_PORT, ROC_KEY_6_PIN);
-    KeyCoder[ROC_KEY_7]  |= HAL_GPIO_ReadPin(ROC_KEY_7_PORT, ROC_KEY_7_PIN);
-    KeyCoder[ROC_KEY_8]  |= HAL_GPIO_ReadPin(ROC_KEY_8_PORT, ROC_KEY_8_PIN);
-    KeyCoder[ROC_KEY_9]  |= HAL_GPIO_ReadPin(ROC_KEY_9_PORT, ROC_KEY_9_PIN);
-    KeyCoder[ROC_KEY_10] |= HAL_GPIO_ReadPin(ROC_KEY_10_PORT, ROC_KEY_10_PIN);
-    KeyCoder[ROC_KEY_11] |= HAL_GPIO_ReadPin(ROC_KEY_11_PORT, ROC_KEY_11_PIN);
-    KeyCoder[ROC_KEY_12] |= HAL_GPIO_ReadPin(ROC_KEY_12_PORT, ROC_KEY_12_PIN);
-    KeyCoder[ROC_KEY_13] |= HAL_GPIO_ReadPin(ROC_KEY_13_PORT, ROC_KEY_13_PIN);
-    KeyCoder[ROC_KEY_14] |= HAL_GPIO_ReadPin(ROC_KEY_14_PORT, ROC_KEY_14_PIN);
-    KeyCoder[ROC_KEY_15] |= HAL_GPIO_ReadPin(ROC_KEY_15_PORT, ROC_KEY_15_PIN);
-    KeyCoder[ROC_KEY_16] |= HAL_GPIO_ReadPin(ROC_KEY_LT_PORT, ROC_KEY_LT_PIN);
-    KeyCoder[ROC_KEY_17] |= HAL_GPIO_ReadPin(ROC_KEY_RT_PORT, ROC_KEY_RT_PIN);
+    g_KeyCoder[ROC_KEY_1]  |= HAL_GPIO_ReadPin(ROC_KEY_1_PORT, ROC_KEY_1_PIN);
+    g_KeyCoder[ROC_KEY_2]  |= HAL_GPIO_ReadPin(ROC_KEY_2_PORT, ROC_KEY_2_PIN);
+    g_KeyCoder[ROC_KEY_3]  |= HAL_GPIO_ReadPin(ROC_KEY_3_PORT, ROC_KEY_3_PIN);
+    g_KeyCoder[ROC_KEY_4]  |= HAL_GPIO_ReadPin(ROC_KEY_4_PORT, ROC_KEY_4_PIN);
+    g_KeyCoder[ROC_KEY_5]  |= HAL_GPIO_ReadPin(ROC_KEY_5_PORT, ROC_KEY_5_PIN);
+    g_KeyCoder[ROC_KEY_6]  |= HAL_GPIO_ReadPin(ROC_KEY_6_PORT, ROC_KEY_6_PIN);
+    g_KeyCoder[ROC_KEY_7]  |= HAL_GPIO_ReadPin(ROC_KEY_7_PORT, ROC_KEY_7_PIN);
+    g_KeyCoder[ROC_KEY_8]  |= HAL_GPIO_ReadPin(ROC_KEY_8_PORT, ROC_KEY_8_PIN);
+    g_KeyCoder[ROC_KEY_9]  |= HAL_GPIO_ReadPin(ROC_KEY_9_PORT, ROC_KEY_9_PIN);
+    g_KeyCoder[ROC_KEY_10] |= HAL_GPIO_ReadPin(ROC_KEY_10_PORT, ROC_KEY_10_PIN);
+    g_KeyCoder[ROC_KEY_11] |= HAL_GPIO_ReadPin(ROC_KEY_11_PORT, ROC_KEY_11_PIN);
+    g_KeyCoder[ROC_KEY_12] |= HAL_GPIO_ReadPin(ROC_KEY_12_PORT, ROC_KEY_12_PIN);
+    g_KeyCoder[ROC_KEY_13] |= HAL_GPIO_ReadPin(ROC_KEY_13_PORT, ROC_KEY_13_PIN);
+    g_KeyCoder[ROC_KEY_14] |= HAL_GPIO_ReadPin(ROC_KEY_14_PORT, ROC_KEY_14_PIN);
+    g_KeyCoder[ROC_KEY_15] |= HAL_GPIO_ReadPin(ROC_KEY_15_PORT, ROC_KEY_15_PIN);
+    g_KeyCoder[ROC_KEY_16] |= HAL_GPIO_ReadPin(ROC_KEY_LT_PORT, ROC_KEY_LT_PIN);
+    g_KeyCoder[ROC_KEY_17] |= HAL_GPIO_ReadPin(ROC_KEY_RT_PORT, ROC_KEY_RT_PIN);
 
     for(KeyNum = ROC_KEY_1; KeyNum < ROC_KEY_NUM; KeyNum++)
     {
-        if((KeyCoder[KeyNum] & ROC_KEY_DURATION_TIME_MASK) == 0x00)
+        if((g_KeyCoder[KeyNum] & ROC_KEY_DURATION_TIME_MASK) == 0x00)
         {
-            g_KeyMask |= (1U << KeyNum);
+            //g_KeyMask |= (1U << KeyNum);
+            g_KeyMask = KeyNum;     /*TODO, support multiple key */
         }
     }
 }
@@ -98,7 +99,8 @@ uint32_t RocPressKeyNumGet(void)
 **********************************************************************************/
 void RocKeyEventClear(ROC_KEY_TYPE_e KeyNum)
 {
-    g_KeyMask &= ~(1U << KeyNum);
+    //g_KeyMask &= ~(1U << KeyNum);
+    g_KeyMask = ROC_KEY_0_MASK;
 }
 
 /*********************************************************************************
@@ -121,7 +123,7 @@ ROC_RESULT RocKeyInit(void)
 
     for(i = 0; i < ROC_KEY_NUM; i++)
     {
-        KeyCoder[i] = ROC_KEY_DURATION_TIME_MASK;
+        g_KeyCoder[i] = ROC_KEY_DURATION_TIME_MASK;
     }
 
     if(HAL_OK != HAL_TIM_Base_Start_IT(&htim6))

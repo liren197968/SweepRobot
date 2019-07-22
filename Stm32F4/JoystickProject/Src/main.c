@@ -109,8 +109,8 @@ int main(void)
     MX_SPI1_Init();
     MX_USART3_UART_Init();
     MX_I2C2_Init();
-    MX_SPI2_Init();
     MX_TIM2_Init();
+    MX_SPI3_Init();
     MX_TIM6_Init();
     MX_TIM7_Init();
 
@@ -183,7 +183,7 @@ void SystemClock_Config(void)
     */
     HAL_SYSTICK_Config(HAL_RCC_GetHCLKFreq() / 1000);
 
-    /**Configure the Systick                                                                                         `
+    /**Configure the Systick
     */
     HAL_SYSTICK_CLKSourceConfig(SYSTICK_CLKSOURCE_HCLK);
 

@@ -81,7 +81,7 @@ void MX_USART2_UART_Init(void)
 {
 
     huart2.Instance = USART2;
-    huart2.Init.BaudRate = 115200;
+    huart2.Init.BaudRate = 9600;
     huart2.Init.WordLength = USART_WORDLENGTH_8B;
     huart2.Init.StopBits = UART_STOPBITS_1;
     huart2.Init.Parity = UART_PARITY_NONE;
@@ -334,6 +334,15 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef *uartHandle)
 
         /* USER CODE END USART3_MspDeInit 1 */
     }
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *UartHandle)
+{
+   if ((NULL != RxCpltCallback) && (HAL_UART_ERROR_NONE ==UartHandle->ErrorCode))
+   {
+     RxCpltCallback(&charRx);
+   }
+   HAL_UART_Receive_IT(UartHandle, &charRx,1);
 }
 
 /* USER CODE BEGIN 1 */

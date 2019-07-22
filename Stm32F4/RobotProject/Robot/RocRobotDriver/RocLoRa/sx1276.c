@@ -68,7 +68,7 @@
 #include "gpio.h"
 #include "radio.h"
 #include "sx1276.h"
-#include "main.h"
+#include "gpio.h"
 
 
 /*
@@ -96,7 +96,7 @@ typedef struct
 
 typedef struct
 {
-    osTimerId timer_id;
+//    osTimerId timer_id;
     uint32_t    period;
 } lora_timer_t;
 
@@ -258,9 +258,9 @@ DioIrqHandler *DioIrq[] = { SX1276OnDio0Irq, SX1276OnDio1Irq,
  * Tx and Rx timers
  */
 
-osTimerId TxTimerId;
-osTimerId RxTimerId;
-osTimerId RxSyncWordTimerId;
+//osTimerId TxTimerId;
+//osTimerId RxTimerId;
+//osTimerId RxSyncWordTimerId;
 
 lora_timer_t TxTimeoutTimer ;
 lora_timer_t RxTimeoutTimer  ;
@@ -268,24 +268,24 @@ lora_timer_t RxTimeoutSyncWord ;
 
 
 
-osTimerDef(TxTimerId, SX1276OnTimeoutIrq);
-osTimerDef(RxTimerId, SX1276OnTimeoutIrq);
-osTimerDef(RxSyncWordTimerId, SX1276OnTimeoutIrq);
+//osTimerDef(TxTimerId, SX1276OnTimeoutIrq);
+//osTimerDef(RxTimerId, SX1276OnTimeoutIrq);
+//osTimerDef(RxSyncWordTimerId, SX1276OnTimeoutIrq);
 
 
 void TimerSetValue(lora_timer_t *obj, uint32_t value)
 {
-    obj->period = value;
+    //obj->period = value;
 }
 
 void TimerStart(lora_timer_t *obj)
 {
-    osTimerStart(obj->timer_id, obj->period);
+    //osTimerStart(obj->timer_id, obj->period);
 }
 
 void TimerStop(lora_timer_t *obj)
 {
-    osTimerStop(obj->timer_id);
+    //osTimerStop(obj->timer_id);
 }
 
 
@@ -311,9 +311,9 @@ uint32_t SX1276Init( RadioEvents_t *events )
 
     //LoRaBoardCallbacks->SX1276BoardSetXO( SET );
 
-    TxTimeoutTimer.timer_id = osTimerCreate(osTimer(TxTimerId), osTimerPeriodic, NULL);
-    RxTimeoutTimer.timer_id = osTimerCreate(osTimer(RxTimerId), osTimerPeriodic, NULL);
-    RxTimeoutSyncWord.timer_id = osTimerCreate(osTimer(RxSyncWordTimerId), osTimerPeriodic, NULL);
+//    TxTimeoutTimer.timer_id = osTimerCreate(osTimer(TxTimerId), osTimerPeriodic, NULL);
+//    RxTimeoutTimer.timer_id = osTimerCreate(osTimer(RxTimerId), osTimerPeriodic, NULL);
+//    RxTimeoutSyncWord.timer_id = osTimerCreate(osTimer(RxSyncWordTimerId), osTimerPeriodic, NULL);
 
     SX1276Reset( );
 
@@ -1240,22 +1240,22 @@ int16_t SX1276ReadRssi( RadioModems_t modem )
 void SX1276Reset( void )
 {
 
-    GPIO_InitTypeDef initStruct = { 0 };
+//    GPIO_InitTypeDef initStruct = { 0 };
 
-    initStruct.Mode = GPIO_MODE_OUTPUT_PP;
-    initStruct.Pull = GPIO_NOPULL;
-    initStruct.Speed = GPIO_SPEED_FREQ_HIGH;
+//    initStruct.Mode = GPIO_MODE_OUTPUT_PP;
+//   initStruct.Pull = GPIO_NOPULL;
+//    initStruct.Speed = GPIO_SPEED_FREQ_HIGH;
 
     // Set RESET pin to 0
-    HW_GPIO_Init( RFRESET_GPIO_Port, RFRESET_Pin, &initStruct );
-    HW_GPIO_Write( RFRESET_GPIO_Port, RFRESET_Pin, 0 );
-
-    // Wait 1 ms
-    DelayMs( 1 );
-
-    // Configure RESET as input
-    initStruct.Mode = GPIO_NOPULL;
-    HW_GPIO_Init( RFRESET_GPIO_Port, RFRESET_Pin, &initStruct );
+//    HW_GPIO_Init( RFRESET_GPIO_Port, RFRESET_Pin, &initStruct );
+//    HW_GPIO_Write( RFRESET_GPIO_Port, RFRESET_Pin, 0 );
+//
+//    // Wait 1 ms
+//    DelayMs( 1 );
+//
+//    // Configure RESET as input
+//    initStruct.Mode = GPIO_NOPULL;
+//    HW_GPIO_Init( RFRESET_GPIO_Port, RFRESET_Pin, &initStruct );
 
     // Wait 6 ms
     DelayMs( 6 );
@@ -1338,7 +1338,7 @@ void SX1276WriteBuffer( uint16_t addr, uint8_t *buffer, uint8_t size )
     uint8_t i;
 
     //NSS = 0;
-    HW_GPIO_Write( RFNSS_GPIO_Port, RFNSS_Pin, 0 );
+//    HW_GPIO_Write( RFNSS_GPIO_Port, RFNSS_Pin, 0 );
 
     HW_SPI_InOut( addr | 0x80 );
 
@@ -1348,7 +1348,7 @@ void SX1276WriteBuffer( uint16_t addr, uint8_t *buffer, uint8_t size )
     }
 
     //NSS = 1;
-    HW_GPIO_Write( RFNSS_GPIO_Port, RFNSS_Pin, 1 );
+//    HW_GPIO_Write( RFNSS_GPIO_Port, RFNSS_Pin, 1 );
 
 
 }
@@ -1359,7 +1359,7 @@ void SX1276ReadBuffer( uint16_t addr, uint8_t *buffer, uint8_t size )
     uint8_t i;
 
     //NSS = 0;
-    HW_GPIO_Write( RFNSS_GPIO_Port, RFNSS_Pin, 0 );
+//    HW_GPIO_Write( RFNSS_GPIO_Port, RFNSS_Pin, 0 );
 
     HW_SPI_InOut( addr & 0x7F );
 
@@ -1369,7 +1369,7 @@ void SX1276ReadBuffer( uint16_t addr, uint8_t *buffer, uint8_t size )
     }
 
     //NSS = 1;
-    HW_GPIO_Write( RFNSS_GPIO_Port, RFNSS_Pin, 1 );
+//    HW_GPIO_Write( RFNSS_GPIO_Port, RFNSS_Pin, 1 );
 
 
 }

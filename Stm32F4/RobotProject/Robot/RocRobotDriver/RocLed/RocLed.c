@@ -156,8 +156,6 @@ ROC_RESULT RocLedInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    RocLedTurnOff();
-
     ROC_LOGI("Robot led module hardware init success.");
 
     return Ret;
