@@ -938,6 +938,8 @@ void RocTftLcdDrawGbk16Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
 
     pStr = pStr - Size;
 
+    RocTftLcdWaitWriteDone();   /* To wait the string buffer write done */
+
     while(*pStr)
     {
         if((*pStr) < 128)
@@ -1074,6 +1076,8 @@ void RocTftLcdDrawGbk24Str(uint16_t X, uint16_t Y, uint16_t Fc, uint16_t Bc, uin
     }
 
     pStr = pStr - Size;
+
+    RocTftLcdWaitWriteDone();   /* To wait the string buffer write done */
 
     while(*pStr)
     {

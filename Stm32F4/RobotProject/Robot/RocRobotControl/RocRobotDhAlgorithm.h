@@ -27,10 +27,15 @@
 #define ROC_ROBOT_MATH_CONST_PI                     3.1415926
 
 
+#define ROC_ROBOT_LEG_HEIGHT                        120
+#define ROC_ROBOT_FEET_WIDTH                        21
+
 #define ROC_ROBOT_DH_CONST_D1                       0
 #define ROC_ROBOT_DH_CONST_A1                       44
-#define ROC_ROBOT_DH_CONST_A2                       74
-#define ROC_ROBOT_DH_CONST_A3                       112.38F
+#define ROC_ROBOT_DH_CONST_A2                       64
+#define ROC_ROBOT_DH_CONST_A3                       121.82F
+
+#define ROC_ROBOT_LEG_WIDTH                         (ROC_ROBOT_DH_CONST_A1 + ROC_ROBOT_DH_CONST_A2 + ROC_ROBOT_FEET_WIDTH)
 
 
 #define ROC_ROBOT_BODY_LENGTH_OFFSET                48
@@ -67,11 +72,6 @@
 
 #define ROC_ROBOT_STEP_ERROR_LOW_LIMIT              -15
 #define ROC_ROBOT_STEP_ERROR_HIGH_LIMIT             15
-
-
-#define ROC_ROBOT_LEG_WIDTH                         141.06F
-#define ROC_ROBOT_LEG_HEIGHT                        110
-#define ROC_ROBOT_FEET_WIDTH                        23
 
 
 #define ROC_ROBOT_INIT_DOWN_ANGLE                   0
@@ -140,7 +140,7 @@
 
 #define ROC_ROBOT_DEFAULT_LEG_STEP                  40
 #define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
-#define ROC_ROBOT_DEFAULT_FEET_LIFT                 24
+#define ROC_ROBOT_DEFAULT_FEET_LIFT                 30
 #define ROC_ROBOT_QUAD_MODE_FEET_LIFT               40
 
 

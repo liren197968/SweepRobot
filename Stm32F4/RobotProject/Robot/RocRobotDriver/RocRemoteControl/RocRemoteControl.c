@@ -233,6 +233,8 @@ static ROC_RESULT RocRemoteTransUsartInit(void)
         Error_Handler();
     }
 
+    while(HAL_UART_GetState(ROC_REMOTE_UART_CHANNEL) != HAL_UART_STATE_READY);
+
     __HAL_UART_ENABLE_IT(ROC_REMOTE_UART_CHANNEL, UART_IT_IDLE);
 
     if(HAL_OK != HAL_UART_Receive_DMA(ROC_REMOTE_UART_CHANNEL, g_RemoteRxBuffer, ROC_REMOTE_MAX_NUM_LEN_SEND))
