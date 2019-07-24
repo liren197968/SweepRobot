@@ -13,7 +13,6 @@
 #include "RocLog.h"
 #include "RocLed.h"
 #include "RocKey.h"
-#include "RocOled.h"
 #include "RocRelay.h"
 #include "RocServo.h"
 #include "RocMotor.h"
@@ -26,10 +25,14 @@
 #include "RocRobotControl.h"
 
 
-static void RocRobotCarTransformRun(void);
-
-
-ROC_ROBOT_CTRL_s    g_RobotCtrl = {{0}, {0}, ROC_ROBOT_RUN_MODE_HEXAPOD, {0}, NULL};
+ROC_ROBOT_CTRL_s g_RobotCtrl =
+{
+    {0},
+    {0},
+    ROC_ROBOT_RUN_MODE_HEXAPOD,
+    {0},
+    NULL
+};
 /*********************************************************************************
  *  Description:
  *              Robot init success beeper aciton
@@ -331,6 +334,19 @@ static uint8_t RocRobotJoystickAdcGet(uint16_t* JoysticAdcDat)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot standing
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodStanding(void)
 {
     g_RobotCtrl.RemoteCtrl.X = 0;
@@ -347,6 +363,19 @@ static void RocRobotHexapodStanding(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot forward
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodForwardRun(void)
 {
     g_RobotCtrl.RemoteCtrl.X = 0;
@@ -370,6 +399,19 @@ static void RocRobotHexapodForwardRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot backward
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodBackwardRun(void)
 {
     g_RobotCtrl.RemoteCtrl.X = 0;
@@ -392,6 +434,19 @@ static void RocRobotHexapodBackwardRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot left moving
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodLeftMovingRun(void)
 {
     g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
@@ -414,6 +469,19 @@ static void RocRobotHexapodLeftMovingRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot right moving
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodRightMovingRun(void)
 {
     g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP;
@@ -436,10 +504,23 @@ static void RocRobotHexapodRightMovingRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot left forward
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodLeftForwardRun(void)
 {
-    g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
-    g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
+    g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
+    g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
     g_RobotCtrl.RemoteCtrl.Z = 0;
     g_RobotCtrl.RemoteCtrl.A = 0;
     g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -458,10 +539,23 @@ static void RocRobotHexapodLeftForwardRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot left backward
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodLeftBackwardRun(void)
 {
-    g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP;
-    g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
+    g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
+    g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
     g_RobotCtrl.RemoteCtrl.Z = 0;
     g_RobotCtrl.RemoteCtrl.A = 0;
     g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -480,10 +574,23 @@ static void RocRobotHexapodLeftBackwardRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot right forward
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodRightForwardRun(void)
 {
-    g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP;
-    g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
+    g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
+    g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
     g_RobotCtrl.RemoteCtrl.Z = 0;
     g_RobotCtrl.RemoteCtrl.A = 0;
     g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -502,10 +609,23 @@ static void RocRobotHexapodRightForwardRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot right backward
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodRightBackwardRun(void)
 {
-    g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
-    g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
+    g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
+    g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
     g_RobotCtrl.RemoteCtrl.Z = 0;
     g_RobotCtrl.RemoteCtrl.A = 0;
     g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -524,6 +644,19 @@ static void RocRobotHexapodRightBackwardRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot left clockwise
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodLeftClockRun(void)
 {
     g_RobotCtrl.RemoteCtrl.X = 0;
@@ -540,6 +673,19 @@ static void RocRobotHexapodLeftClockRun(void)
     }
 }
 
+/*********************************************************************************
+ *  Description:
+ *              Input cmd to let robot right clockwise
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.23)
+**********************************************************************************/
 static void RocRobotHexapodRightClockRun(void)
 {
     g_RobotCtrl.RemoteCtrl.X = 0;
@@ -553,288 +699,6 @@ static void RocRobotHexapodRightClockRun(void)
     if(ROC_FALSE == RocRobotCtrlFlagGet(4))
     {
         RocRobotCtrlFlagSet(4);
-    }
-}
-
-/*********************************************************************************
- *  Description:
- *              Robot remote control function
- *
- *  Parameter:
- *              None
- *
- *  Return:
- *              None
- *
- *  Author:
- *              ROC LiRen(2018.12.16)
-**********************************************************************************/
-static void RocRobotRemoteControl(void)
-{
-    uint8_t RobotBleCtrlCmd = ROC_NONE;
-    uint8_t RobotRemoteCmd = ROC_NONE;
-    uint16_t RobotRemoteAdc[4] = {ROC_NONE};
-
-    RobotBleCtrlCmd = RocBluetoothCtrlCmd_Get();
-
-    switch(RobotBleCtrlCmd)
-    {
-        case ROC_ROBOT_CTRL_CMD_MOSTAND:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodStanding();
-            }
-            else if(ROC_ROBOT_RUN_MODE_CAR == RocRobotRunModeGet())
-            {
-                RocRobotCarTransformRun();
-            }
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_FORWARD:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodForwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_BAKWARD:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodBackwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_LFCLOCK:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodLeftClockRun();
-            }
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_RGCLOCK:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodRightClockRun();
-            }
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_LFRWARD:
-        {
-//            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-//            {
-//                RocRobotHexapodLeftForwardRun();
-//            }
-
-            RocRelayTurnOn();
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_RFRWARD:
-        {
-//            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-//            {
-//                RocRobotHexapodRightForwardRun();
-//            }
-
-            RocRelayTurnOff();
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_LBKWARD:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodRightForwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_ROBOT_CTRL_CMD_RBKWARD:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodRightBackwardRun();
-            }
-
-            break;
-        }
-
-        default:
-        {
-            break;
-        }
-    }
-
-    RobotRemoteCmd = RocRobotJoystickCmdGet();
-    RocRobotJoystickAdcGet(RobotRemoteAdc);
-
-    switch(RobotRemoteCmd)
-    {
-        case ROC_KEY_13:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodStanding();
-            }
-            else if(ROC_ROBOT_RUN_MODE_CAR == RocRobotRunModeGet())
-            {
-                RocRobotCarTransformRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_1:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodForwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_2:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodBackwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_3:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodLeftMovingRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_4:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodRightMovingRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_5:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodLeftForwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_6:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodLeftBackwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_7:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodRightForwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_8:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodRightBackwardRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_9:
-        {
-            RocRemoteWaklInfoTransmit(&g_RobotCtrl.MoveCtrl->CurState.CurImuAngle);
-
-            break;
-        }
-
-        case ROC_KEY_10:
-        {
-            RocRobotSensorMeasure();
-
-            break;
-        }
-
-        case ROC_KEY_11:
-        {
-            break;
-        }
-
-        case ROC_KEY_12:
-        {
-            RocRelayTurnOn();
-        }
-
-        case ROC_KEY_15:
-        {
-            RocRelayTurnOff();
-        }
-
-        case ROC_KEY_16:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodLeftClockRun();
-            }
-
-            break;
-        }
-
-        case ROC_KEY_17:
-        {
-            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
-            {
-                RocRobotHexapodRightClockRun();
-            }
-
-            break;
-        }
-
-        default:
-        {
-            break;
-        }
     }
 }
 
@@ -1023,6 +887,7 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_MOVE_CTRL_s *pRobotCtrl)
     switch(MoveStatus)
     {
         case ROC_ROBOT_MOVE_STATUS_POWER_ON:
+        case ROC_ROBOT_MOVE_STATUS_STANDING:
         {
             RocRobotSingleLegCtrl(&pRobotCtrl->CurServo);
 
@@ -1133,7 +998,7 @@ static void RocRobotPowerOnGaitSeq_Run(void)
     RocRobotSingleLegSelect(ROC_ROBOT_CNT_LEGS);
     HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
 
-    for(i = 0; i < 4; i++)
+    for(i = 0; i < (ROC_ROBOT_CTRL_TRANSFORM_STEP + 1); i++)
     {
         g_RobotCtrl.RemoteCtrl.X = 0;
         g_RobotCtrl.RemoteCtrl.Y = 0;
@@ -1158,7 +1023,7 @@ static void RocRobotPowerOnGaitSeq_Run(void)
 
 /*********************************************************************************
  *  Description:
- *              Robot run special gait sequence when power on
+ *              Robot transform from car mode to hexapod mode
  *
  *  Parameter:
  *              None
@@ -1179,17 +1044,78 @@ static void RocRobotCarTransformRun(void)
 
         g_RobotCtrl.RemoteCtrl.X = 0;
         g_RobotCtrl.RemoteCtrl.Y = 0;
-        g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * (12 - Index) / 4;
+        g_RobotCtrl.RemoteCtrl.Z = (ROC_ROBOT_CTRL_TRANSFORM_STEP * ROC_ROBOT_CTRL_TRANSFORM_DELAY - Index)
+                                    * ROC_ROBOT_DEFAULT_FEET_LIFT / ROC_ROBOT_CTRL_TRANSFORM_DELAY;
         g_RobotCtrl.RemoteCtrl.A = 0;
         g_RobotCtrl.RemoteCtrl.H = 0;
 
-        if(Index == 12)
+        if(Index == ROC_ROBOT_CTRL_TRANSFORM_STEP * ROC_ROBOT_CTRL_TRANSFORM_DELAY)
         {
             RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_HEXAPOD);
             RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
         }
 
-        Index++;
+        if(Index == ROC_ROBOT_CTRL_TRANSFORM_STEP * ROC_ROBOT_CTRL_TRANSFORM_DELAY)
+        {
+            Index = 0;
+        }
+        else
+        {
+            Index++;
+        }
+    }
+}
+
+/*********************************************************************************
+ *  Description:
+ *              Robot transform from hexapod mode to car mode
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2019.07.24)
+**********************************************************************************/
+static void RocRobotHexapodTransformRun(void)
+{
+    static uint8_t Index = 0;
+
+    if(ROC_TRUE == RocServoTurnIsFinshed())
+    {
+        RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_POWER_ON);
+
+        if(ROC_ROBOT_CTRL_TRANSFORM_STEP * ROC_ROBOT_CTRL_TRANSFORM_DELAY >= Index)
+        {
+            g_RobotCtrl.RemoteCtrl.X = 0;
+            g_RobotCtrl.RemoteCtrl.Y = 0;
+            g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * Index / ROC_ROBOT_CTRL_TRANSFORM_DELAY;
+            g_RobotCtrl.RemoteCtrl.A = 0;
+            g_RobotCtrl.RemoteCtrl.H = 0;
+        }
+        else if((ROC_ROBOT_CTRL_TRANSFORM_STEP + 1) * ROC_ROBOT_CTRL_TRANSFORM_DELAY == Index)
+        {
+            RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_CAR);
+            RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_TRANSFORM);
+
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
+        }
+
+        if(Index == (ROC_ROBOT_CTRL_TRANSFORM_STEP + 1) * ROC_ROBOT_CTRL_TRANSFORM_DELAY)
+        {
+            Index = 0;
+        }
+        else
+        {
+            Index++;
+        }
     }
 }
 
@@ -1252,8 +1178,6 @@ static ROC_RESULT RocRobotStartRun(void)
     g_RobotCtrl.MoveCtrl->CurGait.NomGaitSpeed = ROC_ROBOT_RUN_SPEED_DEFAULT;
     RocServoSpeedSet(g_RobotCtrl.MoveCtrl->CurGait.NomGaitSpeed);
 
-    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
-
     return Ret;
 }
 
@@ -1286,7 +1210,305 @@ static ROC_RESULT RocRobotStopRun(void)
 
     return Ret;
 }
+/*********************************************************************************
+ *  Description:
+ *              Robot remote control function
+ *
+ *  Parameter:
+ *              None
+ *
+ *  Return:
+ *              None
+ *
+ *  Author:
+ *              ROC LiRen(2018.12.16)
+**********************************************************************************/
+static void RocRobotRemoteControl(void)
+{
+    uint8_t RobotBleCtrlCmd = ROC_NONE;
+    uint8_t RobotRemoteCmd = ROC_NONE;
+    uint16_t RobotRemoteAdc[4] = {ROC_NONE};
 
+    RobotBleCtrlCmd = RocBluetoothCtrlCmd_Get();
+
+    switch(RobotBleCtrlCmd)
+    {
+        case ROC_ROBOT_CTRL_CMD_MOSTAND:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodStanding();
+            }
+            else if(ROC_ROBOT_RUN_MODE_CAR == RocRobotRunModeGet())
+            {
+                RocRobotCarTransformRun();
+            }
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_FORWARD:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodForwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_BAKWARD:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodBackwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_LFCLOCK:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodLeftClockRun();
+            }
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_RGCLOCK:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodRightClockRun();
+            }
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_LFRWARD:
+        {
+//            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+//            {
+//                RocRobotHexapodLeftForwardRun();
+//            }
+
+            RocRelayTurnOn();
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_RFRWARD:
+        {
+//            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+//            {
+//                RocRobotHexapodRightForwardRun();
+//            }
+
+            RocRelayTurnOff();
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_LBKWARD:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodRightForwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_ROBOT_CTRL_CMD_RBKWARD:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodRightBackwardRun();
+            }
+
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
+
+    RobotRemoteCmd = RocRobotJoystickCmdGet();
+    RocRobotJoystickAdcGet(RobotRemoteAdc);
+
+    switch(RobotRemoteCmd)
+    {
+        case ROC_KEY_13:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodStanding();
+            }
+            else if(ROC_ROBOT_RUN_MODE_CAR == RocRobotRunModeGet())
+            {
+                RocRobotCarTransformRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_14:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodTransformRun();
+            }
+            else if(ROC_ROBOT_RUN_MODE_CAR == RocRobotRunModeGet())
+            {
+
+            }
+
+            break;
+        }
+
+        case ROC_KEY_1:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodForwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_2:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodBackwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_3:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodLeftMovingRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_4:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodRightMovingRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_5:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodLeftForwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_6:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodLeftBackwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_7:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodRightForwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_8:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodRightBackwardRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_9:
+        {
+            RocRemoteWaklInfoTransmit(&g_RobotCtrl.MoveCtrl->CurState.CurImuAngle);
+
+            break;
+        }
+
+        case ROC_KEY_10:
+        {
+            RocRobotSensorMeasure();
+
+            break;
+        }
+
+        case ROC_KEY_11:
+        {
+            break;
+        }
+
+        case ROC_KEY_12:
+        {
+            RocRelayTurnOn();
+
+            break;
+        }
+
+        case ROC_KEY_15:
+        {
+            RocRelayTurnOff();
+
+            break;
+        }
+
+        case ROC_KEY_16:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodLeftClockRun();
+            }
+
+            break;
+        }
+
+        case ROC_KEY_17:
+        {
+            if(ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet())
+            {
+                RocRobotHexapodRightClockRun();
+            }
+
+            break;
+        }
+
+        default:
+        {
+            break;
+        }
+    }
+}
 /*********************************************************************************
  *  Description:
  *              Robot control control init
@@ -1304,7 +1526,7 @@ void RocRobotInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    ROC_LOGW("############# Robot hardware version is 0.5! #############");
+    ROC_LOGW("############# Robot hardware version is V0.8! #############");
 
     RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_POWER_ON);
 
@@ -1434,8 +1656,6 @@ void RocRobotInit(void)
     {
         ROC_LOGW("############# Robot is running! Be careful! #############");
     }
-
-    //RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
 }
 
 /*********************************************************************************
@@ -1515,9 +1735,10 @@ static void RocBatteryCheckTaskEntry(void)
  *  Author:
  *              ROC LiRen(2019.04.10)
 **********************************************************************************/
-static void RocRobotLcdShowInfoEntry(void)
+static void RocRobotLcdShowInfoTaskEntry(void)
 {
     uint8_t RemoteCmd = ROC_NONE;
+    uint8_t Ret = ROC_NONE;
     uint16_t RemoteAdc[4] = {ROC_NONE};
 
     if(ROC_TRUE == g_RobotCtrl.CtrlTime.LcdTimeIsReady)
@@ -1525,23 +1746,26 @@ static void RocRobotLcdShowInfoEntry(void)
         g_RobotCtrl.CtrlTime.LcdTimeIsReady = ROC_FALSE;
 
         RemoteCmd = RocRobotJoystickCmdGet();
-        RocRobotJoystickAdcGet(RemoteAdc);
+        Ret = RocRobotJoystickAdcGet(RemoteAdc);
 
         RocTftLcdDrawGbk16Str(10, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Bat:");
         RocTftLcdDrawGbk16Str(45, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "     ");
         RocTftLcdDrawGbk16Num(45, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, g_RobotCtrl.BatVoltage);
 
-        RocTftLcdDrawGbk16Str(85, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Key:");
-        RocTftLcdDrawGbk16Str(120, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(120, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteCmd);
-        RocTftLcdDrawGbk16Str(160, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(160, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[0]);
-        RocTftLcdDrawGbk16Str(200, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(200, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[1]);
-        RocTftLcdDrawGbk16Str(240, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(240, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[2]);
-        RocTftLcdDrawGbk16Str(280, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(280, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[3]);
+        if(ROC_NONE != Ret)
+        {
+            RocTftLcdDrawGbk16Str(85, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Key:");
+            RocTftLcdDrawGbk16Str(120, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(120, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteCmd);
+            RocTftLcdDrawGbk16Str(160, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(160, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[0]);
+            RocTftLcdDrawGbk16Str(200, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(200, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[1]);
+            RocTftLcdDrawGbk16Str(240, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(240, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[2]);
+            RocTftLcdDrawGbk16Str(280, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(280, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[3]);
+        }
 
         RocTftLcdDrawGbk16Str(10, 25, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Pitch:");
         RocTftLcdDrawGbk16Str(65, 25, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "      ");
@@ -1622,6 +1846,8 @@ static void RocRobotCtrlTaskEntry(void)
 **********************************************************************************/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+    static uint8_t PowerOnIsFinshed = ROC_FALSE;
+
     if(TIM2 == htim->Instance)
     {
         RocBeeperTaskBackground();
@@ -1632,12 +1858,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         MoveStatus = RocRobotMoveStatus_Get();
 
-        if((ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus) && (ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet()))
+        if((ROC_FALSE == PowerOnIsFinshed)
+            && (ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus)
+            && (ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet()))
         {
             RocRobotPowerOnTaskEntry();
+
+            g_RobotCtrl.CtrlTime.CtrlTimeIsReady = ROC_FALSE;
         }
         else
         {
+            PowerOnIsFinshed = ROC_TRUE;
             g_RobotCtrl.CtrlTime.CtrlTimeIsReady = ROC_TRUE;
         }
     }
@@ -1677,7 +1908,7 @@ void RocRobotMain(void)
 
     RocBatteryCheckTaskEntry();
 
-    RocRobotLcdShowInfoEntry();
+    RocRobotLcdShowInfoTaskEntry();
 
     RocBluetoothRecvIsFinshed();
 }

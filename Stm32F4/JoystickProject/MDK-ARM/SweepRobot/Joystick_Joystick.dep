@@ -1,1573 +1,0 @@
-Dependencies for Project 'Joystick', Target 'Joystick': (DO NOT MODIFY !)
-F (..//Src/system_stm32f4xx.c)(0x5D308BFD)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\system_stm32f4xx.o --omf_browse sweeprobot\system_stm32f4xx.crf --depend sweeprobot\system_stm32f4xx.d)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\CMSIS\Lib\ARM\arm_cortexM4lf_math.lib)(0x5D308BFD)()
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal.o --omf_browse sweeprobot\stm32f4xx_hal.crf --depend sweeprobot\stm32f4xx_hal.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_adc.o --omf_browse sweeprobot\stm32f4xx_hal_adc.crf --depend sweeprobot\stm32f4xx_hal_adc.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_adc_ex.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_adc_ex.o --omf_browse sweeprobot\stm32f4xx_hal_adc_ex.crf --depend sweeprobot\stm32f4xx_hal_adc_ex.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_cortex.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_cortex.o --omf_browse sweeprobot\stm32f4xx_hal_cortex.crf --depend sweeprobot\stm32f4xx_hal_cortex.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_dma.o --omf_browse sweeprobot\stm32f4xx_hal_dma.crf --depend sweeprobot\stm32f4xx_hal_dma.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_dma_ex.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_dma_ex.o --omf_browse sweeprobot\stm32f4xx_hal_dma_ex.crf --depend sweeprobot\stm32f4xx_hal_dma_ex.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_gpio.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_gpio.o --omf_browse sweeprobot\stm32f4xx_hal_gpio.crf --depend sweeprobot\stm32f4xx_hal_gpio.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_i2c.o --omf_browse sweeprobot\stm32f4xx_hal_i2c.crf --depend sweeprobot\stm32f4xx_hal_i2c.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_i2c_ex.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_i2c_ex.o --omf_browse sweeprobot\stm32f4xx_hal_i2c_ex.crf --depend sweeprobot\stm32f4xx_hal_i2c_ex.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_spi.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_spi.o --omf_browse sweeprobot\stm32f4xx_hal_spi.crf --depend sweeprobot\stm32f4xx_hal_spi.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_tim.o --omf_browse sweeprobot\stm32f4xx_hal_tim.crf --depend sweeprobot\stm32f4xx_hal_tim.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_tim_ex.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_tim_ex.o --omf_browse sweeprobot\stm32f4xx_hal_tim_ex.crf --depend sweeprobot\stm32f4xx_hal_tim_ex.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_uart.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_uart.o --omf_browse sweeprobot\stm32f4xx_hal_uart.crf --depend sweeprobot\stm32f4xx_hal_uart.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_rcc.o --omf_browse sweeprobot\stm32f4xx_hal_rcc.crf --depend sweeprobot\stm32f4xx_hal_rcc.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Src\stm32f4xx_hal_rcc_ex.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_rcc_ex.o --omf_browse sweeprobot\stm32f4xx_hal_rcc_ex.crf --depend sweeprobot\stm32f4xx_hal_rcc_ex.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocBattery\RocBattery.c)(0x5D34AB19)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\rocbattery.o --omf_browse sweeprobot\rocbattery.crf --depend sweeprobot\rocbattery.d)
-I (..\Inc\adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\tim.h)(0x5D308BFD)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocBattery\RocBattery.h)(0x5D34A19D)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocBeeper\RocBeeper.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\rocbeeper.o --omf_browse sweeprobot\rocbeeper.crf --depend sweeprobot\rocbeeper.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocBeeper\RocBeeper.h)(0x5D308BFE)
-I (..\Inc\tim.h)(0x5D308BFD)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocGui\RocFont.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\rocfont.o --omf_browse sweeprobot\rocfont.crf --depend sweeprobot\rocfont.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocGui\RocFont.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocKey\RocKey.c)(0x5D3484BB)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\rockey.o --omf_browse sweeprobot\rockey.crf --depend sweeprobot\rockey.d)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\tim.h)(0x5D308BFD)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocKey\RocKey.h)(0x5D349B3D)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocLed\RocLed.c)(0x5D31C9E8)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\rocled.o --omf_browse sweeprobot\rocled.crf --depend sweeprobot\rocled.d)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLed\RocLed.h)(0x5D3099B9)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.c)(0x5D308BFE)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\roclog.o --omf_browse sweeprobot\roclog.crf --depend sweeprobot\roclog.d)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdarg.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\Inc\usart.h)(0x5D309492)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocOled\RocOled.c)(0x5D34A410)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\rocoled.o --omf_browse sweeprobot\rocoled.crf --depend sweeprobot\rocoled.d)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocGui\RocFont.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocOled\RocOled.h)(0x5D31D490)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\Inc\spi.h)(0x5D31E006)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl\RocRemoteControl.c)(0x5D348D03)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\rocremotecontrol.o --omf_browse sweeprobot\rocremotecontrol.crf --depend sweeprobot\rocremotecontrol.d)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
-I (..\Inc\usart.h)(0x5D309492)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\lora_ptp.h)(0x5D31C99E)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\radio.h)(0x5C185DC3)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276.h)(0x5C185BB0)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276Regs-Fsk.h)(0x5B48A5C1)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276Regs-LoRa.h)(0x5B48A5C1)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\eml3047.h)(0x5BAF1DDE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLed\RocLed.h)(0x5D3099B9)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl\RocRemoteControl.h)(0x5D349E3E)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\eml3047.c)(0x5D32C497)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\eml3047.o --omf_browse sweeprobot\eml3047.crf --depend sweeprobot\eml3047.d)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\radio.h)(0x5C185DC3)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276.h)(0x5C185BB0)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276Regs-Fsk.h)(0x5B48A5C1)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276Regs-LoRa.h)(0x5B48A5C1)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\eml3047.h)(0x5BAF1DDE)
-I (..\Inc\gpio.h)(0x5D345158)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
-I (..\Inc\spi.h)(0x5D31E006)
-I (..\Inc\usart.h)(0x5D309492)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\lora_ptp.c)(0x5D33FA55)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\lora_ptp.o --omf_browse sweeprobot\lora_ptp.crf --depend sweeprobot\lora_ptp.d)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\lora_ptp.h)(0x5D31C99E)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\radio.h)(0x5C185DC3)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276.h)(0x5C185BB0)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276Regs-Fsk.h)(0x5B48A5C1)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276Regs-LoRa.h)(0x5B48A5C1)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\eml3047.h)(0x5BAF1DDE)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276.c)(0x5D33FD3A)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\sx1276.o --omf_browse sweeprobot\sx1276.crf --depend sweeprobot\sx1276.d)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\math.h)(0x57F606B6)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdbool.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\spi.h)(0x5D31E006)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\radio.h)(0x5C185DC3)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276.h)(0x5C185BB0)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276Regs-Fsk.h)(0x5B48A5C1)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\sx1276Regs-LoRa.h)(0x5B48A5C1)
-F (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\utilities.c)(0x5B48A62A)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\utilities.o --omf_browse sweeprobot\utilities.crf --depend sweeprobot\utilities.d)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdlib.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLoRa\utilities.h)(0x5C177C8D)
-F (startup_stm32f405xx.s)(0x5D308BFD)(--cpu Cortex-M4.fp -g --apcs=interwork --pd "__MICROLIB SETA 1"-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"--pd "__UVISION_VERSION SETA 522" --pd "_RTE_ SETA 1" --pd "STM32F405xx SETA 1"--list startup_stm32f405xx.lst --xref -o sweeprobot\startup_stm32f405xx.o --depend sweeprobot\startup_stm32f405xx.d)
-F (../Src/main.c)(0x5D347100)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\main.o --omf_browse sweeprobot\main.crf --depend sweeprobot\main.d)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\adc.h)(0x5D308BFD)
-I (..\Inc\dma.h)(0x5D308BFD)
-I (..\Inc\i2c.h)(0x5D308BFD)
-I (..\Inc\spi.h)(0x5D31E006)
-I (..\Inc\tim.h)(0x5D308BFD)
-I (..\Inc\usart.h)(0x5D309492)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\Joystick\RocJoystick.h)(0x5D348DCE)
-F (../Src/gpio.c)(0x5D34A6A8)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\gpio.o --omf_browse sweeprobot\gpio.crf --depend sweeprobot\gpio.d)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-F (../Src/dma.c)(0x5D31DFB7)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\dma.o --omf_browse sweeprobot\dma.crf --depend sweeprobot\dma.d)
-I (..\Inc\dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (../Src/i2c.c)(0x5D308BFD)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\i2c.o --omf_browse sweeprobot\i2c.crf --depend sweeprobot\i2c.d)
-I (..\Inc\i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\gpio.h)(0x5D345158)
-F (../Src/spi.c)(0x5D340C83)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\spi.o --omf_browse sweeprobot\spi.crf --depend sweeprobot\spi.d)
-I (..\Inc\spi.h)(0x5D31E006)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\Inc\dma.h)(0x5D308BFD)
-F (../Src/tim.c)(0x5D308BFD)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\tim.o --omf_browse sweeprobot\tim.crf --depend sweeprobot\tim.d)
-I (..\Inc\tim.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (../Src/usart.c)(0x5D344F04)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\usart.o --omf_browse sweeprobot\usart.crf --depend sweeprobot\usart.d)
-I (..\Inc\usart.h)(0x5D309492)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_usart.h)(0x5D308BFE)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\Inc\dma.h)(0x5D308BFD)
-F (../Src/stm32f4xx_it.c)(0x5D332BE2)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_it.o --omf_browse sweeprobot\stm32f4xx_it.crf --depend sweeprobot\stm32f4xx_it.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\stm32f4xx_it.h)(0x5D308BFD)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl\RocRemoteControl.h)(0x5D349E3E)
-F (../Src/stm32f4xx_hal_msp.c)(0x5D308BFD)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\stm32f4xx_hal_msp.o --omf_browse sweeprobot\stm32f4xx_hal_msp.crf --depend sweeprobot\stm32f4xx_hal_msp.d)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-F (..\Src\adc.c)(0x5D308BFD)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\adc.o --omf_browse sweeprobot\adc.crf --depend sweeprobot\adc.d)
-I (..\Inc\adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\Inc\dma.h)(0x5D308BFD)
-F (..\Joystick\RocJoystick.c)(0x5D34AB64)(-c --cpu Cortex-M4.fp -D__MICROLIB -g -O0 -Otime --apcs=interwork --split_sections -I ..\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc -I ..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy -I ..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include -I ..\..\RobotProject\Drivers\CMSIS\Include -I ..\..\RobotProject\Robot\RocRobotDriver\RocError -I ..\..\RobotProject\Robot\RocRobotDriver\RocLog -I ..\..\RobotProject\Robot\RocRobotDriver\RocLed -I ..\..\RobotProject\Robot\RocRobotDriver\RocOled -I ..\..\RobotProject\Robot\RocRobotDriver\RocBeeper -I ..\..\RobotProject\Robot\RocRobotDriver\RocBattery -I ..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl -I ..\..\RobotProject\Robot\RocRobotDriver\RocGui -I ..\..\RobotProject\Robot\RocRobotDriver\RocKey -I ..\..\RobotProject\Robot\RocRobotDriver\RocLoRa -I ..\Joystick --locale=english-IE:\学科竞赛\2018年IDT传感器创新设计大赛\项目设计\软件设计\SweepRobot\Stm32F4\JoystickProject\MDK-ARM\RTE\_Joystick-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\ARM\CMSIS\5.0.0\CMSIS\Include"-I"D:\Program Files (x86)\Keil_v5\ARM\PACK\Keil\STM32F4xx_DFP\2.11.0\Drivers\CMSIS\Device\ST\STM32F4xx\Include"-D__UVISION_VERSION="522" -D_RTE_ -DSTM32F405xx -DUSE_HAL_DRIVER -DSTM32F405xx -DARM_MATH_CM4 -D__CC_ARM --C99-o sweeprobot\rocjoystick.o --omf_browse sweeprobot\rocjoystick.crf --depend sweeprobot\rocjoystick.d)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\string.h)(0x57F606B8)
-I (..\Inc\tim.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal.h)(0x5D308BFD)
-I (..\Inc\stm32f4xx_hal_conf.h)(0x5D308BFD)
-I (..\Inc\main.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_def.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\stm32f405xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cm4.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdint.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmInstr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\cmsis_armcc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmFunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Include\core_cmSimd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\CMSIS\Device\ST\STM32F4xx\Include\system_stm32f4xx.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\Legacy/stm32_hal_legacy.h)(0x5D308BFD)
-I (D:\Program Files (x86)\Keil_v5\ARM\ARMCC\include\stdio.h)(0x57F606B8)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_rcc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_gpio_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_dma_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_cortex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_adc_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_flash_ramfunc.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_i2c_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_pwr_ex.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_spi.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_tim_ex.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_uart.h)(0x5D308BFE)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_hal_hcd.h)(0x5D308BFD)
-I (..\..\RobotProject\Drivers\STM32F4xx_HAL_Driver\Inc\stm32f4xx_ll_usb.h)(0x5D308BFE)
-I (..\Inc\gpio.h)(0x5D345158)
-I (..\Inc\usart.h)(0x5D309492)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLog\RocLog.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocError\RocError.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocLed\RocLed.h)(0x5D3099B9)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocKey\RocKey.h)(0x5D349B3D)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocOled\RocOled.h)(0x5D31D490)
-I (..\Inc\spi.h)(0x5D31E006)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocBeeper\RocBeeper.h)(0x5D308BFE)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocBattery\RocBattery.h)(0x5D34A19D)
-I (..\..\RobotProject\Robot\RocRobotDriver\RocRemoteControl\RocRemoteControl.h)(0x5D349E3E)
-I (..\Joystick\RocJoystick.h)(0x5D348DCE)

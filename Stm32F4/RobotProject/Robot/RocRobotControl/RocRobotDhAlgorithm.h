@@ -131,16 +131,16 @@
 #define ROC_ROBOT_LEF_FRO_LEG_CENTER                (402 - 196)
 #define ROC_ROBOT_LEF_FRO_FET_CENTER                (300)
 #define ROC_ROBOT_LEF_MID_HIP_CENTER                (310)
-#define ROC_ROBOT_LEF_MID_LEG_CENTER                (410 - 214)
+#define ROC_ROBOT_LEF_MID_LEG_CENTER                (410 - 202)
 #define ROC_ROBOT_LEF_MID_FET_CENTER                (300)
 #define ROC_ROBOT_LEF_HIN_HIP_CENTER                (303)
-#define ROC_ROBOT_LEF_HIN_LEG_CENTER                (400 - 198)
+#define ROC_ROBOT_LEF_HIN_LEG_CENTER                (400 - 184)
 #define ROC_ROBOT_LEF_HIN_FET_CENTER                (310)
 
 
-#define ROC_ROBOT_DEFAULT_LEG_STEP                  40
+#define ROC_ROBOT_DEFAULT_LEG_STEP                  30
 #define ROC_ROBOT_DEFAULT_TURN_ANGLE                20
-#define ROC_ROBOT_DEFAULT_FEET_LIFT                 30
+#define ROC_ROBOT_DEFAULT_FEET_LIFT                 45
 #define ROC_ROBOT_QUAD_MODE_FEET_LIFT               40
 
 

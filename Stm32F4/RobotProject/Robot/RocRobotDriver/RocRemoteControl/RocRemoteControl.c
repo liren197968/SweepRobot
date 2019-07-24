@@ -486,25 +486,6 @@ void StartTransTxRxTask(void)
     }
 }
 #endif
-static uint8_t RocRobotJoystickCmdGet(void)
-{
-    uint8_t *RemoteData = NULL;
-
-    RemoteData = RocRemoteDataReceive();
-
-    if(ROC_JOYSTICK_FRAME_HEADER != RemoteData[0])
-    {
-        return ROC_NONE;
-    }
-    else if(ROC_JOYSTICK_KEY_HEADER != RemoteData[1])
-    {
-        return ROC_NONE;
-    }
-    else
-    {
-        return RemoteData[3];
-    }
-}
 
 /*********************************************************************************
  *  Description:
@@ -522,7 +503,7 @@ static uint8_t RocRobotJoystickCmdGet(void)
 ROC_RESULT RocRemoteControlInit(void)
 {
     ROC_RESULT Ret = RET_OK;
-    uint16_t Dat[4];
+
 #ifdef ROC_REMOTE_USB_CONTROL
     RocRemoteUsbControlInit();
 #endif
