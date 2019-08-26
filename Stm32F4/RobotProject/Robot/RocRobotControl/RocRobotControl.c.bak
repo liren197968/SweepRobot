@@ -519,8 +519,8 @@ static void RocRobotHexapodRightMovingRun(void)
 **********************************************************************************/
 static void RocRobotHexapodLeftForwardRun(void)
 {
-    g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
-    g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
+    g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
+    g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
     g_RobotCtrl.RemoteCtrl.Z = 0;
     g_RobotCtrl.RemoteCtrl.A = 0;
     g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -554,8 +554,8 @@ static void RocRobotHexapodLeftForwardRun(void)
 **********************************************************************************/
 static void RocRobotHexapodLeftBackwardRun(void)
 {
-    g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP;
-    g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
+    g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
+    g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
     g_RobotCtrl.RemoteCtrl.Z = 0;
     g_RobotCtrl.RemoteCtrl.A = 0;
     g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -589,8 +589,8 @@ static void RocRobotHexapodLeftBackwardRun(void)
 **********************************************************************************/
 static void RocRobotHexapodRightForwardRun(void)
 {
-    g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP;
-    g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP;
+    g_RobotCtrl.RemoteCtrl.X = ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
+    g_RobotCtrl.RemoteCtrl.Y = ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
     g_RobotCtrl.RemoteCtrl.Z = 0;
     g_RobotCtrl.RemoteCtrl.A = 0;
     g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -624,8 +624,8 @@ static void RocRobotHexapodRightForwardRun(void)
 **********************************************************************************/
 static void RocRobotHexapodRightBackwardRun(void)
 {
-    g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP;
-    g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP;
+    g_RobotCtrl.RemoteCtrl.X = -ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
+    g_RobotCtrl.RemoteCtrl.Y = -ROC_ROBOT_DEFAULT_LEG_STEP * 0.5;
     g_RobotCtrl.RemoteCtrl.Z = 0;
     g_RobotCtrl.RemoteCtrl.A = 0;
     g_RobotCtrl.RemoteCtrl.H = ROC_ROBOT_DEFAULT_FEET_LIFT;
@@ -887,6 +887,7 @@ static void RocRobotMoveCtrlCore(ROC_ROBOT_MOVE_CTRL_s *pRobotCtrl)
     switch(MoveStatus)
     {
         case ROC_ROBOT_MOVE_STATUS_POWER_ON:
+        case ROC_ROBOT_MOVE_STATUS_STANDING:
         {
             RocRobotSingleLegCtrl(&pRobotCtrl->CurServo);
 
@@ -1009,12 +1010,12 @@ static void RocRobotPowerOnGaitSeq_Run(void)
 
     RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_TRANSFORM);
 
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
     HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
 
     RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_CAR);
@@ -1043,7 +1044,8 @@ static void RocRobotCarTransformRun(void)
 
         g_RobotCtrl.RemoteCtrl.X = 0;
         g_RobotCtrl.RemoteCtrl.Y = 0;
-        g_RobotCtrl.RemoteCtrl.Z = ROC_ROBOT_DEFAULT_FEET_LIFT * (ROC_ROBOT_CTRL_TRANSFORM_STEP - Index / ROC_ROBOT_CTRL_TRANSFORM_DELAY);
+        g_RobotCtrl.RemoteCtrl.Z = (ROC_ROBOT_CTRL_TRANSFORM_STEP * ROC_ROBOT_CTRL_TRANSFORM_DELAY - Index)
+                                    * ROC_ROBOT_DEFAULT_FEET_LIFT / ROC_ROBOT_CTRL_TRANSFORM_DELAY;
         g_RobotCtrl.RemoteCtrl.A = 0;
         g_RobotCtrl.RemoteCtrl.H = 0;
 
@@ -1053,7 +1055,14 @@ static void RocRobotCarTransformRun(void)
             RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
         }
 
-        Index++;
+        if(Index == ROC_ROBOT_CTRL_TRANSFORM_STEP * ROC_ROBOT_CTRL_TRANSFORM_DELAY)
+        {
+            Index = 0;
+        }
+        else
+        {
+            Index++;
+        }
     }
 }
 
@@ -1078,7 +1087,7 @@ static void RocRobotHexapodTransformRun(void)
     {
         RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_POWER_ON);
 
-        if(ROC_ROBOT_CTRL_TRANSFORM_STEP >= Index)
+        if(ROC_ROBOT_CTRL_TRANSFORM_STEP * ROC_ROBOT_CTRL_TRANSFORM_DELAY >= Index)
         {
             g_RobotCtrl.RemoteCtrl.X = 0;
             g_RobotCtrl.RemoteCtrl.Y = 0;
@@ -1088,22 +1097,25 @@ static void RocRobotHexapodTransformRun(void)
         }
         else if((ROC_ROBOT_CTRL_TRANSFORM_STEP + 1) * ROC_ROBOT_CTRL_TRANSFORM_DELAY == Index)
         {
+            RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_CAR);
             RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_TRANSFORM);
 
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-        }
-        else if((ROC_ROBOT_CTRL_TRANSFORM_STEP + 2) * ROC_ROBOT_CTRL_TRANSFORM_DELAY == Index)
-        {
-            RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_CAR);
-            RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
         }
 
-        Index++;
+        if(Index == (ROC_ROBOT_CTRL_TRANSFORM_STEP + 1) * ROC_ROBOT_CTRL_TRANSFORM_DELAY)
+        {
+            Index = 0;
+        }
+        else
+        {
+            Index++;
+        }
     }
 }
 
@@ -1165,8 +1177,6 @@ static ROC_RESULT RocRobotStartRun(void)
 
     g_RobotCtrl.MoveCtrl->CurGait.NomGaitSpeed = ROC_ROBOT_RUN_SPEED_DEFAULT;
     RocServoSpeedSet(g_RobotCtrl.MoveCtrl->CurGait.NomGaitSpeed);
-
-    RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
 
     return Ret;
 }
@@ -1354,7 +1364,7 @@ static void RocRobotRemoteControl(void)
             }
             else if(ROC_ROBOT_RUN_MODE_CAR == RocRobotRunModeGet())
             {
-                RocRobotHexapodStanding();
+
             }
 
             break;
@@ -1462,11 +1472,15 @@ static void RocRobotRemoteControl(void)
         case ROC_KEY_12:
         {
             RocRelayTurnOn();
+
+            break;
         }
 
         case ROC_KEY_15:
         {
             RocRelayTurnOff();
+
+            break;
         }
 
         case ROC_KEY_16:
@@ -1512,7 +1526,7 @@ void RocRobotInit(void)
 {
     ROC_RESULT Ret = RET_OK;
 
-    ROC_LOGW("############# Robot hardware version is 0.5! #############");
+    ROC_LOGW("############# Robot hardware version is V0.8! #############");
 
     RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_POWER_ON);
 
@@ -1642,8 +1656,6 @@ void RocRobotInit(void)
     {
         ROC_LOGW("############# Robot is running! Be careful! #############");
     }
-
-    //RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_STANDING);
 }
 
 /*********************************************************************************
@@ -1726,6 +1738,7 @@ static void RocBatteryCheckTaskEntry(void)
 static void RocRobotLcdShowInfoTaskEntry(void)
 {
     uint8_t RemoteCmd = ROC_NONE;
+    uint8_t Ret = ROC_NONE;
     uint16_t RemoteAdc[4] = {ROC_NONE};
 
     if(ROC_TRUE == g_RobotCtrl.CtrlTime.LcdTimeIsReady)
@@ -1733,23 +1746,26 @@ static void RocRobotLcdShowInfoTaskEntry(void)
         g_RobotCtrl.CtrlTime.LcdTimeIsReady = ROC_FALSE;
 
         RemoteCmd = RocRobotJoystickCmdGet();
-        RocRobotJoystickAdcGet(RemoteAdc);
+        Ret = RocRobotJoystickAdcGet(RemoteAdc);
 
         RocTftLcdDrawGbk16Str(10, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Bat:");
         RocTftLcdDrawGbk16Str(45, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "     ");
         RocTftLcdDrawGbk16Num(45, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, g_RobotCtrl.BatVoltage);
 
-        RocTftLcdDrawGbk16Str(85, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Key:");
-        RocTftLcdDrawGbk16Str(120, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(120, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteCmd);
-        RocTftLcdDrawGbk16Str(160, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(160, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[0]);
-        RocTftLcdDrawGbk16Str(200, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(200, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[1]);
-        RocTftLcdDrawGbk16Str(240, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(240, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[2]);
-        RocTftLcdDrawGbk16Str(280, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
-        RocTftLcdDrawGbk16Num(280, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[3]);
+        if(ROC_NONE != Ret)
+        {
+            RocTftLcdDrawGbk16Str(85, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Key:");
+            RocTftLcdDrawGbk16Str(120, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(120, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteCmd);
+            RocTftLcdDrawGbk16Str(160, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(160, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[0]);
+            RocTftLcdDrawGbk16Str(200, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(200, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[1]);
+            RocTftLcdDrawGbk16Str(240, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(240, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[2]);
+            RocTftLcdDrawGbk16Str(280, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "    ");
+            RocTftLcdDrawGbk16Num(280, 5, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, RemoteAdc[3]);
+        }
 
         RocTftLcdDrawGbk16Str(10, 25, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "Pitch:");
         RocTftLcdDrawGbk16Str(65, 25, ROC_TFT_LCD_COLOR_DEFAULT_FOR, ROC_TFT_LCD_COLOR_DEFAULT_BAK, "      ");
@@ -1830,6 +1846,8 @@ static void RocRobotCtrlTaskEntry(void)
 **********************************************************************************/
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
+    static uint8_t PowerOnIsFinshed = ROC_FALSE;
+
     if(TIM2 == htim->Instance)
     {
         RocBeeperTaskBackground();
@@ -1840,12 +1858,17 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 
         MoveStatus = RocRobotMoveStatus_Get();
 
-        if((ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus) && (ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet()))
+        if((ROC_FALSE == PowerOnIsFinshed)
+            && (ROC_ROBOT_MOVE_STATUS_POWER_ON == MoveStatus)
+            && (ROC_ROBOT_RUN_MODE_HEXAPOD == RocRobotRunModeGet()))
         {
             RocRobotPowerOnTaskEntry();
+
+            g_RobotCtrl.CtrlTime.CtrlTimeIsReady = ROC_FALSE;
         }
         else
         {
+            PowerOnIsFinshed = ROC_TRUE;
             g_RobotCtrl.CtrlTime.CtrlTimeIsReady = ROC_TRUE;
         }
     }

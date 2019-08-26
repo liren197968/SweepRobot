@@ -31,7 +31,7 @@
 #define ROC_ROBOT_FEET_WIDTH                        21
 
 #define ROC_ROBOT_DH_CONST_D1                       0
-#define ROC_ROBOT_DH_CONST_A1                       43
+#define ROC_ROBOT_DH_CONST_A1                       30
 #define ROC_ROBOT_DH_CONST_A2                       64
 #define ROC_ROBOT_DH_CONST_A3                       121.82F /* (ROC_ROBOT_FEET_WIDTH^2 + ROC_ROBOT_FEET_WIDTH^2)^0.5 */
 

@@ -1010,12 +1010,12 @@ static void RocRobotPowerOnGaitSeq_Run(void)
 
     RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_TRANSFORM);
 
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+    g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
     HAL_Delay(ROC_ROBOT_RUN_SPEED_POWER_ON);
 
     RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_CAR);
@@ -1100,12 +1100,12 @@ static void RocRobotHexapodTransformRun(void)
             RocRobotRunModeSet(ROC_ROBOT_RUN_MODE_CAR);
             RocRobotMoveStatus_Set(ROC_ROBOT_MOVE_STATUS_TRANSFORM);
 
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
-            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += 30;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_RIG_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] -= ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_FRO_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_MID_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
+            g_RobotCtrl.MoveCtrl->CurServo.RobotLeg[ROC_ROBOT_LEF_HIN_LEG].RobotJoint[ROC_ROBOT_LEG_ANKLE_JOINT] += ROC_ROBOT_CTRL_LEG_LEFT_STEP;
         }
 
         if(Index == (ROC_ROBOT_CTRL_TRANSFORM_STEP + 1) * ROC_ROBOT_CTRL_TRANSFORM_DELAY)
